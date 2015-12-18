@@ -60,7 +60,7 @@ try {
       Install-ChocolateyInstallPackage 'visualstudiotestagent' 'exe' "/silent /log $env:temp\vstestcontrollerinstall.log" "$AvailableDriveLetter\TestController\vstf_testcontroller.exe"
     }
     start-sleep -seconds 5
-    Try {start-process imdisk -argumentlist "'"-d -m $AvailableDriveLetter" -ErrorAction SilentlyContinue}
+    Try {start-process imdisk -argumentlist "-d -m $AvailableDriveLetter" -ErrorAction SilentlyContinue}
     Catch {#swallow dismount ISO errors
     }
 }

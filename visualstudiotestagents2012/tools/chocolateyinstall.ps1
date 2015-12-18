@@ -40,11 +40,16 @@ if ($packageParameters) {
         Write-Host "Installing Test Controller instead of Test Agent because /ControllerInsteadofTestAgent was used."
         $ControllerInsteadofTestAgent = $true
     }
+} else {
+    Write-Debug "No Package Parameters Passed in";
+}
+
+Write-Output "Logs for installers will be in $env:temp"
 
 try {
-    Get-ChocolateyWebFile "$packageName" "$env:temp\VS2013_RTM_AGTS_ENU.iso" 'https://download.microsoft.com/download/9/8/B/98B5E7D1-231B-4439-824F-0EE0B8D3011E/VS2013_RTM_AGTS_ENU.iso' -checksum $checksum -checksumType $checksumType -checksum64 $checksum64 -checksumType64 $checksumType64
-    imdisk -a -f "$env:temp\VS2013_RTM_AGTS_ENU.iso"  -m "q:"
-    If (!ControllerInsteadofTestAgent)
+    Get-ChocolateyWebFile "$packageName" "$env:temp\VS2012.4_Agents_ENU.iso" $url -checksum $checksum -checksumType $checksumType -checksum64 $checksum64 -checksumType64 $checksumType64
+    imdisk -a -f "$env:temp\VS2012.4_Agents_ENU.iso"  -m "q:"
+    If (!$ControllerInsteadofTestAgent)
     {
       Install-ChocolateyInstallPackage 'visualstudiotestagent' 'exe' $silentArgs 'q:\testagent\vstf_testagent.exe'
     }

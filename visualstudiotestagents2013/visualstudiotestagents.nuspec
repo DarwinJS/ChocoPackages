@@ -16,7 +16,7 @@
     <tags>visualstudiotestagents admin</tags>
     <copyright>Microsoft</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <!--<iconUrl>http://cdn.rawgit.com/__REPLACE_YOUR_REPO__/master/icons/visualstudiotestagents.png</iconUrl>-->
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/visualstudiotestagents2013/msagents.png</iconUrl>
     <dependencies>
       <dependency id="imdisk" />
     </dependencies>

@@ -3,20 +3,29 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>visualstudio2012testagents</id>
-    <title>visualstudio2013testagents2012 Update 4 (Install)</title>
-    <version>11.0.21005.1</version>
+    <title>visualstudio2012testagents Update 4 (Install)</title>
+    <version>11.0.61030.0</version>
     <authors>Microsoft</authors>
     <owners>Darwin Sanoy</owners>
     <summary>Microsoft Visual Test Agents and Controller running compiled tests on a node without installing all of Visual Studio.</summary>
     <description>Microsoft Visual Test Agent and Controller for running compiled tests on a node without installing all of Visual Studio.
       By default this package installs only the Test Agent.  Use the switch /ControllerInsteadofTestAgent to install the Test Controller instead.
       If you need both on one node, run the package once with no options and then again with '/ControllerInsteadofTestAgent -Force'
+
+      #### Package Parameters
+      The following package parameters can be set:
+
+      * `/ControllerInsteadofTestAgent` - install the Test Controller instead of just the Test Agent.
+
+      These parameters can be passed to the installer with the use of `-params`.
+      For example: -params '"/ControllerInsteadofTestAgent"'.
+      To added Controller to a machine with Agent already installed: -params '"/ControllerInsteadofTestAgent"' -force.
     </description>
     <projectUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</projectUrl>
     <tags>visualstudiotestagents admin</tags>
     <copyright>Microsoft</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <!--<iconUrl>http://cdn.rawgit.com/__REPLACE_YOUR_REPO__/master/icons/visualstudiotestagents.png</iconUrl>-->
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/visualstudiotestagents2012/msagents.png</iconUrl>
     <dependencies>
       <dependency id="imdisk" />
     </dependencies>

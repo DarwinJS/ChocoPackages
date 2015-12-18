@@ -11,6 +11,15 @@
     <description>Microsoft Visual Test Agent and Controller for running compiled tests on a node without installing all of Visual Studio.
       By default this package installs only the Test Agent.  Use the switch /ControllerInsteadofTestAgent to install the Test Controller instead.
       If you need both on one node, run the package once with no options and then again with '/ControllerInsteadofTestAgent -Force'
+
+            #### Package Parameters
+            The following package parameters can be set:
+
+            * `/ControllerInsteadofTestAgent` - install the Test Controller instead of just the Test Agent.
+
+            These parameters can be passed to the installer with the use of `-params`.
+            For example: -params '"/ControllerInsteadofTestAgent"'.
+            To added Controller to a machine with Agent already installed: -params '"/ControllerInsteadofTestAgent"' -force.
     </description>
     <projectUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</projectUrl>
     <tags>visualstudiotestagents admin</tags>

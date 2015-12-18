@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>visualstudio2012testagents</id>
+    <title>visualstudio2013testagents2012 Update 4 (Install)</title>
+    <version>11.0.21005.1</version>
+    <authors>Microsoft</authors>
+    <owners>Darwin Sanoy</owners>
+    <summary>Microsoft Visual Test Agents and Controller running compiled tests on a node without installing all of Visual Studio.</summary>
+    <description>Microsoft Visual Test Agent and Controller for running compiled tests on a node without installing all of Visual Studio.
+      By default this package installs only the Test Agent.  Use the switch /ControllerInsteadofTestAgent to install the Test Controller instead.
+      If you need both on one node, run the package once with no options and then again with '/ControllerInsteadofTestAgent -Force'
+    </description>
+    <projectUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</projectUrl>
+    <tags>visualstudiotestagents admin</tags>
+    <copyright>Microsoft</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <!--<iconUrl>http://cdn.rawgit.com/__REPLACE_YOUR_REPO__/master/icons/visualstudiotestagents.png</iconUrl>-->
+    <dependencies>
+      <dependency id="imdisk" />
+    </dependencies>
+    <releaseNotes>__REPLACE_OR_REMOVE__MarkDown_Okay</releaseNotes>
+    <!--<provides></provides>-->
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

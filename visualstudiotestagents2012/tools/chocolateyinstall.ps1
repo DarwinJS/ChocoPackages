@@ -63,6 +63,9 @@ try {
     Try {start-process imdisk -argumentlist "-d -m $AvailableDriveLetter" -ErrorAction SilentlyContinue}
     Catch {#swallow dismount ISO errors
     }
+    If (test-path env:ProgramFiles`(x86`)) {$PF = ${env:ProgramFiles(x86)}} Else {$PF = $env:ProgramFiles}
+    Install-ChocolateyPath "$PF\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow" 'Machine'
+    Install-ChocolateyPath "$env:windir\Microsoft.NET\Framework\v4.0.30319" 'Machine'
 }
 catch {
     throw $_.exception

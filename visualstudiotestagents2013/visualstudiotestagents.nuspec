@@ -6,31 +6,33 @@
     <title>visualstudio2013testagents Update 5 (Install)</title>
     <version>12.0.21005.1</version>
     <authors>Microsoft</authors>
-    <owners>Darwin Sanoy</owners>
+    <owners>Darwin Sanoy (Workwave)</owners>
     <summary>Microsoft Visual Test Agents and Controller running compiled tests on a node without installing all of Visual Studio.</summary>
     <description>Microsoft Visual Test Agent and Controller for running compiled tests on a node without installing all of Visual Studio.
       By default this package installs only the Test Agent.  Use the switch /ControllerInsteadofTestAgent to install the Test Controller instead.
       If you need both on one node, run the package once with no options and then again with '/ControllerInsteadofTestAgent -Force'
 
-            #### Package Parameters
-            The following package parameters can be set:
+      #### Package Parameters
+      The following package parameters can be set:
 
-            * `/ControllerInsteadofTestAgent` - install the Test Controller instead of just the Test Agent.
+      * `/ControllerInsteadofTestAgent` - install the Test Controller instead of just the Test Agent.
 
-            These parameters can be passed to the installer with the use of `-params`.
-            For example: -params '"/ControllerInsteadofTestAgent"'.
-            To added Controller to a machine with Agent already installed: -params '"/ControllerInsteadofTestAgent"' -force.
+      These parameters can be passed to the installer with the use of `-params`.
+      For example: -params '"/ControllerInsteadofTestAgent"'.
+      To add Controller to a machine with Agent already installed: -params '"/ControllerInsteadofTestAgent"' -force.
     </description>
     <projectUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/visualstudiotestagents2013</packageSourceUrl>
+    <docsUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</docsUrl>
     <tags>visualstudiotestagents admin</tags>
     <copyright>Microsoft</copyright>
+    <licenseUrl>http://download.microsoft.com/download/2/5/3/253ed8fa-2f17-44ab-8a6a-53b0423a7b15/visualstudio2012andmsdnlicensingwhitepaper-january-2013.doc</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/visualstudiotestagents2013/msagents.png</iconUrl>
     <dependencies>
-      <dependency id="imdisk" />
+      <dependency id="imdisk" version="1.9.4.20150620"/>
     </dependencies>
-    <releaseNotes>__REPLACE_OR_REMOVE__MarkDown_Okay</releaseNotes>
-    <!--<provides></provides>-->
+    <releaseNotes>The Microsoft Agents do not provide an uninstaller, so neither does this package.</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

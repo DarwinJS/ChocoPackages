@@ -49,8 +49,8 @@ Write-Output "Logs for installers will be in $env:temp"
 $AvailableDriveLetter = @(65..90 | ForEach-Object {[char]$_ + ":"}) | Where-Object {@(get-wmiobject win32_logicaldisk | select -expand deviceid) -notcontains $_} | select-object -last 1
 
 try {
-    Get-ChocolateyWebFile "$packageName" "$env:temp\VS2012.4_Agents_ENU.iso" $url -checksum $checksum -checksumType $checksumType -checksum64 $checksum64 -checksumType64 $checksumType64
-    imdisk -a -f "$env:temp\VS2012.4_Agents_ENU.iso"  -m "$AvailableDriveLetter"
+    Get-ChocolateyWebFile "$packageName" "$env:temp\vs2013.5_agts_enu.iso" $url -checksum $checksum -checksumType $checksumType -checksum64 $checksum64 -checksumType64 $checksumType64
+    imdisk -a -f "$env:temp\vs2013.5_agts_enu.iso"  -m "$AvailableDriveLetter"
     If (!$ControllerInsteadofTestAgent)
     {
       Install-ChocolateyInstallPackage 'visualstudiotestagent' 'exe' $silentArgs "$AvailableDriveLetter\testagent\vstf_testagent.exe"
@@ -63,6 +63,9 @@ try {
     Try {start-process imdisk -argumentlist "-d -m $AvailableDriveLetter" -ErrorAction SilentlyContinue}
     Catch {#swallow dismount ISO errors
     }
+    If (test-path env:ProgramFiles`(x86`)) {$PF = ${env:ProgramFiles(x86)}} Else {$PF = $env:ProgramFiles}
+    Install-ChocolateyPath "$PF\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow" 'Machine'
+    Install-ChocolateyPath "$env:windir\Microsoft.NET\Framework\v4.0.30319" 'Machine'
 }
 catch {
     throw $_.exception

@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t5appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>visualstudio2015testagents</id>
+    <title>visualstudio2015testagents Update 5 (Install)</title>
+    <version>14.0.23107.0</version>
+    <authors>Microsoft</authors>
+    <owners>Darwin Sanoy (Workwave)</owners>
+    <summary>Microsoft Visual Test Agents and Controller running compiled tests on a node without installing all of Visual Studio.</summary>
+    <description>Microsoft Visual Test Agent and Controller for running compiled tests on a node without installing all of Visual Studio.
+    </description>
+    <projectUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/visualstudiotestagents2013</packageSourceUrl>
+    <docsUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</docsUrl>
+    <tags>visualstudiotestagents Workwave-Engineering-Services</tags>
+    <copyright>Microsoft</copyright>
+    <licenseUrl>http://download.microsoft.com/download/2/5/3/253ed8fa-2f17-44ab-8a6a-53b0423a7b15/visualstudio2012andmsdnlicensingwhitepaper-january-2013.doc</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/visualstudiotestagents2013/msagents.png</iconUrl>
+    <releaseNotes>The Microsoft Agents do not provide an uninstaller, so neither does this package.
+    The test agents are no longer provided as an ISO - so this package is simplified to a regular chocolatey package compared to previous test agent packages.</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

@@ -1,6 +1,6 @@
 ﻿$ErrorActionPreference = 'Stop'; # stop on all errors
 
-$packageName= 'visualstudio2013testagents'
+$packageName= 'visualstudio2015testagents'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $fileType   = 'EXE'
 $url        = 'https://download.microsoft.com/download/8/A/F/8AFFDD5A-53D9-46EB-98D7-B61BBCAF0DE6/vstf_testagent.exe'
@@ -12,4 +12,4 @@ $checksumType  = $checksumType64 = 'sha1'
 
 Write-Output "Logs for installer is here: $logPath"
 
-Install-ChocolateyPackage "$packageName" $fileType $url -checksum $checksum -checksumType $checksumType
+Install-ChocolateyPackage -PackageName "$packageName" -FileType $fileType -SilentArgs $SilentArgs -url $url -checksum $checksum -checksumType $checksumType

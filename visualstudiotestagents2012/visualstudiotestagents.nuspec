@@ -4,7 +4,7 @@
   <metadata>
     <id>visualstudio2012testagents</id>
     <title>visualstudio2012testagents Update 4 (Install)</title>
-    <version>11.0.61030.0</version>
+    <version>11.0.61030.20160101</version>
     <authors>Microsoft</authors>
     <owners>Darwin Sanoy (Workwave)</owners>
     <summary>Microsoft Visual Test Agents and Controller running compiled tests on a node without installing all of Visual Studio.</summary>

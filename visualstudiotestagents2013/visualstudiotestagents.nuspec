@@ -4,7 +4,7 @@
   <metadata>
     <id>visualstudio2013testagents</id>
     <title>visualstudio2013testagents Update 5 (Install)</title>
-    <version>12.0.21005.1</version>
+    <version>12.0.21005.20160101</version>
     <authors>Microsoft</authors>
     <owners>Darwin Sanoy (Workwave)</owners>
     <summary>Microsoft Visual Test Agents and Controller running compiled tests on a node without installing all of Visual Studio.</summary>
@@ -24,7 +24,7 @@
     <projectUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</projectUrl>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/visualstudiotestagents2013</packageSourceUrl>
     <docsUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</docsUrl>
-    <tags>visualstudiotestagents admin</tags>
+    <tags>visualstudiotestagents Workwave-Engineering-Services</tags>
     <copyright>Microsoft</copyright>
     <licenseUrl>http://download.microsoft.com/download/2/5/3/253ed8fa-2f17-44ab-8a6a-53b0423a7b15/visualstudio2012andmsdnlicensingwhitepaper-january-2013.doc</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

@@ -3,23 +3,25 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>visualstudio2015testagents</id>
-    <title>visualstudio2015testagents</title>
-    <version>14.0.23107.0</version>
+    <title>Agents for Visual Studio 2015</title>
+    <version>14.0.23107.10</version>
     <authors>Microsoft</authors>
     <owners>Darwin Sanoy (Workwave)</owners>
     <summary>Microsoft Visual Test Agents and Controller for running compiled tests on a node without installing all of Visual Studio.</summary>
-    <description>Microsoft Visual Test Agent and Controller for running compiled tests on a node without installing all of Visual Studio.
+    <description>This package is the Update 1 version. Microsoft Visual Test Agent and Controller for running compiled tests on a node without installing all of Visual Studio.
+
+      **ATTENTION: The Microsoft Agents for Visual Studio 2015 installer will update your machine to .NET 4.6 - if you need to test with a previous
+      version of .NET, then use the appropriate Agents for Visual Studio version (e.g. Agents for Visual Studio 2012, Agents for Visual Studio 2013).**
     </description>
     <projectUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</projectUrl>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/visualstudiotestagents2015</packageSourceUrl>
     <docsUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</docsUrl>
-    <tags>visualstudio2015testagents Workwave-Engineering-Services</tags>
+    <tags>admin visualstudio2015testagents Workwave-Engineering-Services test mstest</tags>
     <copyright>Microsoft</copyright>
     <licenseUrl>http://download.microsoft.com/download/2/5/3/253ed8fa-2f17-44ab-8a6a-53b0423a7b15/visualstudio2012andmsdnlicensingwhitepaper-january-2013.doc</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/visualstudiotestagents2015/msagents.png</iconUrl>
-    <releaseNotes>The Microsoft Agents do not provide an uninstaller, so neither does this package.
-    The test agents are no longer provided as an ISO - so this package is simplified to a regular chocolatey package compared to previous test agent packages.</releaseNotes>
+    <releaseNotes>https://www.visualstudio.com/news/vs2015-update1-vs</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

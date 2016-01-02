@@ -10,13 +10,14 @@
     <summary>Free, portable, light JSON editor that allows editing in the tree view.</summary>
     <description>
 Free, portable, light JSON editor that allows editing in the tree view.
-This the only free editor that allows editing in tree view.
+As of this package creation, this the only free editor that allows editing in tree view.
     </description>
     <projectUrl>http://tomeko.net/software/JSONedit/</projectUrl>
-    <tags>JSON Editor</tags>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/jsonedit</packageSourceUrl>
+    <tags>JSON Editor TreeViewEditor</tags>
     <copyright>Tomasz Ostrowski</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://cdn.rawgit.com/csi-windowschocolatey/jsonedit/master/appicon.png</iconUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/jsonedit/appicon.png</iconUrl>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

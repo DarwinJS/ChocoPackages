@@ -12,11 +12,12 @@
 Identifies and isolates problems with applications that attempt operations that require admin rights when they should not.
     </description>
     <projectUrl>http://blogs.msdn.com/b/aaron_margosis/archive/2015/07/01/lua-buglight-2-3-with-support-for-windows-8-1-and-windows-10.aspx</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/luabuglight</packageSourceUrl>
     <tags>Non-admin LUA Test</tags>
     <copyright>Aaron Margosis</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://cdn.rawgit.com/csi-windowschocolatey/luabuglight/master/appicon.png</iconUrl>
-    <releaseNotes>This version is compatible up through Windows 10.</releaseNotes>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/luabuglight/appicon.png</iconUrl>
+    <releaseNotes>This version is compatible up through Windows 10.  [http://blogs.msdn.com/b/aaron_margosis/archive/2015/07/01/lua-buglight-2-3-with-support-for-windows-8-1-and-windows-10.aspx]</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

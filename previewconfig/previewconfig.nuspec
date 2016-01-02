@@ -13,10 +13,10 @@
 No more opening and closing note pad just to see into .INI, .XML, .VBS, .REG, .PS1, .CMD, .BAT, .CSV, etc, etc.  Unbelievable time saver.
     </description>
     <projectUrl>http://www.winhelponline.com/blog/previewconfig-tool-registers-file-types-for-the-preview-pane-in-windows-vista/</projectUrl>
-    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/luabuglight</packageSourceUrl>    
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/previewconfig</packageSourceUrl>
     <tags>file type extensions explorer preview</tags>
     <copyright>Ramesh Srinivasan</copyright>
-    <iconUrl>https://cdn.rawgit.com/csi-windowschocolatey/previewconfig/master/appicon.png</iconUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/previewconfig/appicon.png</iconUrl>
     <releaseNotes></releaseNotes>
   </metadata>
   <files>

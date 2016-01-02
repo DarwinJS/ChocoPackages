@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if ??? doesn?t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
+    <id>virtualmachineconverter</id>
+    <title>Microsoft Virtual Machine Converter</title>
+    <version>3.1</version>
+    <authors>Microsoft</authors>
+    <owners>Darwin Sanoy (CSI-Windows.com)</owners>
+    <summary>Microsoft Virtual Machine Converter can be used to convert non-MS virtual machines to Hyper-V using a wizard or CMDLets and non-VHD hard disks to VHD or VHDX using CMDLets.(</summary>
+    <description>
+Microsoft Virtual Machine Converter can be used to convert non-MS virtual machines to Hyper-V using a wizard or CMDLets and non-VHD hard disks to VHD or VHDX using CMDLets.
+
+A walkthrough is posted here: https://technet.microsoft.com/en-us/library/dn874008.aspx
+
+If you wish to convert a VM for usage with Windows Desktop Hyper-V, you will need to use the CMDLets to convert just the disk file.
+
+CMDLet reference is here: http://download.microsoft.com/download/9/1/E/91E9F42C-3F1F-4AD9-92B7-8DD65DA3B0C2/MVMC_cmdlets.doc
+
+	</description>
+    <projectUrl>https://www.microsoft.com/en-us/download/details.aspx?id=42497</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/previewconfig</packageSourceUrl>
+    <tags>Convert VM VHD VHDX VMDK VMWare</tags>
+    <copyright>Microsoft</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://cdn.rawgit.com/csi-windowschocolatey/virtualmachineconverter/master/appicon.png</iconUrl>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

@@ -20,11 +20,11 @@ CMDLet reference is here: http://download.microsoft.com/download/9/1/E/91E9F42C-
 
 	</description>
     <projectUrl>https://www.microsoft.com/en-us/download/details.aspx?id=42497</projectUrl>
-    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/previewconfig</packageSourceUrl>
-    <tags>Convert VM VHD VHDX VMDK VMWare</tags>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/VirtualMachineConverter</packageSourceUrl>
+    <tags>Convert VM VHD VHDX VMDK VMWare vdi</tags>
     <copyright>Microsoft</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://cdn.rawgit.com/csi-windowschocolatey/virtualmachineconverter/master/appicon.png</iconUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/VirtualMachineConverter/appicon.png</iconUrl>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

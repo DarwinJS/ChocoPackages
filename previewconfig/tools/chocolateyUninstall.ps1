@@ -1,0 +1,2 @@
+
+Uninstall-ChocolateyZipPackage previewconfig previewconfig.zip

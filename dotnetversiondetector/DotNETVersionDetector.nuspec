@@ -13,10 +13,11 @@
 Utility itself does not use .NET so that it will work regardless of whether .NET is installed or what versions are installed.
     </description>
     <projectUrl>http://www.asoft.be/prod_netver.html</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/dotnetversiondetector</packageSourceUrl>    
     <tags>dotnet .NET Version Detect</tags>
     <copyright>ASoft</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://cdn.rawgit.com/csi-windowschocolatey/dotnetversiondetector/master/appicon.png</iconUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/dotnetversiondetector/appicon.png</iconUrl>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

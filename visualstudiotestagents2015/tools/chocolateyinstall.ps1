@@ -8,7 +8,7 @@ $logPath    = "$env:temp\vstestagents2015install.log"
 $silentArgs = "/Full /NoRestart /Q /Log $logPath"
 $validExitCodes = @(0,3010,1641)
 
-$checksum      = $checksum64     ='69CC5B261F6D3A7BE28CCC5D46B9936747F1F87C'
+$checksum      = $checksum64     ='EB982D5B9C23DB45824DEAD444F2DB08CC3C741F'
 $checksumType  = $checksumType64 = 'sha1'
 
 Write-Output "Logs for installer is here: $logPath"

@@ -21,9 +21,7 @@
     <licenseUrl>http://download.microsoft.com/download/2/5/3/253ed8fa-2f17-44ab-8a6a-53b0423a7b15/visualstudio2012andmsdnlicensingwhitepaper-january-2013.doc</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/visualstudiotestagents2015/msagents.png</iconUrl>
-    <dependencies>
-      <dependency id="dotnet4.6" version="4.6.00081.20150925"/>
-    </dependencies>    <releaseNotes>https://www.visualstudio.com/news/vs2015-update1-vs</releaseNotes>
+    <releaseNotes>https://www.visualstudio.com/news/vs2015-update1-vs</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

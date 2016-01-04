@@ -1,8 +1,8 @@
 
-$ErrorActionPreference = 'Stop'; # stop on all errors
+$ErrorActionPreference = 'Stop';
 
 $packageName = 'sizer'
-$softwareName = 'sizer*' #part or all of the Display Name as you see it in Programs and Features. It should be enough to be unique
+$softwareName = 'Sizer*'
 $installerType = 'MSI'
 
 $silentArgs = '/qn /norestart'
@@ -14,7 +14,7 @@ $local_key     = 'HKCU:\Software\Microsoft\Windows\CurrentVersion\Uninstall\*'
 $machine_key   = 'HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\*'
 $machine_key6432 = 'HKLM:\SOFTWARE\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\*'
 
-$key = Get-ItemProperty -Path @($machine_key6432,$machine_key, $local_key) `
+[array]$key = Get-ItemProperty -Path @($machine_key6432,$machine_key, $local_key) `
                         -ErrorAction SilentlyContinue `
          | ? { $_.DisplayName -like "$softwareName" }
 

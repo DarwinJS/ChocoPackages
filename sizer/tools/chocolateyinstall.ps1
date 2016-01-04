@@ -16,6 +16,7 @@ $packageArgs = @{
 
   softwareName  = 'sizer*' #part or all of the Display Name as you see it in Programs and Features. It should be enough to be unique
   checksum      = '5CE3BCEE86C58065442B8E88AE3433A5BEBA7A91'
+  checksumtype  = 'sha1'
 }
 
 Write-Output "The installation log is: $LogFile"

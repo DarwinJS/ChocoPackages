@@ -4,7 +4,7 @@
   <metadata>
     <id>visualstudio2012testagents</id>
     <title>Agents for Visual Studio 2012 (Update 4)</title>
-    <version>11.0.61030.20160101</version>
+    <version>11.0.61030.20160104</version>
     <authors>Microsoft</authors>
     <owners>Darwin Sanoy (Workwave)</owners>
     <summary>Microsoft Visual Test Agents and Controller running compiled tests on a node without installing all of Visual Studio.</summary>
@@ -30,7 +30,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/visualstudiotestagents2012/msagents.png</iconUrl>
     <dependencies>
-      <dependency id="imdisk" version="1.9.4.20150620"/>
+      <dependency id="imdisk"/>
     </dependencies>
     <releaseNotes>The Microsoft Agents do not provide an uninstaller, so neither does this package.</releaseNotes>
   </metadata>

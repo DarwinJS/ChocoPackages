@@ -46,11 +46,39 @@ if ($packageParameters) {
 
 Write-Output "Logs for installers will be in $env:temp"
 
-$AvailableDriveLetter = @(65..90 | ForEach-Object {[char]$_ + ":"}) | Where-Object {@(get-wmiobject win32_logicaldisk | select -expand deviceid) -notcontains $_} | select-object -last 1
+Get-ChocolateyWebFile "$packageName" "$env:temp\vs2013.5_agts_enu.iso" $url -checksum $checksum -checksumType $checksumType -checksum64 $checksum64 -checksumType64 $checksumType64
+
+$IMDiskFullPath = $null
+
+If (([version](gwmi win32_operatingsystem).version) -ge [version]"6.3.9600")
+{ #Use mount-disk for server 2012 R2 - works over remoting
+  $mountresult = mount-diskimage -imagepath "$env:temp\vs2013.5_agts_enu.iso" -passthru
+  $AvailableDriveLetter = ($mountresult | Get-Volume).DriveLetter + ":"
+}
+Else
+{ #Other OSes use imgdisk (may not work over remoting)
+  $AvailableDriveLetter = @(65..90 | ForEach-Object {[char]$_ + ":"}) | Where-Object {@(get-wmiobject win32_logicaldisk | select -expand deviceid) -notcontains $_} | select-object -last 1
+
+  If ("$env:windir\System32\imdisk.exe")
+  {
+    $IMDiskFullPath = "$env:windir\System32\imdisk.exe"
+  }
+  ElseIf ("$env:windir\SysWOW64\imdisk.exe")
+  {
+    $IMDiskFullPath = "$env:windir\SysWOW64\imdisk.exe"
+  }
+
+  If (!($IMDiskFullPath))
+  {
+    Throw "Could not find imdisk.exe in System32 or SysWOW64 - it is required to mount the downloaded ISO, exiting..."
+  }
+  Else
+  {
+    & $IMDiskFullPath -a -f "$env:temp\vs2013.5_agts_enu.iso"  -m "$AvailableDriveLetter"
+  }
+}
 
 try {
-    Get-ChocolateyWebFile "$packageName" "$env:temp\vs2013.5_agts_enu.iso" $url -checksum $checksum -checksumType $checksumType -checksum64 $checksum64 -checksumType64 $checksumType64
-    imdisk -a -f "$env:temp\vs2013.5_agts_enu.iso"  -m "$AvailableDriveLetter"
     If (!$ControllerInsteadofTestAgent)
     {
       Install-ChocolateyInstallPackage 'visualstudiotestagent' 'exe' $silentArgs "$AvailableDriveLetter\testagent\vstf_testagent.exe"
@@ -60,8 +88,15 @@ try {
       Install-ChocolateyInstallPackage 'visualstudiotestagent' 'exe' "/silent /log $env:temp\vstestcontrollerinstall.log" "$AvailableDriveLetter\TestController\vstf_testcontroller.exe"
     }
     start-sleep -seconds 5
-    Try {start-process imdisk -argumentlist "-d -m $AvailableDriveLetter" -ErrorAction SilentlyContinue}
-    Catch {#swallow dismount ISO errors
+    If ($IMDiskFullPath)
+    {
+      Try {start-process "$IMDiskFullPath" -argumentlist "-d -m $AvailableDriveLetter" -ErrorAction SilentlyContinue}
+      Catch {#swallow dismount ISO errors
+      }
+    }
+    If (([version](gwmi win32_operatingsystem).version) -ge [version]"6.3.9600")
+    {
+      dismount-diskimage -imagepath "$env:temp\vs2013.5_agts_enu.iso"
     }
     If (test-path env:ProgramFiles`(x86`)) {$PF = ${env:ProgramFiles(x86)}} Else {$PF = $env:ProgramFiles}
     Install-ChocolateyPath "$PF\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow" 'Machine'

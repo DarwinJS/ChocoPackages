@@ -4,7 +4,7 @@ $packageName= 'visualstudio2015testagents'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $fileType   = 'EXE'
 $url        = 'https://download.microsoft.com/download/8/A/F/8AFFDD5A-53D9-46EB-98D7-B61BBCAF0DE6/vstf_testagent.exe'
-$logPath    = "$env:temp\vstestagents2015install.log"
+$logPath    = "$env:temp\$packageName_$(Get-date -format 'yyyyMMddhhmm').log"
 $silentArgs = "/Full /NoRestart /Q /Log $logPath"
 $validExitCodes = @(0,3010,1641)
 

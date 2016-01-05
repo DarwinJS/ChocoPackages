@@ -3,8 +3,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>visualstudio2012testagents</id>
-    <title>Agents for Visual Studio 2012 (Update 4)</title>
-    <version>11.0.61030.20160104</version>
+    <title>Agents for Visual Studio 2012</title>
+    <version>11.0.61030.20160105</version>
     <authors>Microsoft</authors>
     <owners>Darwin Sanoy (Workwave)</owners>
     <summary>Microsoft Visual Test Agents and Controller running compiled tests on a node without installing all of Visual Studio.</summary>
@@ -24,15 +24,16 @@
     <projectUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</projectUrl>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/visualstudiotestagents2012</packageSourceUrl>
     <docsUrl>https://msdn.microsoft.com/en-us/library/dd648127.aspx</docsUrl>
-    <tags>admin visualstudiotestagents Workwave-Engineering-Services test mstest</tags>
+    <tags>admin visualstudio2012testagents Workwave-Engineering-Services test mstest Works-With-Remoting Works-Under-SYSTEM</tags>
     <copyright>Microsoft</copyright>
     <licenseUrl>http://download.microsoft.com/download/2/5/3/253ed8fa-2f17-44ab-8a6a-53b0423a7b15/visualstudio2012andmsdnlicensingwhitepaper-january-2013.doc</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/visualstudiotestagents2012/msagents.png</iconUrl>
     <dependencies>
-      <dependency id="imdisk"/>
+      <dependency id="virtualclonedrive"/>
     </dependencies>
-    <releaseNotes>The Microsoft Agents do not provide an uninstaller, so neither does this package.</releaseNotes>
+    <releaseNotes>**ATTENTION:** If you already have a version of .NET newer than 4.5.1 (like 4.5.2), this installer may fail with the error code 1603 and in the install logs have the text 'Applied execute package: netfxfullredist_43, result: 0x80074005'
+      Includes Update 4. The Microsoft Agents do not provide an uninstaller, so neither does this package.</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

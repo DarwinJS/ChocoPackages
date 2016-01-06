@@ -4,7 +4,7 @@ $packageName= 'visualstudio2013testagents'
 $ISOName = 'vs2013.5_agts_enu.iso'
 $logPath    = "$env:temp\$($packageName)_$(Get-date -format 'yyyyMMddhhmm').log"
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = 'https://download.microsoft.com/download/B/E/3/BE3CD572-E8B4-48C5-B2C6-D038CB6B1E93/$ISOName'
+$url        = "https://download.microsoft.com/download/B/E/3/BE3CD572-E8B4-48C5-B2C6-D038CB6B1E93/$ISOName"
 $silentArgs = "/silent /log $logPath"
 
 $checksum      ='C0D8789271E254E3B8307A78B6F5DC76532345C1'
@@ -46,7 +46,7 @@ if ($packageParameters) {
 }
 
 Write-Output "Logs for installers will be in $logPath"
-Get-ChocolateyWebFile "$packageName" "$env:temp\" $url -checksum $checksum -checksumType $checksumType
+Get-ChocolateyWebFile "$packageName" "$env:temp\$ISOName" $url -checksum $checksum -checksumType $checksumType
 
 $VCDFullPath = $null
 $ISOMountDrive = $null

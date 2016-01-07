@@ -14,4 +14,6 @@ Install-ChocolateyEnvironmentVariable -variableName 'EC2_HOME' -variableValue "C
 
 Install-ChocolateyPath "`%EC2_HOME`%\bin" 'Machine'
 
+Write-Warning "You must start a new prompt, or re-read the environment for the tools to be available in your command line environment."
+
 Write-Warning "For completely automatic operation you must set the environment variables AWS_ACCESS_KEY and AWS_SECRET_KEY, for details see: http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/set-up-ec2-cli-windows.html"

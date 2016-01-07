@@ -12,7 +12,7 @@
     <description>You can use the CLI tools to manage your Amazon EC2 resources (such as instances, security groups, and volumes) and your Amazon VPC resources (such as VPCs, subnets, route tables, and Internet gateways).
     </description>
     <projectUrl>http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/ec2-cli-get-set-up.html</projectUrl>
-    <packageSourceUrl>s</packageSourceUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/ec2clitools</packageSourceUrl>
     <projectSourceUrl>https://github.com/aws/aws-cli</projectSourceUrl>
     <docsUrl>http://docs.aws.amazon.com/AWSEC2/latest/CommandLineReference/command-reference.html</docsUrl>
     <bugTrackerUrl>https://github.com/aws/aws-cli/issues</bugTrackerUrl>
@@ -20,7 +20,7 @@
     <copyright>Amazon</copyright>
     <licenseUrl>http://aws.amazon.com/asl/</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>http://cdn.rawgit.com/__REPLACE_YOUR_REPO__/master/icons/ec2clitools.png</iconUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/ec2clitools/appicon.png</iconUrl>
     <dependencies>
       <dependency id="javaruntime" />
     </dependencies>

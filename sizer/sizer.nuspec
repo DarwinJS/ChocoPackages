@@ -11,6 +11,7 @@
     <summary>Adds a control to all windows on your system to easily resize and place windows.  Great for aligning standard sized windows (e.g. 1280x720) to a screencast recording window.</summary>
     <description>Sizer is a freeware utility that allows you to resize any window to an exact, predefined size. This is extremely useful when designing web pages, as it allows you to see how the page will look when viewed at a smaller size. The utility is also handy when compiling screen-shots for documentation, using Sizer allows you to easily maintain the same window size across screen grabs.
     </description>
+    <projectUrl>http://www.brianapps.net/sizer</projectUrl>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/sizer</packageSourceUrl>
     <docsUrl>http://www.brianapps.net/sizer/userguide.html</docsUrl>
     <tags>sizer admin Works-Under-SYSTEM</tags>

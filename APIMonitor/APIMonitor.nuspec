@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if ??? doesn?t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
+    <id>apimonitor</id>
+    <title>APIMonitor</title>
+    <version>2.13</version>
+    <authors>Rohitab Batra</authors>
+    <owners>Darwin Sanoy (CSI-Windows.com)</owners>
+    <summary>Process traces with full API in and Out parameters.</summary>
+    <description>
+Allows creation of process tracest that include all windows APIs by name and includes all in and out parameters  Many filtering options.
+    </description>
+    <projectUrl>http://www.rohitab.com/apimonitor</projectUrl>
+    <tags>Procmon, Process Analysis, </tags>
+    <copyright>Nektra Advanced Computing</copyright>
+    <licenseUrl>http://www.rohitab.com/apimonitor</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://cdn.rawgit.com/csi-windowschocolatey/apimonitor/master/apimonitor-icon.png</iconUrl>
+    <!--<dependencies>
+      <dependency id="" version="" />
+    </dependencies>-->
+    <releaseNotes></releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

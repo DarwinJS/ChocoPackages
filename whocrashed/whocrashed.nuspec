@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if ??? doesn?t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
+    <id>whocrashed</id>
+    <title>Who Crashed</title>
+    <version>5.03</version>
+    <authors>Microsoft</authors>
+    <owners>Darwin_CSIWindowscom</owners>
+    <summary>Analyzes existing crash dumps and tries to determine and state the root cause in easy to understand language.</summary>
+    <description>
+Analyzes existing crash dumps and tries to determine and state the root cause in easy to understand language.
+	</description>
+    <projectUrl>http://www.resplendence.com/whocrashed</projectUrl>
+    <tags>Crash Dump Debugging admin</tags>
+    <copyright>Resplendence Software Projects Sp.</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://cdn.rawgit.com/csi-windowschocolatey/whocrashed/master/appicon.png</iconUrl>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

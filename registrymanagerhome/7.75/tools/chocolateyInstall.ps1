@@ -7,7 +7,6 @@ $validExitCodes = @(0)
 $checksum = '50FC113EE9473E464C7E23C2143434180EF4B62B'
 $checksumtype = 'sha1'
 
-
 Install-ChocolateyPackage "$packageName" "$installerType" "$silentArgs" "$url" -checksum $checksum -checksumtype $checksumtype -validExitCodes $validExitCodes
 
 Write-Output "**************************************************************************************"

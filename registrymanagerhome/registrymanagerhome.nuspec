@@ -14,10 +14,11 @@ Registry manager enables lightning fast ""google hits" style searching (rather t
 Not all capabilities are enabled in the free Home edition which this package installs.
 	</description>
     <projectUrl>http://www.resplendence.com/registrar_features</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/registrymanagerhome</packageSourceUrl>
     <tags>admin Registry Search bookmarks</tags>
     <copyright>Resplendence Software Projects Sp.</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://cdn.rawgit.com/csi-windowschocolatey/registrymanager/master/appicon.png</iconUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/registrymanagerhome/appicon.png</iconUrl>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

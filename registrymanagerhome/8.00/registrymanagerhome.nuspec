@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>registrymanager</id>
     <title>Registrar Registry Manager (Home/Free Edition)</title>
-    <version>7.75</version>
+    <version>8.00</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Registry management tool with many enhanced capabilities.</summary>
@@ -14,11 +14,11 @@ Registry manager enables lightning fast ""google hits" style searching (rather t
 Not all capabilities are enabled in the free Home edition which this package installs.
 	</description>
     <projectUrl>http://www.resplendence.com/registrar_features</projectUrl>
-    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/registrymanagerhome</packageSourceUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/registrymanagerhome/8.00</packageSourceUrl>
     <tags>admin Registry Search bookmarks</tags>
     <copyright>Resplendence Software Projects Sp.</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/registrymanagerhome/appicon.png</iconUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/registrymanagerhome/8.00/appicon.png</iconUrl>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

@@ -13,10 +13,11 @@
 Analyzes existing crash dumps and tries to determine and state the root cause in easy to understand language.
 	</description>
     <projectUrl>http://www.resplendence.com/whocrashed</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/whocrashed</packageSourceUrl>
     <tags>Crash Dump Debugging admin</tags>
     <copyright>Resplendence Software Projects Sp.</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://cdn.rawgit.com/csi-windowschocolatey/whocrashed/master/appicon.png</iconUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/whocrashed/appicon.png</iconUrl>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

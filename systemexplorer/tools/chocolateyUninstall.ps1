@@ -1,0 +1,2 @@
+
+Uninstall-ChocolateyZipPackage systemexplorer SystemExplorerPortable_700.zip

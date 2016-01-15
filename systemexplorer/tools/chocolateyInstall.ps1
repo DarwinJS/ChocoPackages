@@ -3,10 +3,18 @@ $url = 'http://systemexplorer.net/download-archive/6.4.2/SystemExplorerPortable_
 $url = 'http://www.softpedia.com/dyn-postdownload.php/015070120cbf7e2b4a26d0a09325cfdd/5592f250/14a8a/0/4'
 $validExitCodes = @(0)
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
+$exeName = 'systemexplorer.exe'
+
+$AppPathKey = "Registry::HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$exeName"
+If (!(Test-Path $AppPathKey)) {New-Item "$AppPathKey" | Out-Null}
+Set-ItemProperty -Path $AppPathKey -Name "(Default)" -Value "$env:chocolateyinstall\lib\$packagename\tools\$exeName"
+Set-ItemProperty -Path $AppPathKey -Name "Path" -Value "$env:chocolateyinstall\lib\$packagename\tools\"
+
 
 Install-ChocolateyZipPackage "$packageName" "$toolsDir\SystemExplorerPortable_700.zip" "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
 Write-Output "******************************************************************************"
-Write-Output "*  INSTRUCTIONS: Type `"systemexplorer.exe`" to edit file type associations. *"
+Write-Output "*  INSTRUCTIONS: In the search prompt of your start menu type `"$exeName`"   *"
+Write-Output "*   or in a command line type `"$exeName`"                                   *"
 Write-Output "*       More Info: http://systemexplorer.net                                 *"
 Write-Output "******************************************************************************"

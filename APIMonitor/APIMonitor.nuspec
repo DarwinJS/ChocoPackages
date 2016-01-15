@@ -4,24 +4,22 @@
   <metadata>
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>apimonitor</id>
-    <title>APIMonitor</title>
-    <version>2.13</version>
+    <title>Rohitab API Monitor</title>
+    <version>2.13.0.20160115</version>
     <authors>Rohitab Batra</authors>
     <owners>Darwin Sanoy (CSI-Windows.com)</owners>
     <summary>Process traces with full API in and Out parameters.</summary>
     <description>
-Allows creation of process tracest that include all windows APIs by name and includes all in and out parameters  Many filtering options.
+    Allows creation of process traces that include all windows APIs by name and includes all in and out parameters  Many filtering options.
     </description>
     <projectUrl>http://www.rohitab.com/apimonitor</projectUrl>
-    <tags>Procmon, Process Analysis, </tags>
-    <copyright>Nektra Advanced Computing</copyright>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/APIMonitor</packageSourceUrl>
+    <docsUrl>http://www.rohitab.com/apimonitor</docsUrl>
+    <tags>Procmon Process Analysis Debugging</tags>
+    <copyright>Rohitab Batra</copyright>
     <licenseUrl>http://www.rohitab.com/apimonitor</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://cdn.rawgit.com/csi-windowschocolatey/apimonitor/master/apimonitor-icon.png</iconUrl>
-    <!--<dependencies>
-      <dependency id="" version="" />
-    </dependencies>-->
-    <releaseNotes></releaseNotes>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/APIMonitor/apimonitor-icon.png</iconUrl>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

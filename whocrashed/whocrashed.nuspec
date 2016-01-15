@@ -6,8 +6,8 @@
     <id>whocrashed</id>
     <title>Who Crashed</title>
     <version>5.03</version>
-    <authors>Microsoft</authors>
-    <owners>Darwin_CSIWindowscom</owners>
+    <authors>Resplendence Software Projects Sp.</authors>
+    <owners>DarwinJS</owners>
     <summary>Analyzes existing crash dumps and tries to determine and state the root cause in easy to understand language.</summary>
     <description>
 Analyzes existing crash dumps and tries to determine and state the root cause in easy to understand language.

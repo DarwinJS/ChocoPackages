@@ -13,11 +13,11 @@ Parses a procmon trace to create an installer of whatever was traced.  Creates a
 Perfect for figuring out what some mysterious installers do.
     </description>
     <projectUrl>http://blogs.msdn.com/b/aaron_margosis/archive/2014/09/05/the-case-of-the-app-install-recorder.aspx</projectUrl>
-    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/luabuglight</packageSourceUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/appinstallrecorder</packageSourceUrl>
     <tags>Non-admin Snapshot procmon</tags>
     <copyright>Aaron Margosis</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/luabuglight/appicon.png</iconUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/appinstallrecorder/appicon.png</iconUrl>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

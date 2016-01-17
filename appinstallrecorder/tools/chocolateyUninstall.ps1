@@ -1,7 +1,12 @@
-$packageName = 'LuaBuglight'
-$exeName = "luabuglight.exe"
-$AppPathKey = "Registry::HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\$exeName"
+$packageName = 'appinstallrecorder'
 
-Uninstall-ChocolateyZipPackage $packageName LuaBuglight.zip
+$targetfolder = "$env:programdata\$packagename"
+Remove-Item "$targetfolder\AppInstallPlayback.cmd"
+Remove-Item "$targetfolder\Capture-Recording.ps1"
 
-If (Test-Path $AppPathKey) {Remove-Item "$AppPathKey" -Force -Recurse -EA SilentlyContinue | Out-Null}
+Remove-Item -Recurse -Force "$([Environment]::GetFolderPath('CommonDesktopDirectory'))\App Install Recorder Scripts.lnk"
+Remove-Item -Recurse -Force "$([Environment]::GetFolderPath('CommonStartMenu'))\App Install Recorder Scripts.lnk"
+
+
+
+Uninstall-ChocolateyZipPackage $packageName AppInstallRecorderScripts.zip

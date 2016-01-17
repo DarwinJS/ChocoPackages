@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if ??? doesn?t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>appinstallrecorder</id>
+    <title>App Install Recorder PowerShell Scripts</title>
+    <version>1.0.0</version>
+    <authors>Aaron Margosis</authors>
+    <owners>Darwin Sanoy (CSI-Windows.com)</owners>
+    <summary>Parses a procmon trace to create an installer of whatever was traced.  Creates a populated folder structure and a .REG</summary>
+    <description>
+Parses a procmon trace to create an installer of whatever was traced.  Creates a populated folder structure and a .REG
+Perfect for figuring out what some mysterious installers do.
+    </description>
+    <projectUrl>http://blogs.msdn.com/b/aaron_margosis/archive/2014/09/05/the-case-of-the-app-install-recorder.aspx</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/luabuglight</packageSourceUrl>
+    <tags>Non-admin Snapshot procmon</tags>
+    <copyright>Aaron Margosis</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/luabuglight/appicon.png</iconUrl>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

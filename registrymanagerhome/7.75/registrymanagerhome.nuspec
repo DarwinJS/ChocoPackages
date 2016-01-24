@@ -6,7 +6,7 @@
     <id>registrymanager</id>
     <title>Registrar Registry Manager (Home/Free Edition)</title>
     <version>7.75</version>
-    <authors>Microsoft</authors>
+    <authors>Daniel Terhell</authors>
     <owners>DarwinJS</owners>
     <summary>Registry management tool with many enhanced capabilities.</summary>
     <description>

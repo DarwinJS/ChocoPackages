@@ -11,6 +11,9 @@
     <summary>Microsoft is making it harder and harder to prevent this update from hitting your systems.  This package applies the Microsoft fixes to prevent the upgrade on Windows 7 and 8.1.</summary>
     <description>Microsoft is making it harder and harder to prevent this update from hitting your systems.  This package applies the Microsoft fixes to prevent the upgrade on Windows 7 and 8.1.
       This process is documented at: https://support.microsoft.com/en-us/kb/3080351
+
+      Details about Windows 10 Upgrade being changed to a Windows Update "Recommended Update" : http://www.extremetech.com/computing/222326-look-out-microsoft-shifts-windows-10-to-recommended-update-automatic-download
+
     </description>
     <docsUrl>https://support.microsoft.com/en-us/kb/3080351</docsUrl>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/disablewindows10upgrade</packageSourceUrl>

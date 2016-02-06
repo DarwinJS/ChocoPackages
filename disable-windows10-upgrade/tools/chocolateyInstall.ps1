@@ -1,4 +1,4 @@
-﻿$packageName = 'disablewindows10upgrade'
+﻿$packageName = 'disable-windows10-upgrade'
 $url7 = 'https://download.microsoft.com/download/C/5/3/C530B84C-857A-4296-BB9E-3BB59EEDF555/Windows6.1-KB3065987-v2-x86.msu'
 $checksum7 = '52B432A85AEA3F6CF1BB047D4118A6D4BE9BF5E5'
 $url764 = 'https://download.microsoft.com/download/F/6/7/F678BB18-7D81-4BBA-8FED-6388FF7968AD/Windows6.1-KB3065987-v2-x64.msu'

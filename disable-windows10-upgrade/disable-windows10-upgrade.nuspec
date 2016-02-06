@@ -17,7 +17,7 @@
     </description>
     <docsUrl>https://support.microsoft.com/en-us/kb/3080351</docsUrl>
     <projectUrl>https://support.microsoft.com/en-us/kb/3080351</projectUrl>
-    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/disablewindows10upgrade</packageSourceUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/disable-windows10-upgrade</packageSourceUrl>
     <tags>admin disable Windows 10 Automatic Upgrade Windows Update disable-windows10-upgrade</tags>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/disable-windows10-upgrade/appicon.png</iconUrl>

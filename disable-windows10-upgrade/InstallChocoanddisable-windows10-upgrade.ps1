@@ -5,7 +5,7 @@ as they work on a pristine machine no matter whether it is domain joined or not.
 
   1) Open an ELEVATED PowerShell Prompt
   2) Paste this command into the console (get the whole line - it's long):
-     [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/WorkWave/ESQuickConfigs/master/installchoco.ps1'))
+     [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/disable-windows10-upgrade/InstallChocoanddisable-windows10-upgrade.ps1'))
 #>
 
 $DoNotPrompt = $true

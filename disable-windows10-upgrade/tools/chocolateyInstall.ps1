@@ -34,6 +34,7 @@ Else
     {
       Write-Output "Applying required hotfix KB3065987"
       Install-ChocolateyPackage "$packageName" 'MSU' "$SilentArgs /log:$env:temp\KB3065987.evtx" -url $url7 -url64 $url764 -checksum $checksum7 -checksumtype 'sha1' -checksum64 $checksum764 -checksumtype64 'sha1' -validExitCodes $validExitCodes
+      #Manual command: wusa.exe updatename.msu /quiet /norestart /log:$env:temp\\KB3065987.evtx
       Write-Warning "This update will require a restart before it becomes active..."
     }
   }
@@ -42,7 +43,8 @@ Else
     If (-not([bool](get-hotfix | where {$_.hotfixId -eq 'KB3065988'})))
     {
       Write-Output "Applying required hotfix KB3065988"
-      Install-ChocolateyPackage "$packageName" 'MSU' "$SilentArgs /log:$env:temp\KB3065987.evtx" -url $url81 -url64 $url8164 -checksum $checksum81 -checksumtype 'sha1' -checksum64 $checksum8164 -checksumtype64 'sha1' -validExitCodes $validExitCodes
+      Install-ChocolateyPackage "$packageName" 'MSU' "$SilentArgs /log:$env:temp\KB3065988.evtx" -url $url81 -url64 $url8164 -checksum $checksum81 -checksumtype 'sha1' -checksum64 $checksum8164 -checksumtype64 'sha1' -validExitCodes $validExitCodes
+      #Manual command: wusa.exe updatename.msu /quiet /norestart /log:$env:temp\\KB3065988.evtx
       Write-Warning "This update will require a restart before it becomes active..."
     }
   }

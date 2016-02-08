@@ -4,7 +4,7 @@
   <metadata>
     <id>visualstudio2013testagents</id>
     <title>Agents for Visual Studio 2013</title>
-    <version>12.0.21005.20160105</version>
+    <version>12.0.21005.20160119</version>
     <authors>Microsoft</authors>
     <owners>Darwin Sanoy (Workwave)</owners>
     <summary>Microsoft Visual Test Agents and Controller for running compiled tests on a node without installing all of Visual Studio.</summary>
@@ -32,7 +32,8 @@
     <dependencies>
       <dependency id="virtualclonedrive"/>
     </dependencies>
-    <releaseNotes>Includes Update 5.  The Microsoft Agents do not provide an uninstaller, so neither does this package.</releaseNotes>
+    <releaseNotes>Includes Update 5.  The Microsoft Agents do not provide an uninstaller, so neither does this package.
+    Version 12.0.21005.20160119 of this package detects if the agents are already present - usually due to full Visual Studio being installed.</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

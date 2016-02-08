@@ -15,7 +15,7 @@ $SQL_QuietSwitch = "Q"
 $SQL_InstanceName = 'SQLEXPRESS'
 $SQL_Features = 'SQLENGINE,FULLTEXT,CONN,IS,BC,SDK,SSMS,ADV_SSMS'
 $SQL_SecurityMode = $null
-$SQL_SAPwd = 'BestP@ssword2Have' #Password must meet operating system configured complexity requirements or install will fail.
+$SQL_SAPwd = 'BestPassword2Have' #Password must meet operating system configured complexity requirements or install will fail.
 $SQL_BROWSERSVCSTARTUPTYPE = 'Automatic'
 $SQL_SQLSVCSTARTUPTYPE = 'Automatic'
 

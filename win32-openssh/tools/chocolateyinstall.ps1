@@ -12,10 +12,10 @@ $checksum64 = '0DAF4EC97DC282CB51335A0A95F22DBC'
 $checksumtype = 'md5'
 #>
 
-$OSBits = GetObject("winmgmts:root\cimv2:Win32_Processor='cpu0'").AddressWidth
+$OSBits = (gwmi win32_processor | where {$_.DeviceID -eq 'CPU0'}).addresswidth
 
 #On 64-bit, always favor 64-bit Program Files no matter what our execution is now (works back past XP / Server 2003)
-If ($env:ProgramFiles.contains('x86')
+If ($env:ProgramFiles.contains('x86'))
 {
   $PF = $env:ProgramFiles.replace(' (x86)','')
 }
@@ -26,6 +26,7 @@ Else
 
 $filename = "$toolsdir\OpenSSH-Win$($OSBits).zip"
 $TargetFolder = "$PF\OpenSSH-Win$($OSBits)"
+$ExtractFolder = "$PF"
 
 # Default the values
 $SSHServerFeature = $false
@@ -71,10 +72,43 @@ if ($packageParameters) {
     Write-Debug "No Package Parameters Passed in";
 }
 
+$SSHServiceInstanceExistsAndIsOurs = ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike 'sshd'} | select -expand PathName) -ilike "*$TargetFolder*"))
+
+If ($SSHServerFeature -AND (!$SSHServiceInstanceExistsAndIsOurs) -AND (Get-Service sshd -ErrorAction SilentlyContinue))
+{
+  $ExistingSSHDInstancePath = (Get-WmiObject win32_service | ?{$_.Name -ilike 'sshd'} | select -expand PathName)
+  Throw "You have requested that the SSHD service be installed, but this system appears to have an instance of an SSHD service configured for another folder ($ExistingSSHDInstancePath).  You can remove the package switch /SSHServerFeature to install just the client tools, or you will need to remove that instance of SSHD to use the one that comes with this package."
+}
+
+If ((!$SSHServerFeature) -AND $SSHServiceInstanceExistsAndIsOurs)
+{
+  Throw "There is a configured instance of the SSHD service, please specify the /SSHServerFeature to confirm it is OK to shutdown and upgrade the SSHD service at this time."
+}
+
+If ([bool](get-process ssh -erroraction silentlycontinue | where {$_.Path -ilike "*$TargetPath*"}))
+{
+  Throw "It appears you have instances of ssh.exe (client) running from the folder this package installs to, please terminate them and try again."
+}
+
+If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorAction SilentlyContinue | where {$_.Status -ieq 'Running'})))
+{
+#Shutdown and unregister service for upgrade
+    Stop-Service SSHD -Force
+    If (!([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
+    {
+      Throw "Could not stop the SSHD service, please stop manually and retry this package."
+    }
+}
+
+If ($SSHServiceInstanceExistsAndIsOurs)
+{
+  start-process "$TargetFolder\sshd.exe" -ArgumentList 'uninstall' -nonewwindow -wait
+}
+
 #Placing these security sensitive exe files in a location secure from viruses (and as per project install instructions)
 #Use of internal files because project does not (yet) provide the current version at a versioned url
 #Have updated an issue to request a versioned url be provided for all new releases (even if not published)
-Get-ChocolateyUnzip "$filename" "$TargetFolder"
+Get-ChocolateyUnzip "$filename" "$ExtractFolder"
 
 Install-ChocolateyPath "$TargetFolder" 'Machine'
 
@@ -83,6 +117,7 @@ If ($SSHServerFeature)
   Write-Warning "You have specified SSHServerFeature - this machine is being configured as an SSH Server including opening port 22."
   If ($KeyBasedAuthenticationFeature)
   {
+    Write-Warning "You have specified KeyBasedAuthenticationFeature - a new lsa provider will be installed."
     If (Test-Path "$env:windir\sysnative")
     { #We are running in a 32-bit process under 64-bit Windows
       $sys32dir = "$env:windir\sysnative"
@@ -91,26 +126,45 @@ If ($SSHServerFeature)
     { #We are on a 32-bit OS, or 64-bit proc on 64-bit OS
       $sys32dir = "$env:windir\system32"
     }
+    IF ($OSBits -ge 64)
+    {
+      $BitnessRef = 'x64'
+    }
+    Else
+    {
+      $BitnessRef = 'x86'
+    }
+    Copy-Item "$TargetFolder\$BitnessRef\ssh-lsa.dll" "$sys32dir\ssh-lsa.dll" -Force
+
     #Don't destroy other values
     $key = get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa'
     $values = $key.GetValue("Authentication Packages")
-    $values += "msv1_0\0ssh-lsa.dll"
+    $values += 'msv1_0\0ssh-lsa.dll'
     Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\" "Authentication Packages" $values
   }
-  cd "$TargetFolder"
-  .\ssh-keygen.exe -A
-  netsh advfirewall firewall add rule name='SSHD Port' dir=in action=allow protocol=TCP localport=22
-  .\sshd.exe install
+
+  If (!(Test-Path "$TargetFolder\ssh_host_rsa_key"))
+  { #Only ever generate a key the first time SSHD server is installed
+      Write-Output "Generating sshd keys in `"$TargetFolder`""
+      start-process "$TargetFolder\ssh-keygen.exe" -ArgumentList '-A' -WorkingDirectory "$TargetFolder" -nonewwindow -wait
+  }
+  Else
+  {
+    Write-Warning "Found existing server ssh keys in $TargetFolder, you must delete them manually to generate new ones."
+  }
+
+  netsh advfirewall firewall add rule name='SSHD Port win32-openssh' dir=in action=allow protocol=TCP localport=22
+  start-process "$TargetFolder\sshd.exe" -ArgumentList 'install' -nonewwindow -wait
   Set-Service sshd -StartupType Automatic
 
-  #Need reboot first?
   If (!$KeyBasedAuthenticationFeature)
   {
+    Write-Output "Starting sshd Service"
     Start-Service sshd
   }
   Else
   {
-    Write-Warning "You must reboot for SSHD so that the Key based authentication can be fully installed before SSHD starts the first time."
+    Write-Warning "You must reboot so thatKey based authentication can be fully installed for the SSHD Service."
   }
 }
 

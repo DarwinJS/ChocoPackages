@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
+    <id>win32-openssh</id>
+    <title>Win32 OpenSSH (Microsoft Port)</title>
+    <version>2015.12.22</version>
+    <authors>Microsoft</authors>
+    <owners>DarwinJS</owners>
+    <summary>Open SSH tools for Windows - work in all CLIs.</summary>
+    <description>Open SSH tools for Windows - work in all CLIs.
+      Includes the following tools:
+      * ssh.exe
+      * ssh-add.exe
+      * ssh-agent.exe
+      * ssh-keygen.exe
+      * ssh-keyscan.exe
+      * ssh-keysign.exe
+      * ssh-pkcs11-helper.exe
+      * scp.exe
+      * sftp.exe
+      * sshd.exe (server)
+      * sftp-server.exe
+    </description>
+    <projectUrl>https://github.com/PowerShell/Win32-OpenSSH</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/win32-openssh</packageSourceUrl>
+    <projectSourceUrl>https://github.com/PowerShell/Win32-OpenSSH</projectSourceUrl>
+    <docsUrl>https://github.com/PowerShell/Win32-OpenSSH/wiki</docsUrl>
+    <bugTrackerUrl>https://github.com/PowerShell/Win32-OpenSSH/issues</bugTrackerUrl>
+    <tags>win32-openssh admin</tags>
+    <copyright>Microsoft</copyright>
+    <licenseUrl>https://raw.githubusercontent.com/PowerShell/Win32-OpenSSH/L1/LICENCE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/win32-openssh/appicon.png</iconUrl>
+    <releaseNotes>None</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

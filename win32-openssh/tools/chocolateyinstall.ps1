@@ -4,13 +4,6 @@ $ErrorActionPreference = 'Stop'; # stop on all errors
 $packageName= 'win32-openssh'
 $packageVersion = '2015.12.22'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-<#
-$url        = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/latest/OpenSSH-Win32.zip'
-$checksum = '06DA0A083EEE2620DF32AB01CE7B18A4'
-$url64        = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/latest/OpenSSH-Win64.zip'
-$checksum64 = '0DAF4EC97DC282CB51335A0A95F22DBC'
-$checksumtype = 'md5'
-#>
 
 $OSBits = (gwmi win32_processor | where {$_.DeviceID -eq 'CPU0'}).addresswidth
 

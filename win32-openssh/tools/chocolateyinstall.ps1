@@ -67,7 +67,7 @@ if ($packageParameters) {
 
 $SSHServiceInstanceExistsAndIsOurs = ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike 'sshd'} | select -expand PathName) -ilike "*$TargetFolder*"))
 
-If ($SSHServerFeature -AND (!$SSHServiceInstanceExistsAndIsOurs) -AND (Get-Service sshd -ErrorAction SilentlyContinue))
+If ($SSHServerFeature -AND (!$SSHServiceInstanceExistsAndIsOurs) -AND ([bool](Get-Service sshd -ErrorAction SilentlyContinue)))
 {
   $ExistingSSHDInstancePath = (Get-WmiObject win32_service | ?{$_.Name -ilike 'sshd'} | select -expand PathName)
   Throw "You have requested that the SSHD service be installed, but this system appears to have an instance of an SSHD service configured for another folder ($ExistingSSHDInstancePath).  You can remove the package switch /SSHServerFeature to install just the client tools, or you will need to remove that instance of SSHD to use the one that comes with this package."
@@ -157,7 +157,7 @@ If ($SSHServerFeature)
   }
   Else
   {
-    Write-Warning "You must reboot so thatKey based authentication can be fully installed for the SSHD Service."
+    Write-Warning "You must reboot so that key based authentication can be fully installed for the SSHD Service."
   }
 }
 

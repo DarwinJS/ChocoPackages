@@ -15,14 +15,12 @@ If ($host.name -ilike "*remote*") {$Description = "Basic chocolatey install and 
 $Changes = @"
   [1] Sets PowerShell Execution Policy to "RemoteSigned"
   [2] Installs chocolatey package manager
-  [3] Registers Workwave Repo (You need the user name and password to complete this step)
-  [4] Installs BGINFO (on virtuals only)
-  [5] Installs Windows Evaluation helper shortcuts (only if an eval version of Windows is detected)
+  [3] Installs the chocolatey package disable-windows10-upgrade
 "@
 
 clear-host
 Write-output "****************************************************"
-Write-output "Quick Config by WW Engineering Services..."
+Write-output "Quick Config by Darwin Sanoy..."
 Write-output $Description
 Write-output "Changes to be made:"
 Write-output $Changes

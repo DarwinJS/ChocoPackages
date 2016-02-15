@@ -5,7 +5,7 @@ $packageName= 'win32-openssh'
 $packageVersion = '2015.12.22'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
-$OSBits = (gwmi win32_processor | where {$_.DeviceID -eq 'CPU0'}).addresswidth
+$OSBits = Get-ProcessorBits
 
 #On 64-bit, always favor 64-bit Program Files no matter what our execution is now (works back past XP / Server 2003)
 If ($env:ProgramFiles.contains('x86'))

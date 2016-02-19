@@ -66,4 +66,4 @@ If (!(Test-Path env:ChocolateyInstall))
 
 Write-Output "Chocolatey is installed and enabled for use in this session..."
 
-choco install disable-windows10-upgrade -version 1.2.0 -confirm
+choco install win32-openssh -confirm

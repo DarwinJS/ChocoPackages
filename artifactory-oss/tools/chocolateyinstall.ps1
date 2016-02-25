@@ -1,4 +1,7 @@
 
+#Reread Environment In Case JDK dependency just ran
+Update-SessionEnvironment
+
 $url = 'https://bintray.com/artifact/download/jfrog/artifactory/jfrog-artifactory-oss-4.5.1.zip'
 $checksum = '3572deecb47d2ef15f0bee09f6b455d90a804ec2'
 $checksumtype = 'sha1'
@@ -21,21 +24,30 @@ Else
 }
 
 $TargetFolder = "$PF\artifactory-oss"
-$ExtractFolder = "$env:temp\jfrog"
+$ExtractFolder = "$env:temp"
 $servicename = 'artifactory'
 
 If ([bool](Get-Service $servicename -ErrorAction SilentlyContinue))
 {
-  Write-Warning "Nexus web app is already present, shutting it down so that we can upgrade it."
+  Write-Warning "Artifactory is already present, shutting it down so that we can upgrade it."
   Stop-Service $servicename -force
+  pushd "$TargetFolder\bin"
+  Start-ChocolateyProcessAsAdmin "/c `"$TargetFolder\bin\uninstallservice.bat`"" "cmd.exe" -validExitCodes $validExitCodes
+  popd
 }
 
 Install-ChocolateyZipPackage -PackageName $packageName -unziplocation "$ExtractFolder" -url $url -checksum $checksum -checksumtype $checksumtype -url64 $url -checksum64 $checksum -checksumtype64 $checksumtype
 
-Copy-Item "$ExtractFolder\$versionedfolder" "$TargetFolder" -Force -Recurse
-Remove-Item "$ExtractFolder\$versionedfolder" -Force -Recurse
+Rename-Item "$ExtractFolder\$versionedfolder" "$ExtractFolder\artifactory-oss"
+Copy-Item "$ExtractFolder\artifactory-oss" "$PF" -Force -Recurse
+Remove-Item "$ExtractFolder\artifactory-oss" -Force -Recurse
 
+#remove the pause from installservice.bat
+((Get-Content "$TargetFolder\bin\installservice.bat") -replace '& pause', '') -replace 'pause', ''| Set-Content "$TargetFolder\bin\installservice.bat"
+
+pushd "$TargetFolder\bin"
 Start-ChocolateyProcessAsAdmin "/c `"$TargetFolder\bin\installservice.bat`"" "cmd.exe" -validExitCodes $validExitCodes
+popd
 
 Install-ChocolateyEnvironmentVariable 'ARTIFACTORY_HOME' "$TargetFolder\bin"
 

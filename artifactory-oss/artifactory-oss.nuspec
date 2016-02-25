@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
+    <id>artifactory-oss</id>
+    <title>jFrog Artifactory OSS</title>
+    <version>4.5.1</version>
+    <authors>jFrog</authors>
+    <owners>DarwinJS</owners>
+    <summary>Open source vesion of jFrog binary artifact repository including Nuget.</summary>
+    <description>Open source vesion of jFrog binary artifact repository including Nuget.
+    </description>
+    <projectUrl>https://www.jfrog.com/artifactory/</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/artifactory-oss</packageSourceUrl>
+    <projectSourceUrl>https://subversion.jfrog.org/artifactory/public/trunk</projectSourceUrl>
+    <bugTrackerUrl>https://issues.jfrog.org/jira/browse/rtfact</bugTrackerUrl>
+    <releaseNotes>[https://bintray.com/jfrog/artifactory/jfrog-artifactory-oss-zip/4.5.1/view#release]</releaseNotes>
+    <docsUrl>https://www.jfrog.com/confluence/display/RTF/Welcome+to+Artifactory</docsUrl>
+    <tags>artifactory-oss admin</tags>
+    <copyright>jFrog</copyright>
+    <licenseUrl>http://www.opensource.org/licenses/lgpl-3.0.html</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/artifactory-oss/appicon.png</iconUrl>
+    <dependencies>
+      <dependency id="JDK" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

@@ -1,8 +1,7 @@
-
 $validExitCodes = @(0)
 
-$packageName= 'nexus-repository-oss'
-$nexusversionedfolder = 'nexus-2.12.0-01'
+$packageName= 'artifactory-oss'
+$versionedfolder = 'artifactory-oss-4.5.1'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
 $OSBits = Get-ProcessorBits
@@ -17,19 +16,17 @@ Else
   $PF = $env:ProgramFiles
 }
 
-$TargetFolder = "$PF\nexus"
-$ExtractFolder = "$env:programdata\nexus"
-$NexusWorkFolder = "$env:programdata\nexus\sonatype-work"
-$servicename = 'nexus-webapp'
+$TargetFolder = "$PF\artifactory-oss"
+$ExtractFolder = "$env:temp\jfrog"
+$servicename = 'artifactory'
 
 If ([bool](Get-Service $servicename -ErrorAction SilentlyContinue))
 {
   Stop-Service $servicename -force
 }
 
-Start-ChocolateyProcessAsAdmin "/c `"$TargetFolder\bin\nexus.bat`" uninstall" "cmd.exe" -validExitCodes $validExitCodes
+Start-ChocolateyProcessAsAdmin "/c `"$TargetFolder\bin\uninstallservice.bat`"" "cmd.exe" -validExitCodes $validExitCodes
 
-[Environment]::SetEnvironmentVariable('PLEXUS_NEXUS_WORK',$null,'Machine')
+[Environment]::SetEnvironmentVariable('ARTIFACTORY_HOME',$null,'Machine')
 
-Remove-Item $NexusWorkFolder -Recurse -Force
 Remove-Item $TargetFolder -Recurse -Force

@@ -27,14 +27,14 @@ $servicename = 'nexus-webapp'
 
 If ([bool](Get-Service $servicename -ErrorAction SilentlyContinue))
 {
-  Write-Warning "Nexus web app is already presenting, shutting it down so that we can upgrade it."
+  Write-Warning "Nexus web app is already present, shutting it down so that we can upgrade it."
   Stop-Service $servicename -force
   Start-ChocolateyProcessAsAdmin "/c `"$TargetFolder\bin\nexus.bat`" uninstall" "cmd.exe" -validExitCodes $validExitCodes
 }
 
 Install-ChocolateyZipPackage -PackageName $packageName -unziplocation "$ExtractFolder" -url $url -checksum $checksum -checksumtype $checksumtype -url64 $url -checksum64 $checksum -checksumtype64 $checksumtype
 
-Copy-Item "$env:programdata\nexus\$nexusversionedfolder" "$PF\nexus" -Force -Recurse
+Copy-Item "$env:programdata\nexus\$nexusversionedfolder" "$TargetFolder" -Force -Recurse
 Remove-Item "$env:programdata\nexus\$nexusversionedfolder" -Force -Recurse
 
 Start-ChocolateyProcessAsAdmin "/c `"$TargetFolder\bin\nexus.bat`" install" "cmd.exe" -validExitCodes $validExitCodes
@@ -47,5 +47,5 @@ Write-Warning "`r`n"
 Write-Warning "***************************************************************************"
 Write-Warning "*  You can manage the repository by visiting http://localhost:8081/nexus"
 Write-Warning "*  The default user is 'admin' with password 'admin123'"
-Write-Warning "*  Nexus availability is controlled via the service $servicename"
+Write-Warning "*  Nexus availability is controlled via the service `"$servicename`""
 Write-Warning "***************************************************************************"

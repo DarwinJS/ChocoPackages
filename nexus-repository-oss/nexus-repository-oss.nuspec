@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
+    <id>nexus-repository-oss</id>
+    <title>Nexus Repository OSS</title>
+    <version>2.12.0.01</version>
+    <authors>Sonatype</authors>
+    <owners>DarwinJS</owners>
+    <summary>Open source vesion of popular Nexus Repository for binary artifacts including Nuget.</summary>
+    <description>Open source vesion of popular Nexus Repository for binary artifacts including Nuget.
+    </description>
+    <projectUrl>http://www.sonatype.com/nexus</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/nexus-repository-oss</packageSourceUrl>
+    <projectSourceUrl>https://github.com/sonatype/nexus-public</projectSourceUrl>
+    <docsUrl>http://books.sonatype.com/nexus-book/</docsUrl>
+    <tags>nexus-repository-oss admin</tags>
+    <copyright>Sonatype</copyright>
+    <licenseUrl>http://www.eclipse.org/legal/epl-v10.html</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/nexus-repository-oss/appicon.png</iconUrl>
+    <releaseNotes>None</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

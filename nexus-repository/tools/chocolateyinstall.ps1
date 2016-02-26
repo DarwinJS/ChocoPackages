@@ -10,7 +10,7 @@ $validExitCodes = @(0)
 $packageName= 'nexus-repository'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
-$downloadedfile = "$toolsDir\$packageNameinstall.exe"
+$downloadedfile = "$toolsDir\$packageidinstall.exe"
 
 If (Test-Path "$installfolder\bin\uninstall.exe")
 {
@@ -31,11 +31,23 @@ Else
   netsh advfirewall firewall add rule name="nexus-respositoryInstall.exe" program="$downloadedfile" dir=in action=block
   Install-ChocolateyInstallPackage -packageName $packageName -fileType 'EXE' -file $downloadedfile -silentargs $silentargs
   netsh advfirewall firewall delete rule name="nexus-respositoryInstall.exe"
+  If ((gwmi win32_operatingsystem).caption -ilike "*2012*")
+  {
+    If(![bool]((gc "$installfolder\etc\custom.properties") -ilike "*felix.native.osname.alias.windowsserver2012=windows server 2012,win32*"))
+    {
+      Add-Content "$installfolder\etc\custom.properties" 'felix.native.osname.alias.windowsserver2012=windows server 2012,win32'
+      Stop-Service Nexus -force -erroraction SilentlyContinue
+      Start-Service Nexus 
+    }
+  }
 }
 
 Write-Warning "`r`n"
-Write-Warning "***************************************************************************"
+Write-Warning "*******************************************************************************************"
 Write-Warning "*  You can manage the repository by visiting http://localhost:8081"
 Write-Warning "*  The default user is 'admin' with password 'admin123'"
 Write-Warning "*  Nexus availability is controlled via the service `"$servicename`""
-Write-Warning "***************************************************************************"
+Write-Warning "*  Use the following command to open port 8081 for access from off this machine (one line):"
+Write-Warning "*   netsh advfirewall firewall add rule name=`"Nexus Repository`" dir=in action=allow "
+Write-Warning "*   protocol=TCP localport=8081"
+Write-Warning "*******************************************************************************************"

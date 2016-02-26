@@ -5,7 +5,7 @@ as they work on a pristine machine no matter whether it is domain joined or not.
 
   1) Open an ELEVATED PowerShell Prompt
   2) Paste this command into the console (get the whole line - it's long):
-     [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/nexus-repository-oss/InstallChoco_and_nexus-repository-oss.ps1'))
+     [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/nexus-repository-2/InstallChoco_and_nexus-repository.ps1'))
 #>
 
 $DoNotPrompt = $true
@@ -15,7 +15,7 @@ If ($host.name -ilike "*remote*") {$Description = "Nexus Repository OSS on `$env
 $Changes = @"
   [1] Sets PowerShell Execution Policy to "RemoteSigned"
   [2] Installs chocolatey package manager
-  [3] Installs the chocolatey package nexus-repository-oss
+  [3] Installs the chocolatey package nexus-repository
 "@
 
 clear-host
@@ -66,4 +66,4 @@ If (!(Test-Path env:ChocolateyInstall))
 
 Write-Output "Chocolatey is installed and enabled for use in this session..."
 
-choco install nexus-repository-oss -confirm
+choco install nexus-repository -confirm

@@ -1,7 +1,7 @@
 
 $validExitCodes = @(0)
 
-$packageName= 'nexus-repository-oss'
+$packageName= 'nexus-repository'
 $nexusversionedfolder = 'nexus-2.12.0-01'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 

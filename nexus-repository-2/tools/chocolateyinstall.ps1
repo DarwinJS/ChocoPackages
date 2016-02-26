@@ -4,7 +4,7 @@ $checksum = 'e082f4ee8fea2eb7351d522ae304bfdbe05b7efe'
 $checksumtype = 'sha1'
 $validExitCodes = @(0)
 
-$packageName= 'nexus-repository-oss'
+$packageName= 'nexus-repository'
 $nexusversionedfolder = 'nexus-2.12.0-01'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 

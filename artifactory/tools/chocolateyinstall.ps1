@@ -7,7 +7,7 @@ $checksum = '3572deecb47d2ef15f0bee09f6b455d90a804ec2'
 $checksumtype = 'sha1'
 $validExitCodes = @(0)
 
-$packageName= 'artifactory-oss'
+$packageName= 'artifactory'
 $versionedfolder = 'artifactory-oss-4.5.1'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
@@ -23,8 +23,8 @@ Else
   $PF = $env:ProgramFiles
 }
 
-$TargetFolder = "$PF\artifactory-oss"
-$ExtractFolder = "$env:temp"
+$TargetFolder = "$PF\artifactory"
+$ExtractFolder = "$env:temp\jfrogtemp"
 $servicename = 'artifactory'
 
 If ([bool](Get-Service $servicename -ErrorAction SilentlyContinue))
@@ -38,9 +38,9 @@ If ([bool](Get-Service $servicename -ErrorAction SilentlyContinue))
 
 Install-ChocolateyZipPackage -PackageName $packageName -unziplocation "$ExtractFolder" -url $url -checksum $checksum -checksumtype $checksumtype -url64 $url -checksum64 $checksum -checksumtype64 $checksumtype
 
-Rename-Item "$ExtractFolder\$versionedfolder" "$ExtractFolder\artifactory-oss"
-Copy-Item "$ExtractFolder\artifactory-oss" "$PF" -Force -Recurse
-Remove-Item "$ExtractFolder\artifactory-oss" -Force -Recurse
+Rename-Item "$ExtractFolder\$versionedfolder" "$ExtractFolder\artifactory"
+Copy-Item "$ExtractFolder\artifactory" "$PF" -Force -Recurse
+Remove-Item "$ExtractFolder\artifactory" -Force -Recurse
 
 #remove the pause from installservice.bat
 ((Get-Content "$TargetFolder\bin\installservice.bat") -replace '& pause', '') -replace 'pause', ''| Set-Content "$TargetFolder\bin\installservice.bat"

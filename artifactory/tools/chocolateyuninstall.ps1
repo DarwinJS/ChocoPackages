@@ -1,8 +1,7 @@
 $validExitCodes = @(0)
 
-$packageName= 'artifactory-oss'
-$versionedfolder = 'artifactory-oss-4.5.1'
-$toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
+$packageName= 'artifactory'
+$toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definitionartifactory
 
 $OSBits = Get-ProcessorBits
 
@@ -16,7 +15,7 @@ Else
   $PF = $env:ProgramFiles
 }
 
-$TargetFolder = "$PF\artifactory-oss"
+$TargetFolder = "$PF\artifactory"
 $ExtractFolder = "$env:temp\jfrog"
 $servicename = 'artifactory'
 

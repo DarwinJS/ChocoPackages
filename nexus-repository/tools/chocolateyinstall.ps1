@@ -10,12 +10,7 @@ $validExitCodes = @(0)
 $packageName= 'nexus-repository'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
-$downloadedfile = "$toolsDir\$packageidinstall.exe"
-
-If (Test-Path "$installfolder\bin\uninstall.exe")
-{
-  Throw "There appears to be an installation of Nexus at `"$installfolder`", please remove it and try this package again."
-}
+$downloadedfile = "$toolsDir\$($packageid)install.exe"
 
 Write-Warning "Installation log will be at $env:temp\i4j_nlog_<SEQ#>"
 
@@ -35,9 +30,10 @@ Else
   {
     If(![bool]((gc "$installfolder\etc\custom.properties") -ilike "*felix.native.osname.alias.windowsserver2012=windows server 2012,win32*"))
     {
+      Write-Warning "Fixing up `"$installfolder\etc\custom.properties`" for Server 2012"
       Add-Content "$installfolder\etc\custom.properties" 'felix.native.osname.alias.windowsserver2012=windows server 2012,win32'
       Stop-Service Nexus -force -erroraction SilentlyContinue
-      Start-Service Nexus 
+      Start-Service Nexus
     }
   }
 }

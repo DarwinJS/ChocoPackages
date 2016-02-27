@@ -1,7 +1,6 @@
 $validExitCodes = @(0)
 
 $packageName= 'artifactory'
-$toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definitionartifactory
 
 $OSBits = Get-ProcessorBits
 
@@ -16,7 +15,6 @@ Else
 }
 
 $TargetFolder = "$PF\artifactory"
-$ExtractFolder = "$env:temp\jfrog"
 $servicename = 'artifactory'
 
 If ([bool](Get-Service $servicename -ErrorAction SilentlyContinue))

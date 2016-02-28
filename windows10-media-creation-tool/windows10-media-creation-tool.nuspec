@@ -16,7 +16,7 @@
     </description>
     <projectUrl>https://www.microsoft.com/en-us/software-download/windows10</projectUrl>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/windows10-media-creation-tool</packageSourceUrl>
-    <tags>Non-admin windows10-media-creation-tool</tags>
+    <tags>portable windows10-media-creation-tool</tags>
     <copyright>Microsoft</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/windows10-media-creation-tool/appicon.png</iconUrl>

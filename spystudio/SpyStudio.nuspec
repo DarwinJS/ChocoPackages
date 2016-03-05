@@ -15,11 +15,11 @@ Allows easy creation, comparison and exporting of process tracing data.  Can als
     <releaseNotes>[http://whiteboard.nektra.com/spystudio-changelog]</releaseNotes>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/spystudio</packageSourceUrl>
     <projectUrl>http://www.nektra.com/products/spystudio-api-monitor/</projectUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/spystudio/appicon.png</iconUrl>
     <tags>Procmon Nektra SpyStudio portable</tags>
     <copyright>Nektra Advanced Computing</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-	<licenseUrl>http://whiteboard.nektra.com/spystudio/spystudio_license</licenseUrl>
-    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/spystudio/appicon.png</iconUrl>
+  	<licenseUrl>http://whiteboard.nektra.com/spystudio/spystudio_license</licenseUrl>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

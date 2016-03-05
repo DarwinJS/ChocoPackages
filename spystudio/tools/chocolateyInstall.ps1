@@ -6,7 +6,7 @@ $validExitCodes = @(0) #please insert other valid exit codes here, exit codes fo
 
 #Install-ChocolateyPackage "$packageName" "$installerType" "$silentArgs" "$url" "$url64"  -validExitCodes $validExitCodes
 
-If ((Test-Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5") -AND -NOT ((get-itemproperty "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5").sp -ge 1))
+If ((!(Test-Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5")) -OR (!((get-itemproperty "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5").sp -ge 1)))
   {
   Throw "Spy Studio requires .NET 3.5.1 or later.  You must either: [a] manually install it after verifing it will not cause problems on this system, or [b] use procmon for your trace and analyze it using Spy Studio installed on another system that has .NET 3.5.1 or later."
   }

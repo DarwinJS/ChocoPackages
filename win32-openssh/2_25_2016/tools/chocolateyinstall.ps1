@@ -119,15 +119,8 @@ If ($SSHServerFeature)
     { #We are on a 32-bit OS, or 64-bit proc on 64-bit OS
       $sys32dir = "$env:windir\system32"
     }
-    IF ($OSBits -ge 64)
-    {
-      $BitnessRef = 'x64'
-    }
-    Else
-    {
-      $BitnessRef = 'x86'
-    }
-    Copy-Item "$TargetFolder\$BitnessRef\ssh-lsa.dll" "$sys32dir\ssh-lsa.dll" -Force
+
+    Copy-Item "$TargetFolder\ssh-lsa.dll" "$sys32dir\ssh-lsa.dll" -Force
 
     #Don't destroy other values
     $key = get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa'

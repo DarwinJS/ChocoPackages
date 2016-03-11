@@ -1,18 +1,24 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if ??? doesn?t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+    <metadata>
     <id>teamviewer.portable</id>
     <version>11.0.56083</version>
     <title>teamviewer.portable</title>
     <authors>TeamViewer Inc.</authors>
-    <projectUrl>https:www.teamviewer.com</projectUrl>
-    <!--<iconUrl>http://cdn.rawgit.com/https://github.com/DarwinJS/ChocoPackages/tree/master/teamviewer.portable/master/icons/teamviewer.portable.png</iconUrl>-->
+    <projectUrl>https://www.teamviewer.com</projectUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/teamviewer.portable/appicon.png</iconUrl>
     <copyright>2016 TeamViewer GmbH</copyright>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>-->
-    <licenseUrl>http://www.teamviewer.com/en/eula/</licenseUrl>
-    <docsUrl>http://www.teamviewer.com/en/support/documents/</docsUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <licenseUrl>http://www.teamviewer.com/en/eula</licenseUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/teamviewer.portable</packageSourceUrl>
+    <docsUrl>http://www.teamviewer.com/en/support/documents</docsUrl>
     <tags>teamviewer team viewer remote control support</tags>
     <summary>TeamViewer allows remote control between two computers on the internet.  In portable mode it does not require either computer to do a full install.</summary>
-    <description>TeamViewer allows remote control between two computers on the internet.  In portable mode it does not require either computer to do a full install.</description>
+    <description>TeamViewer allows remote control between two computers on the internet.  In portable mode it does not require either computer to do a full install.
+
+    After the install this package gives instructions on how to start TeamViewer in portable mode, making it easy for a non-technical user to download and start teamviewer in portable mode.
+    </description>
     <releaseNotes>[http://www.teamviewer.com/en/download/changelog]</releaseNotes>
   </metadata>
   <files>

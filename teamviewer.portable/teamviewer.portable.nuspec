@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+    <id>teamviewer.portable</id>
+    <version>11.0.56083</version>
+    <title>teamviewer.portable</title>
+    <authors>TeamViewer Inc.</authors>
+    <projectUrl>https:www.teamviewer.com</projectUrl>
+    <!--<iconUrl>http://cdn.rawgit.com/https://github.com/DarwinJS/ChocoPackages/tree/master/teamviewer.portable/master/icons/teamviewer.portable.png</iconUrl>-->
+    <copyright>2016 TeamViewer GmbH</copyright>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>-->
+    <licenseUrl>http://www.teamviewer.com/en/eula/</licenseUrl>
+    <docsUrl>http://www.teamviewer.com/en/support/documents/</docsUrl>
+    <tags>teamviewer team viewer remote control support</tags>
+    <summary>TeamViewer allows remote control between two computers on the internet.  In portable mode it does not require either computer to do a full install.</summary>
+    <description>TeamViewer allows remote control between two computers on the internet.  In portable mode it does not require either computer to do a full install.</description>
+    <releaseNotes>[http://www.teamviewer.com/en/download/changelog]</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

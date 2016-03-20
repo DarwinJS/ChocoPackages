@@ -6,6 +6,7 @@
     <version>11.0.56083</version>
     <title>teamviewer.portable</title>
     <authors>TeamViewer Inc.</authors>
+    <owners>DarwinJS</owners>
     <projectUrl>https://www.teamviewer.com</projectUrl>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/teamviewer.portable/appicon.png</iconUrl>
     <copyright>2016 TeamViewer GmbH</copyright>

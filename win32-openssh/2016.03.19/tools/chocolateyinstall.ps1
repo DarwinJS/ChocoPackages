@@ -1,9 +1,6 @@
 
 $ErrorActionPreference = 'Stop'; # stop on all errors
-
-$packageName= 'win32-openssh'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-
 $OSBits = Get-ProcessorBits
 
 #On 64-bit, always favor 64-bit Program Files no matter what our execution is now (works back past XP / Server 2003)
@@ -18,9 +15,21 @@ Else
 
 $filename = "$toolsdir\OpenSSH-Win$($OSBits).zip"
 $TargetFolder = "$PF\OpenSSH-Win$($OSBits)"
-$ExtractFolder = "$PF"
 
-# Default the values
+$packageArgs = @{
+  packageName   = 'win32-openssh'
+  unziplocation = "$PF"
+  fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
+  url           = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/3_19_2016/OpenSSH-Win32.zip'
+  url64bit      = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/3_19_2016/OpenSSH-Win64.zip'
+
+  checksum      = 'F5529E44E96C86F5C170B324E07CF6BD'
+  checksumType  = 'md5'
+  checksum64    = '565F77FB26CABDA06D1FDA14A4DA8ACF'
+  checksumType64= 'md5'
+}
+
+# Default the values before reading params
 $SSHServerFeature = $false
 $KeyBasedAuthenticationFeature = $false
 
@@ -84,9 +93,10 @@ If ([bool](get-process ssh -erroraction silentlycontinue | where {$_.Path -ilike
 
 If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorAction SilentlyContinue | where {$_.Status -ieq 'Running'})))
 {
-#Shutdown and unregister service for upgrade
-    Stop-Service sshd -Force
-    Start-Sleep -seconds 3
+    #Shutdown and unregister service for upgrade
+    stop-service sshd -Force
+    start-sleep -seconds 6
+    stop-service sshd -Force
     If (!([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
     {
       Throw "Could not stop the SSHD service, please stop manually and retry this package."
@@ -95,13 +105,13 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorActio
 
 If ($SSHServiceInstanceExistsAndIsOurs)
 {
-  start-process "$TargetFolder\sshd.exe" -ArgumentList 'uninstall' -nonewwindow -wait
+  start-process "$TargetFolder\sshd.exe" -ArgumentList 'uninstall' -workingdirectory $env:temp -nonewwindow -wait
 }
 
 #Placing these security sensitive exe files in a location secure from viruses (and as per project install instructions)
 #Use of internal files because project does not (yet) provide the current version at a versioned url
 #Have updated an issue to request a versioned url be provided for all new releases (even if not published)
-Get-ChocolateyUnzip "$filename" "$ExtractFolder"
+Install-ChocolateyZipPackage @packageArgs
 
 Install-ChocolateyPath "$TargetFolder" 'Machine'
 
@@ -146,8 +156,7 @@ If ($SSHServerFeature)
   }
 
   netsh advfirewall firewall add rule name='SSHD Port win32-openssh' dir=in action=allow protocol=TCP localport=22
-  cd $env:temp
-  start-process "$TargetFolder\sshd.exe" -ArgumentList 'install' -nonewwindow -wait
+  start-process "$TargetFolder\sshd.exe" -ArgumentList 'install' -workingdirectory $env:temp -nonewwindow -wait
   Set-Service sshd -StartupType Automatic
 
   If (!$KeyBasedAuthenticationFeature)

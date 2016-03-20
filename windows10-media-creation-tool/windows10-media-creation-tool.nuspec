@@ -4,7 +4,7 @@
   <metadata>
     <id>windows10-media-creation-tool</id>
     <title>Windows 10 Media Creation Tool</title>
-    <version>10.0.10586.35</version>
+    <version>10.0.10586.20160317</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Create a bootable ISO or Flashdrive to apply the free Windows 10 upgrade with a clean install (from scratch install).</summary>

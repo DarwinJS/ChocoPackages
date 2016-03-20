@@ -85,7 +85,7 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorActio
 #Shutdown and unregister service for upgrade
     Stop-Service SSHD -Force
     Start-Sleep -seconds 3
-    If (!([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
+    If (([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
     {
       Throw "Could not stop the SSHD service, please stop manually and retry this package."
     }
@@ -99,9 +99,8 @@ If ((get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa').getvalue("a
 If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
 {
 #Shutdown and unregister service for upgrade
-    Stop-Service SSHD -Force
-    Start-Sleep -seconds 5
-    If (!([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
+    Stop-Service sshd -Force
+    If (([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
     {
       Throw "Could not stop the SSHD service, please stop manually and retry this package."
     }

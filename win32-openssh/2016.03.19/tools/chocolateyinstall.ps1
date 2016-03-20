@@ -95,9 +95,7 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorActio
 {
     #Shutdown and unregister service for upgrade
     stop-service sshd -Force
-    start-sleep -seconds 6
-    stop-service sshd -Force
-    If (!([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
+    If (([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
     {
       Throw "Could not stop the SSHD service, please stop manually and retry this package."
     }

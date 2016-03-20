@@ -16,7 +16,8 @@ Allows easy creation, comparison and exporting of process tracing data.  Can als
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/spystudio</packageSourceUrl>
     <projectUrl>http://www.nektra.com/products/spystudio-api-monitor/</projectUrl>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/spystudio/appicon.png</iconUrl>
-    <tags>Procmon Nektra SpyStudio portable</tags>
+    <docsUrl>http://whiteboard.nektra.com/spystudio-2-0-quickstart</docsUrl>
+    <tags>Procmon Nektra SpyStudio portable api process tracing monitoring debugging</tags>
     <copyright>Nektra Advanced Computing</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
   	<licenseUrl>http://whiteboard.nektra.com/spystudio/spystudio_license</licenseUrl>

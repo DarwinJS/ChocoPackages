@@ -1,6 +1,5 @@
 ﻿<#
 
-
   Copyright 2012-2012 Amazon.com, Inc. or its affiliates. All Rights Reserved.
 
     Licensed under the Apache License, Version 2.0 (the "License"). You may not use this file except in compliance with the License. A copy of the License is located at
@@ -9,22 +8,26 @@
 
     or in the "license" file accompanying this file. This file is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
 
+ATTENTION: This is a licensing compliant, modified, derative work, please see "UPDATE LOG" later in these comments for the changes made.
 
 .SYNOPSIS
-Collects memory, and Pagefile utilization on an Amazon Windows EC2 instance and sends this data as custom metrics to Amazon CloudWatch.
+Collects disk utilization (%), available disk space and used disk space on an Amazon Windows EC2 instance and sends this data as custom metrics to Amazon CloudWatch.
 
 .DESCRIPTION
-This script is used to send custom metrics to Amazon Cloudwatch. This script pushes memory and page file utilization to cloudwatch. This script can be scheduled or run from a powershell prompt.
-When launched from shceduler you need to specify logfile and all messages will be logged to logfile. You can use whatif and verbose mode with this script.
+This script is used to send custom metrics to Amazon Cloudwatch. This script pushes disk utilization (%), available disk space and used disk space to cloudwatch. 
+This script can be scheduled or run from a powershell prompt.
+When launched from scheduler you can optionally specify logfile and all messages will be logged to logfile. You can use whatif and verbose mode with this script.
 
-.PARAMETER mem_util
-		Reports memory utilization in percentages.
-.PARAMETER mem_used
-		Reports memory used (excluding cache and buffers).
-.PARAMETER mem_avail
-		Reports available memory (including cache and buffers).
-.PARAMETER memory_units
-		Specifies units for memory metrics.
+.PARAMETER disk_util
+		Reports disk utilization in percentages.
+.PARAMETER disk_used
+		Reports disk space used.
+.PARAMETER disk_avail
+		Reports available disk space.
+.PARAMETER disk_space_units
+		Specifies units for disk metrics.
+.PARAMETER disk_drive
+		List of disk specifiers for which to report space.  Special value 'all' reports for all local disks.
 .PARAMETER from_scheduler
 		Specifies that this script is running from Task Scheduler.
 .PARAMETER aws_access_id
@@ -33,27 +36,43 @@ When launched from shceduler you need to specify logfile and all messages will b
 		Specifies the AWS secret key to use to sign the request.
 .PARAMETER aws_credential_file
 		Specifies the location of the file with AWS credentials. Uses "AWS_CREDENTIAL_FILE" Env variable as default.
-.PARAMETER page_used
-		Reports used page file space for all disks.
-.PARAMETER page_avail
-		Reports available space in page file for all disks.
-.PARAMETER page_util
-		Reports page file utilization in percentages for all disks.
 .PARAMETER logfile
 		Logs all error messages to a log file. This is required when from_scheduler is set.
+.PARAMETER scheduletaskwiththeseparams
+		Schedules this script to run in the Windows Scheduler.
 
 .EXAMPLE
-    powershell.exe .\mon-put-metrics-disk.ps1  -EC2AccessKey ThisIsMyAccessKey -EC2SecretKey ThisIsMySecretKey -disk_space_util -disk_space_avail -disk_space_units kilobytes
+    powershell.exe .\mon-put-metrics-disk-darwinjs.ps1  -EC2AccessKey ThisIsMyAccessKey -EC2SecretKey ThisIsMySecretKey -disk_space_util -disk_space_avail -disk_space_units kilobytes
+
+    Encoded credentials are a bad idea.  This script works with Instance Roles as well (V1.2.0).
 
 .EXAMPLE
-	powershell.exe .\mon-put-metrics-disk.ps1  -aws_credential_file C:\awscreds.conf -disk_drive C:, d -disk_space_util -disk_space_used -disk_space_avail -disk_space_units gigabytes
+	powershell.exe .\mon-put-metrics-disk-darwinjs.ps1  -aws_credential_file C:\awscreds.conf -disk_drive C:, d -disk_space_util -disk_space_used -disk_space_avail -disk_space_units gigabytes
+
+    Encoded credentials are a bad idea.  This script works with Instance Roles as well (V1.2.0).
 
 .EXAMPLE
-	powershell.exe .\mon-put-metrics-disk.ps1  -aws_credential_file C:\awscreds.conf -disk_drive C:,D: -disk_space_util -disk_space_units gigabytes  -from_scheduler -logfile C:\mylogfile.log
+	powershell.exe .\mon-put-metrics-disk-darwinjs.ps1  -aws_credential_file C:\awscreds.conf -disk_drive C:,D: -disk_space_util -disk_space_units gigabytes  -from_scheduler -logfile C:\mylogfile.log
 
+    Encoded credentials are a bad idea.  This script works with Instance Roles as well (V1.2.0).
+
+.EXAMPLE
+	powershell.exe .\mon-put-metrics-disk-darwinjs.ps1
+
+     V1.2.0: Posts *usage* metrics for all local drivers - whatever they are in gigabytes.  Will automatically handle differences in attached disks.
+
+.EXAMPLE
+	powershell.exe .\mon-put-metrics-disk-darwinjs.ps1  -disk_drive all -disk_space_util -disk_space_units gigabytes -from_scheduler -logfile C:\mylogfile.log
+
+    V1.2.0: Posts metrics for all local drivers - whatever they are.  Will automatically handle differences in attached disks.
+
+.EXAMPLE
+	powershell.exe .\mon-put-metrics-disk-darwinjs.ps1 -scheduletaskwiththeseparams -disk_drive all -disk_space_util -disk_space_units gigabytes -from_scheduler -logfile C:\mylogfile.log
+
+    V1.2.0: Schedules a job every 5 minutes to post disk utilization for all local drives every 5 minutes.  Does not run the metrics when scheduling the job (but the scheduled job does post them).
 
 .NOTES
-    PREREQUISITES:
+    PREREQUISITES (should be available ahead of time for any Amazon provided AMIs):
     1) Download the SDK library from http://aws.amazon.com/sdkfornet/
     2) Obtain Secret and Access keys from https://aws-portal.amazon.com/gp/aws/developer/account/index.html?action=access-key
 
@@ -61,7 +80,8 @@ When launched from shceduler you need to specify logfile and all messages will b
 
 UPDATE LOG:
 
-2016-05-13 DJS
+2016-05-16 DarwinJS.  Version 1.2.0
+   - Corrected above script help - was an unedited paste of mon-put-metrics-mem
    - Fixed to find .NET 3.5 with newer installs of AWS SDK on Amazon AMIs.
    - allows -disk_drive 'all' to simple upload stats on all local disks - whatever they are for that instance.  
      Will also dynamically adjust if disks are added to or removed from instance in the future.
@@ -70,11 +90,14 @@ UPDATE LOG:
    - replaced all "write-host" lines with better practice "write-output".
    - updated parameters and defaults so that if the script is used with no parameters it reports disk utilization for 
      all installed disks and relies on instance roles for permission to post to cloudwatch.
+   - switch -selfschedulewiththeseparams schedules the script in the task scheduler instead of running.  Uses all parameters
+     given on the script call in the scheduled task (except, of course the parameter "-selfschedulewiththeseparams" itself)
 
 #>
 
 [CmdletBinding(DefaultParametersetName="credsfromfile", supportsshouldprocess = $true) ]
 param(
+[switch]$selfschedulewiththeseparams,
 [switch]$disk_space_util=$True, #Set -disk_space_util:$False to disable from command line
 [switch]$disk_space_used ,
 [switch]$disk_space_avail ,
@@ -92,7 +115,6 @@ param(
 [Switch]$version
 )
 
-
 $ErrorActionPreference = 'Stop'
 
 ### Initliaze common variables ###
@@ -104,9 +126,40 @@ $time = Get-Date
 $invoc = (Get-Variable myinvocation -Scope 0).value
 $currdirectory = Split-Path $invoc.mycommand.path
 $scriptname = $invoc.mycommand.Name
-$ver = '1.0.0'
+$ver = '1.2.0'
 $client_name = 'CloudWatch-PutInstanceDataWindows'
 $useragent = "$client_name/$ver"
+
+If ($selfschedulewiththeseparams)
+{
+  Write-output "Scheduling myself to run in task manager (not running the actual script at this time)"
+  #collect all parameters except selfschedulewiththeseparams
+  #$argList += $MyInvocation.BoundParameters.GetEnumerator() | where {$_.key -ine 'selfschedulewiththeseparams'} | foreach {"-$($_.Key)$((. { switch ($($_.Value)) {"true" { ':$True' } "false" { ':$False' } default { " $($_.Value)" } }}))"}
+  $argList += $MyInvocation.BoundParameters.GetEnumerator() | where {$_.key -ine 'selfschedulewiththeseparams'} | foreach {$curarg = $_ ;"$(. { switch ($($curarg.Value)) {'true' { "-$($curarg.Key)" } 'false' { '' } default { "-$($curarg.Key) $($curarg.Value)" } }})"}
+  
+  $Frequency = 'MINUTE'
+  $minutes = 5
+
+  $TaskName = [io.path]::GetFileNameWithoutExtension($MyInvocation.MyCommand.Path)
+  $ScriptPath = $MyInvocation.MyCommand.Path
+
+  If (Test-Path "$env:windir\System32\Tasks\$TaskName")
+  {
+    schtasks /delete /tn "$TaskName" /F
+  }
+
+  $argumentstring = "/create /sc `"$Frequency`" /mo $minutes /tn `"$TaskName`" /ru `"NT AUTHORITY\SYSTEM`" /tr `"powershell.exe -executionpolicy bypass -noprofile -file $ScriptPath $argList`" /F"
+
+  Write-output "Scheduling with command: "
+  Write-Output "$argumentstring"
+
+  Start-process "schtasks.exe" -ArgumentList "$argumentstring" -nonewwindow -wait
+
+  Write-Output "Schedule was created with command line: $argumentstring"
+
+  Return
+
+}
 
 ### Logs all messages to file or prints to console based on from_scheduler setting. ###
 function report_message ([string]$message)

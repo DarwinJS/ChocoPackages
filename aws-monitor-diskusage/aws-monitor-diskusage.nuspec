@@ -1,0 +1,34 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>aws-monitor-diskusage</id>
+    <version>1.2.0</version>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/aws-monitor-diskusage</packageSourceUrl>
+    <owners>DarwinJS</owners>
+    <title>AWS Disk Monitoring Script For Windows (Install)</title>
+    <authors>Amazon Web Services, DarwinJS</authors>
+    <projectUrl>https://_Software_Location_REMOVE_OR_FILL_OUT_</projectUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/aws-monitor-diskusage/master/appicon.png</iconUrl>
+    <copyright>Amazon Web Services, DarwinJS</copyright>
+    <licenseUrl>https://raw.githubusercontent.com/DarwinJS/aws-monitor-diskusage/master/tools/aws-monitor-diskusage/LICENSE.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/DarwinJS/aws-monitor-diskusage/tree/master/tools/aws-monitor-diskusage</projectSourceUrl>
+    <docsUrl>https://raw.githubusercontent.com/DarwinJS/aws-monitor-diskusage/master/tools/aws-monitor-diskusage/mon-put-metrics-disk-darwinjs.ps1</docsUrl>
+    <bugTrackerUrl>https://github.com/DarwinJS/aws-monitor-diskusage/issues</bugTrackerUrl>
+    <tags>Amazon AWS CloudWatch Monitoring Scripts PowerShell Windows</tags>
+    <summary>Chocolatey package that installs an updated AWS disk monitoring script for Windows and schedules it to run every 5 minutes to post metrics to AWS Cloudwatch.</summary>
+    <description>
+    ATTENTION: This is a licensing compliant, modified, derative work, please see "UPDATE LOG" in the script comments for the changes made.
+    Old locations that mention the original script:
+    https://blog.appliedis.com/2012/10/05/how-to-publish-custom-performance-metrics-to-amazons-cloudwatch/
+    https://aws.amazon.com/blogs/aws/amazon-cloudwatch-monitoring-scripts-for-microsoft-windows/
+    </description>
+    <dependencies>
+      <dependency id="awssdk-tools" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

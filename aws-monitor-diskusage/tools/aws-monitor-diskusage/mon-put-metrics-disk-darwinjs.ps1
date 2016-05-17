@@ -14,7 +14,7 @@ ATTENTION: This is a licensing compliant, modified, derative work, please see "U
 Collects disk utilization (%), available disk space and used disk space on an Amazon Windows EC2 instance and sends this data as custom metrics to Amazon CloudWatch.
 
 .DESCRIPTION
-This script is used to send custom metrics to Amazon Cloudwatch. This script pushes disk utilization (%), available disk space and used disk space to cloudwatch. 
+This script is used to send custom metrics to Amazon Cloudwatch. This script pushes disk utilization (%), available disk space and used disk space to cloudwatch.
 This script can be scheduled or run from a powershell prompt.
 When launched from scheduler you can optionally specify logfile and all messages will be logged to logfile. You can use whatif and verbose mode with this script.
 
@@ -40,6 +40,8 @@ When launched from scheduler you can optionally specify logfile and all messages
 		Logs all error messages to a log file. This is required when from_scheduler is set.
 .PARAMETER scheduletaskwiththeseparams
 		Schedules this script to run in the Windows Scheduler.
+.PARAMETER scheduletaskwiththeseparams
+  	Unschedules a previously schedule job.
 
 .EXAMPLE
     powershell.exe .\mon-put-metrics-disk-darwinjs.ps1  -EC2AccessKey ThisIsMyAccessKey -EC2SecretKey ThisIsMySecretKey -disk_space_util -disk_space_avail -disk_space_units kilobytes
@@ -70,6 +72,10 @@ When launched from scheduler you can optionally specify logfile and all messages
 	powershell.exe .\mon-put-metrics-disk-darwinjs.ps1 -scheduletaskwiththeseparams -disk_drive all -disk_space_util -disk_space_units gigabytes -from_scheduler -logfile C:\mylogfile.log
 
     V1.2.0: Schedules a job every 5 minutes to post disk utilization for all local drives every 5 minutes.  Does not run the metrics when scheduling the job (but the scheduled job does post them).
+.EXAMPLE
+  powershell.exe .\mon-put-metrics-disk-darwinjs.ps1 -unschedule
+
+    V1.2.0: Unschedules a previously scheduled job.
 
 .NOTES
     PREREQUISITES (should be available ahead of time for any Amazon provided AMIs):
@@ -81,14 +87,15 @@ When launched from scheduler you can optionally specify logfile and all messages
 UPDATE LOG:
 
 2016-05-16 DarwinJS.  Version 1.2.0
-   - Corrected above script help - was an unedited paste of mon-put-metrics-mem
+   - Corrected script help - was an unedited paste of mon-put-metrics-mem
+   - Added help examples for new functionality.
    - Fixed to find .NET 3.5 with newer installs of AWS SDK on Amazon AMIs.
-   - allows -disk_drive 'all' to simple upload stats on all local disks - whatever they are for that instance.  
+   - allows -disk_drive 'all' to simple upload stats on all local disks - whatever they are for that instance.
      Will also dynamically adjust if disks are added to or removed from instance in the future.
    - drops any non-existent disks from the list given in -disk_drive, rather than generating an error.
    - removed assumption of credentials being provided so that code can rely on the much better practice of using instance roles.
    - replaced all "write-host" lines with better practice "write-output".
-   - updated parameters and defaults so that if the script is used with no parameters it reports disk utilization for 
+   - updated parameters and defaults so that if the script is used with no parameters it reports disk utilization for
      all installed disks and relies on instance roles for permission to post to cloudwatch.
    - switch -selfschedulewiththeseparams schedules the script in the task scheduler instead of running.  Uses all parameters
      given on the script call in the scheduled task (except, of course the parameter "-selfschedulewiththeseparams" itself)
@@ -98,6 +105,7 @@ UPDATE LOG:
 [CmdletBinding(DefaultParametersetName="credsfromfile", supportsshouldprocess = $true) ]
 param(
 [switch]$selfschedulewiththeseparams,
+[switch]$unschedule,
 [switch]$disk_space_util=$True, #Set -disk_space_util:$False to disable from command line
 [switch]$disk_space_used ,
 [switch]$disk_space_avail ,
@@ -130,18 +138,31 @@ $ver = '1.2.0'
 $client_name = 'CloudWatch-PutInstanceDataWindows'
 $useragent = "$client_name/$ver"
 
+$TaskName = [io.path]::GetFileNameWithoutExtension($MyInvocation.MyCommand.Path)
+$ScriptPath = $MyInvocation.MyCommand.Path
+
+If ($unschedule)
+{
+  If (Test-Path "$env:windir\System32\Tasks\$TaskName")
+  {
+    schtasks /delete /tn "$TaskName" /F
+  }
+  Else
+  {
+    Write-Ouput "Did not find a task called `"$Taskname`", nothing to do..."
+  }
+  Return
+}
+
 If ($selfschedulewiththeseparams)
 {
   Write-output "Scheduling myself to run in task manager (not running the actual script at this time)"
   #collect all parameters except selfschedulewiththeseparams
   #$argList += $MyInvocation.BoundParameters.GetEnumerator() | where {$_.key -ine 'selfschedulewiththeseparams'} | foreach {"-$($_.Key)$((. { switch ($($_.Value)) {"true" { ':$True' } "false" { ':$False' } default { " $($_.Value)" } }}))"}
   $argList += $MyInvocation.BoundParameters.GetEnumerator() | where {$_.key -ine 'selfschedulewiththeseparams'} | foreach {$curarg = $_ ;"$(. { switch ($($curarg.Value)) {'true' { "-$($curarg.Key)" } 'false' { '' } default { "-$($curarg.Key) $($curarg.Value)" } }})"}
-  
+
   $Frequency = 'MINUTE'
   $minutes = 5
-
-  $TaskName = [io.path]::GetFileNameWithoutExtension($MyInvocation.MyCommand.Path)
-  $ScriptPath = $MyInvocation.MyCommand.Path
 
   If (Test-Path "$env:windir\System32\Tasks\$TaskName")
   {
@@ -334,7 +355,7 @@ function check-disks {
 
       $INVALIDValuesPresent = @(($disk_drive | select-string -pattern $LocalDrivesOnThisMachine -simplematch -notmatch).line)
       $VALIDValuesPresent = @(($LocalDrivesOnThisMachine | select-string -pattern $INVALIDValuesPresent -simplematch -notmatch).line)
-      
+
       $drive_list_parsed = $VALIDValuesPresent
 
       If ($INVALIDValuesPresent.count -gt 0)
@@ -418,7 +439,7 @@ function put-instancemem {
 		$monputrequest.namespace = "System/Windows"
 		$response = New-Object psobject
 		$metricdatalist = New-Object Collections.Generic.List[Amazon.Cloudwatch.Model.MetricDatum]
-		
+
         If ($usingEncodedCredentials_VERYBAD)
         {
           $cwclient = New-Object Amazon.Cloudwatch.AmazonCloudWatchClient($accountinfo.AWSAccessKeyId,$accountinfo.AWSSecretKey,$cwconfig)

@@ -5,28 +5,41 @@
     <id>aws-monitor-diskusage</id>
     <version>1.2.0</version>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/aws-monitor-diskusage</packageSourceUrl>
-    <owners>DarwinJS</owners>
+    <owners>DarwinJS, WorkWave</owners>
     <title>AWS Disk Monitoring Script For Windows (Install)</title>
     <authors>Amazon Web Services, DarwinJS</authors>
-    <projectUrl>https://_Software_Location_REMOVE_OR_FILL_OUT_</projectUrl>
-    <iconUrl>https://cdn.rawgit.com/DarwinJS/aws-monitor-diskusage/master/appicon.png</iconUrl>
+    <projectUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/aws-monitor-diskusage/tools/aws-monitor-diskusage</projectUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/aws-monitor-diskusage/appicon.pngng</iconUrl>
     <copyright>Amazon Web Services, DarwinJS</copyright>
-    <licenseUrl>https://raw.githubusercontent.com/DarwinJS/aws-monitor-diskusage/master/tools/aws-monitor-diskusage/LICENSE.txt</licenseUrl>
+    <licenseUrl>https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/aws-monitor-diskusage/tools/aws-monitor-diskusage/LICENSE.txt</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <projectSourceUrl>https://github.com/DarwinJS/aws-monitor-diskusage/tree/master/tools/aws-monitor-diskusage</projectSourceUrl>
-    <docsUrl>https://raw.githubusercontent.com/DarwinJS/aws-monitor-diskusage/master/tools/aws-monitor-diskusage/mon-put-metrics-disk-darwinjs.ps1</docsUrl>
-    <bugTrackerUrl>https://github.com/DarwinJS/aws-monitor-diskusage/issues</bugTrackerUrl>
+    <projectSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/aws-monitor-diskusage/tools/aws-monitor-diskusage</projectSourceUrl>
+    <docsUrl>https://github.com/DarwinJS/ChocoPackages/blob/master/aws-monitor-diskusage/tools/aws-monitor-diskusage/mon-put-metrics-disk-darwinjs.ps1</docsUrl>
+    <bugTrackerUrl>https://github.com/DarwinJS/ChocoPackages/issues</bugTrackerUrl>
     <tags>Amazon AWS CloudWatch Monitoring Scripts PowerShell Windows</tags>
-    <summary>Chocolatey package that installs an updated AWS disk monitoring script for Windows and schedules it to run every 5 minutes to post metrics to AWS Cloudwatch.</summary>
+    <summary>Amazon no longer provides their monitoring  scripts for Windows.  Contains an updated AWS disk monitoring script for Windows and schedules it to run every 5 minutes to post metrics to AWS Cloudwatch.</summary>
     <description>
     ATTENTION: This is a licensing compliant, modified, derative work, please see "UPDATE LOG" in the script comments for the changes made.
-    Old locations that mention the original script:
+    Old locations that mentioned the original script:
+    http://aws.amazon.com/code/7932034889155460 (original URL now broken)
     https://blog.appliedis.com/2012/10/05/how-to-publish-custom-performance-metrics-to-amazons-cloudwatch/
     https://aws.amazon.com/blogs/aws/amazon-cloudwatch-monitoring-scripts-for-microsoft-windows/
+
+    2016-05-16 DarwinJS.  Version 1.2.0
+       - Corrected script help - was an unedited paste of mon-put-metrics-mem
+       - Added help examples for new functionality.
+       - Fixed to find .NET 3.5 with newer installs of AWS SDK on Amazon AMIs.
+       - allows -disk_drive 'all' to simple upload stats on all local disks - whatever they are for that instance.
+         Will also dynamically adjust if disks are added to or removed from instance in the future.
+       - drops any non-existent disks from the list given in -disk_drive, rather than generating an error.
+       - removed assumption of credentials being provided so that code can rely on the much better practice of using instance roles.
+       - replaced all "write-host" lines with better practice "write-output".
+       - updated parameters and defaults so that if the script is used with no parameters it reports disk utilization for
+         all installed disks and relies on instance roles for permission to post to cloudwatch.
+       - switch -selfschedulewiththeseparams schedules the script in the task scheduler instead of running.  Uses all parameters
+         given on the script call in the scheduled task (except, of course the parameter "-selfschedulewiththeseparams" itself)
+
     </description>
-    <dependencies>
-      <dependency id="awssdk-tools" />
-    </dependencies>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

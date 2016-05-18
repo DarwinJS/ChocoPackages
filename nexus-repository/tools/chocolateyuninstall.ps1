@@ -6,10 +6,10 @@ $installfolder = "c:\Program Files\Nexus"
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $validExitCodes = @(0)
 
-If (Test-Path "$installfolder\bin\uninstall.exe")
+If (Test-Path "$installfolder\bin\nexus-uninstall.exe")
 {
   Stop-Service nexus -force
-  Start-ChocolateyProcessAsAdmin "-q -console" "$installfolder\bin\uninstall.exe" -validExitCodes $validExitCodes
+  Start-ChocolateyProcessAsAdmin "-q -console" "$installfolder\bin\nexus-uninstall.exe" -validExitCodes $validExitCodes
 }
 Else
 {

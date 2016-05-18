@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>nexus-repository</id>
     <title>Nexus Repository OSS</title>
-    <version>3.0.0-m7-1</version>
+    <version>3.0.0.03</version>
     <authors>Sonatype</authors>
     <owners>DarwinJS</owners>
     <summary>Free open source version of popular Nexus Repository for binary artifacts including first class Nuget support.</summary>
@@ -13,10 +13,10 @@
     Free OSS version supports advanced access control (groups, roles), LDAP and per-user api keys.
     Nexus product does not have a built-in web gallery for components.
     </description>
-    <projectUrl>http://www.sonatype.com/nexus</projectUrl>
+    <projectUrl>http://www.sonatype.com/nexus-repository-oss</projectUrl>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/nexus-repository</packageSourceUrl>
     <projectSourceUrl>https://github.com/sonatype/nexus-public</projectSourceUrl>
-    <docsUrl>http://books.sonatype.com/nexus-book</docsUrl>
+    <docsUrl>http://books.sonatype.com/nexus-book/3.0/reference/index.html</docsUrl>
     <tags>nexus-repository maven nuget npm java rubygems docker eclipse p2 osgi obr apt yum rpm artifact bower ssl respository sonatype nexus admin</tags>
     <copyright>Sonatype</copyright>
     <licenseUrl>http://www.eclipse.org/legal/epl-v10.html</licenseUrl>

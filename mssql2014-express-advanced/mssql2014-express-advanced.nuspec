@@ -5,7 +5,7 @@
     <version>12.0.4100.1</version>
     <title>SQL Server 2014 Express Advanced SP1</title>
     <authors>Microsoft</authors>
-    <owners>DarwinJS, Workwave</owners>
+    <owners>DarwinJS</owners>
     <licenseUrl>http://download.microsoft.com/download/B/4/E/B4E604D9-9D38-4BBA-A927-56E4C872E41C/SQL_Server_2014_Licensing_Guide.pdf</licenseUrl>
     <projectUrl>http://www.microsoft.com/sqlserver/en/us/default.aspx</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -48,7 +48,7 @@
 
      -params '"/SQL_SecurityMode:SQL"'
      -params '"/SQL_QuietSwitch:QS"' (Default: Q, "QS" shows progress on screen)
-     -params '"/SQL_SAPwd:BestPassword2Have"' (Default: "BestP@ssword2Have") #Password must meet operating system configured complexity requirements or install will fail.
+     -params '"/SQL_SAPwd:ComplexEnough2Count!"' (Default: "ComplexEnough2Count!") #Password must meet operating system configured complexity requirements or install will fail.
      -params '"/SQL_Features:SQLENGINE"' (Default: SQLENGINE,FULLTEXT,CONN,IS,BC,SDK,SSMS,ADV_SSMS)
      -params '"/SQL_InstanceName:SQLEXPRESS"' (Default: SQLEXPRESS)
      -params '"/SQL_BROWSERSVCSTARTUPTYPE:Automatic"' (Default: Automatic)
@@ -58,10 +58,11 @@
        Completely Override the package's internal command line with one from a text file which contains one line with the exact SQL command line.
        Don't forget to add every option you need - don't forget these: "/ACTION=Install /Q /INDICATEPROGRESS /IACCEPTSQLSERVERLICENSETERMS"
 
+    Examples:
      -params '"/SQL_WhatIf:true /OverrideSQLCMDLineFile=$env:public\sqlparams.txt"'
        Just show the command from the file, but don't run it.
 
-     -params '"/SQL_QuietSwitch:QS /SQL_SAPwd:BestPassword2Have /SQL_SecurityMode:SQL /SQL_InstanceName:MSSQLSERVER"'
+     -params '"/SQL_QuietSwitch:QS /SQL_SAPwd:ComplexEnough2Count! /SQL_SecurityMode:SQL /SQL_InstanceName:MSSQLSERVER"'
        Use instance name from SQL full version and enable Mixed Mode security and show progress dialogs.
 
     </description>
@@ -70,7 +71,7 @@
     </releaseNotes>
     <tags>mssql2014-express-advanced admin Microsoft SQL Server 2014 Express</tags>
     <dependencies>
-      <dependency id="ww_dotnet35"/>
+      <dependency id="dotnet3.5"/>
     </dependencies>
   </metadata>
 </package>

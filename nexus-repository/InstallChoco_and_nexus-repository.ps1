@@ -66,4 +66,4 @@ If (!(Test-Path env:ChocolateyInstall))
 
 Write-Output "Chocolatey is installed and enabled for use in this session..."
 
-choco install nexus-repository -pre -confirm
+choco install nexus-repository -confirm

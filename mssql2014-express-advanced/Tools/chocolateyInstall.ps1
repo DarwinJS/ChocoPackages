@@ -15,7 +15,7 @@ $SQL_QuietSwitch = "Q"
 $SQL_InstanceName = 'SQLEXPRESS'
 $SQL_Features = 'SQLENGINE,FULLTEXT,CONN,IS,BC,SDK,SSMS,ADV_SSMS'
 $SQL_SecurityMode = $null
-$SQL_SAPwd = 'BestPassword2Have' #Password must meet operating system configured complexity requirements or install will fail.
+$SQL_SAPwd = 'ComplexEnough2Count!' #Password must meet operating system configured complexity requirements or install will fail.
 $SQL_BROWSERSVCSTARTUPTYPE = 'Automatic'
 $SQL_SQLSVCSTARTUPTYPE = 'Automatic'
 
@@ -24,7 +24,7 @@ $packageParameters = $env:chocolateyPackageParameters;
 
 # Now parse the packageParameters using good old regular expression
 if ($packageParameters) {
-    $match_pattern = "\/(?<option>([a-zA-Z_]+)):(?<value>([`"'])?([a-zA-Z0-9- _\\:\.]+)([`"'])?)|\/(?<option>([a-zA-Z]+))"
+    $match_pattern = "\/(?<option>([a-zA-Z_]+)):(?<value>([`"'])?([a-zA-Z0-9- _\\:\.!]+)([`"'])?)|\/(?<option>([a-zA-Z]+))"
     #"
     $option_name = 'option'
     $value_name = 'value'

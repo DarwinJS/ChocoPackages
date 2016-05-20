@@ -5,7 +5,7 @@ as they work on a pristine machine no matter whether it is domain joined or not.
 
   1) Open an ELEVATED PowerShell Prompt
   2) Paste this command into the console (get the whole line - it's long):
-     [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/win32-openssh/InstallChoco_and_win32-openssh.ps1'))
+     [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/aws-monitor-diskusage/InstallChoco_and_aws-monitor-diskusage.ps1'))
 #>
 
 $DoNotPrompt = $true

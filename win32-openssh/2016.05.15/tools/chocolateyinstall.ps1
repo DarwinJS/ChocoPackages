@@ -210,7 +210,9 @@ If ($SSHServerFeature)
   }
   New-Service -Name sshd -BinaryPathName "$TargetFolder\sshd.exe" -Description "SSH Deamon" -StartupType Automatic -DependsOn ssh-agent | Out-Null
   sc.exe config sshd obj= "NT SERVICE\SSHD"
-  cmd.exe /c "`"$TargetFolder\ntrights.exe`" -u `"NT SERVICE\SSHD`" +r SeAssignPrimaryTokenPrivilege"
+  ."$toolsdir\ntrights.ps1"
+  [MyLsaWrapper.LsaWrapperCaller]::AddPrivileges("NT SERVICE\SSHD", "SeServiceLogonRight")
+  #cmd.exe /c "`"$TargetFolder\ntrights.exe`" -u `"NT SERVICE\SSHD`" +r SeAssignPrimaryTokenPrivilege"
 
   If (!$KeyBasedAuthenticationFeature)
   {

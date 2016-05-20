@@ -26,6 +26,8 @@
     https://aws.amazon.com/blogs/aws/amazon-cloudwatch-monitoring-scripts-for-microsoft-windows/
 
     2016-05-16 DarwinJS.  Version 1.2.0
+       - Created a Chocolatey Package (aws-monitor-diskusage) that deploys and schedules the script to report all disks in
+         one chocolatey command.  It assumes that the required permissions are available via an instance role.
        - Corrected script help - was an unedited paste of mon-put-metrics-mem
        - Added help examples for new functionality.
        - Fixed to find .NET 3.5 with newer installs of AWS SDK on Amazon AMIs.

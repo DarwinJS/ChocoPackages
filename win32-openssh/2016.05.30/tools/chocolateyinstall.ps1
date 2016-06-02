@@ -21,12 +21,12 @@ $packageArgs = @{
   packageName   = 'win32-openssh'
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
-  url           = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_15_2016/OpenSSH-Win32.zip'
-  url64bit      = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_15_2016/OpenSSH-Win64.zip'
+  url           = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win32.zip'
+  url64bit      = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win64.zip'
 
-  checksum      = 'A999458C6E8665746015DADD49C258E5'
+  checksum      = 'B44CC37CCF9C3E4917440B1DFEBB8052'
   checksumType  = 'md5'
-  checksum64    = '83B3BFD39E4F4046E87AA9D38E5F0E25'
+  checksum64    = '1D9574A785EB0CD45380DD33DB11D7B0'
   checksumType64= 'md5'
 }
 
@@ -210,10 +210,10 @@ If ($SSHServerFeature)
   }
   New-Service -Name sshd -BinaryPathName "$TargetFolder\sshd.exe" -Description "SSH Deamon" -StartupType Automatic -DependsOn ssh-agent | Out-Null
   sc.exe config sshd obj= "NT SERVICE\SSHD"
-  
+
   Import-Module "$toolsdir\PoshPrivilege"
   Add-Privilege "NT SERVICE\SSHD" SeServiceLogonRight
-  
+
   <#."$toolsdir\ntrights.ps1"
   [MyLsaWrapper.LsaWrapperCaller]::AddPrivileges("NT SERVICE\SSHD", "SeServiceLogonRight")
   #cmd.exe /c "`"$TargetFolder\ntrights.exe`" -u `"NT SERVICE\SSHD`" +r SeAssignPrimaryTokenPrivilege"

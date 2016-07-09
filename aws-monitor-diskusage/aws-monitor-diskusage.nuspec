@@ -31,7 +31,7 @@
        - Corrected script help - was an unedited paste of mon-put-metrics-mem
        - Added help examples for new functionality.
        - Fixed to find .NET 3.5 with newer installs of AWS SDK on Amazon AMIs.
-       - allows -disk_drive 'all' to simple upload stats on all local disks - whatever they are for that instance.
+       - allows -disk_drive 'all' to simple upload stats on all local disks - whatever they are for that instance.  ('all' is also the default for this parameter)
          Will also dynamically adjust if disks are added to or removed from instance in the future.
        - drops any non-existent disks from the list given in -disk_drive, rather than generating an error.
        - removed assumption of credentials being provided so that code can rely on the much better practice of using instance roles.

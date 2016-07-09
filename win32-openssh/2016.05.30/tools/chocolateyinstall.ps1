@@ -14,7 +14,7 @@ Else
 }
 
 $filename = "$toolsdir\OpenSSH-Win$($OSBits).zip"
-$TargetFolder = "$PF\OpenSSH-Win$($OSBits)"
+$TargetFolder = "$PF\OpenSSH" #Double check to be sure this matches the official folder name
 $ExtractFolder = "$env:temp\OpenSSHTemp"
 
 $packageArgs = @{
@@ -122,12 +122,12 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorActio
 If ($SSHServiceInstanceExistsAndIsOurs)
 {
   Stop-Service sshd
-  sc.exe delete sshd 1> null
+  sc.exe delete sshd | out-null
 }
 If ($SSHAGENTServiceInstanceExistsAndIsOurs)
 {
   Stop-Service ssh-agent -erroraction silentlycontinue
-  sc.exe delete ssh-agent 1> null
+  sc.exe delete ssh-agent | out-null
 }
 
 #Placing these security sensitive exe files in a location secure from viruses
@@ -136,6 +136,14 @@ Install-ChocolateyZipPackage @packageArgs
 
 Copy-Item "$ExtractFolder\*" "$PF" -Force -Recurse
 Remove-Item "$ExtractFolder" -Force -Recurse
+
+$SSHLsaVersionChanged = $true
+If (Test-Path "$env:windir\system32\ssh-lsa.dll")
+{
+  #Using file size because open ssh files are not currently versioned.  Submitted problem report asking for versioning to be done
+  If (((get-item $env:windir\system32\ssh-lsa.dll).length) -eq ((get-item $TargetFolder\ssh-lsa.dll).length))
+  {$SSHLsaVersionChanged = $false}
+}
 
 Install-ChocolateyPath "$TargetFolder" 'Machine'
 
@@ -154,7 +162,10 @@ If ($SSHServerFeature)
       $sys32dir = "$env:windir\system32"
     }
 
-    Copy-Item "$TargetFolder\ssh-lsa.dll" "$sys32dir\ssh-lsa.dll" -Force
+    If ($SSHLsaVersionChanged)
+    {
+      Copy-Item "$TargetFolder\ssh-lsa.dll" "$sys32dir\ssh-lsa.dll" -Force
+    }
 
     #Don't destroy other values
     $key = get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa'
@@ -163,7 +174,7 @@ If ($SSHServerFeature)
     Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\" "Authentication Packages" $values
   }
 
-  If([bool]((gc "$TargetFolder\sshd_config") -ilike "*#LogLevel INFO*"))
+  If((Test-Path "$TargetFolder\sshd_config") -AND ([bool]((gc "$TargetFolder\sshd_config") -ilike "*#LogLevel INFO*")))
   {
     Write-Warning "Explicitly disabling sshd logging as it currently logs about .5 GB / hour"
     (Get-Content "$TargetFolder\sshd_config") -replace '#LogLevel INFO', 'LogLevel QUIET' | Set-Content "$TargetFolder\sshd_config"
@@ -189,8 +200,15 @@ If ($SSHServerFeature)
   Start-Sleep -seconds 3
 
   $keylist = "ssh_host_dsa_key", "ssh_host_rsa_key", "ssh_host_ecdsa_key", "ssh_host_ed25519_key"
+  $fullpathkeylist = "'$TargetFolder\ssh_host_dsa_key'", "'$TargetFolder\ssh_host_rsa_key'", "'$TargetFolder\ssh_host_ecdsa_key'", "'$TargetFolder\ssh_host_ed25519_key'"
 
-  Start-Process "$toolsDir\psexec.exe" -ArgumentList "-accepteula -s -w `"$TargetFolder`" ssh-add.exe $keylist " -wait
+  schtasks.exe /create /RU "NT AUTHORITY\SYSTEM" /RL HIGHEST /SC ONSTART /TN "ssh-add" /TR "'$TargetFolder\ssh-add.exe'  $fullpathkeylist" /F
+
+  schtasks.exe /Run /I /TN "ssh-add"
+
+  schtasks.exe /Delete /TN "ssh-add" /F
+
+  #Start-Process "$toolsDir\psexec.exe" -ArgumentList "-accepteula -s -w `"$TargetFolder`" ssh-add.exe $keylist " -wait
 
   If ($DeleteServerKeysAfterInstalled)
   {
@@ -211,14 +229,22 @@ If ($SSHServerFeature)
   New-Service -Name sshd -BinaryPathName "$TargetFolder\sshd.exe" -Description "SSH Deamon" -StartupType Automatic -DependsOn ssh-agent | Out-Null
   sc.exe config sshd obj= "NT SERVICE\SSHD"
 
-  Import-Module "$toolsdir\PoshPrivilege"
-  Add-Privilege "NT SERVICE\SSHD" SeServiceLogonRight
+  If ($psversiontable.psversion -lt [version]'3.0')
+  {
+    write-output "PowerShell version is older than 3.0, using  ntrights.exe to grant logon as service."
+    Start-Process "$TargetFolder\ntrights.exe" -ArgumentList "-u `"NT SERVICE\SSHD`" +r SeServiceLogonRight"
+  }
+  Else
+  {
+    Import-Module "$toolsdir\PoshPrivilege"
+    Add-Privilege "NT SERVICE\SSHD" SeServiceLogonRight
+  }
 
   <#."$toolsdir\ntrights.ps1"
   [MyLsaWrapper.LsaWrapperCaller]::AddPrivileges("NT SERVICE\SSHD", "SeServiceLogonRight")
   #cmd.exe /c "`"$TargetFolder\ntrights.exe`" -u `"NT SERVICE\SSHD`" +r SeAssignPrimaryTokenPrivilege"
   #>
-  If (!$KeyBasedAuthenticationFeature)
+  If (!$SSHLsaVersionChanged)
   {
     Write-Output "Starting sshd Service"
     Start-Service sshd

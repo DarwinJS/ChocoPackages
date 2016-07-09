@@ -72,11 +72,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/win32-openssh/appicon.png</iconUrl>
     <releaseNotes>
-    Package does not rely on ntrights which does not work on Windows Nano.  (Still have to eliminate psexec.exe for full compatibility)
+    Package does not rely on ntrights nor psexec which do not work on Windows Nano.  (Still have to eliminate psexec.exe for full compatibility)
     Package explicity sets log level to QUIET because on some systems the current version of sshd repeatedly logs the same line at a rate of about 1 GB / 2 hours with default log settings.
     Package incorporates securing of the server keys using the SSH agent as per the product release notes below.
-    Product release notes: [https://github.com/PowerShell/Win32-OpenSSH/releases/tag/5_15_2016]
-    [https://github.com/PowerShell/Win32-OpenSSH/releases/tag/5_30_2016]
+    Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/5_15_2016
+    https://github.com/PowerShell/Win32-OpenSSH/releases/tag/5_30_2016
     </releaseNotes>
   </metadata>
   <files>

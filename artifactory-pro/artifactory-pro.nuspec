@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
+    <id>artifactory-pro</id>
+    <title>jFrog Artifactory Pro</title>
+    <version>4.10</version>
+    <authors>JFrog</authors>
+    <owners>DarwinJS dragon788</owners>
+    <summary>Professional version of JFrog binary artifact repository including Nuget. (Requires paid/evaluation license key)</summary>
+    <description>Professional version of JFrog binary artifact repository including Nuget. (Requires paid/evaluation license key)</description>
+    <projectUrl>https://www.jfrog.com/artifactory/features/</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/artifactory-pro</packageSourceUrl>
+    <bugTrackerUrl>https://issues.jfrog.org/jira/browse/rtfact</bugTrackerUrl>
+    <releaseNotes>[https://bintray.com/jfrog/artifactory-pro/jfrog-artifactory-pro-zip#release]</releaseNotes>
+    <docsUrl>https://www.jfrog.com/confluence/display/RTF/Welcome+to+Artifactory</docsUrl>
+    <tags>artifactory pro devops artifact admin</tags>
+    <copyright>jFrog</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/artifactory/appicon.png</iconUrl>
+    <dependencies>
+      <dependency id="JDK" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

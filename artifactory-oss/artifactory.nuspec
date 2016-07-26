@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>artifactory</id>
     <title>jFrog Artifactory OSS</title>
-    <version>4.5.1</version>
+    <version>4.10.0</version>
     <authors>jFrog</authors>
     <owners>DarwinJS</owners>
     <summary>Open source vesion of jFrog binary artifact repository including Nuget.</summary>
@@ -15,7 +15,7 @@
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/artifactory</packageSourceUrl>
     <projectSourceUrl>https://subversion.jfrog.org/artifactory/public/trunk</projectSourceUrl>
     <bugTrackerUrl>https://issues.jfrog.org/jira/browse/rtfact</bugTrackerUrl>
-    <releaseNotes>[https://bintray.com/jfrog/artifactory/jfrog-artifactory-oss-zip/4.5.1/view#release]</releaseNotes>
+    <releaseNotes>[https://bintray.com/jfrog/artifactory/jfrog-artifactory-oss-zip#release]</releaseNotes>
     <docsUrl>https://www.jfrog.com/confluence/display/RTF/Welcome+to+Artifactory</docsUrl>
     <tags>artifactory admin</tags>
     <copyright>jFrog</copyright>

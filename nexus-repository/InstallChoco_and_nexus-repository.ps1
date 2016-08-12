@@ -15,7 +15,7 @@ If ($host.name -ilike "*remote*") {$Description = "Nexus Repository OSS on `$env
 $Changes = @"
   [1] Sets PowerShell Execution Policy to "RemoteSigned"
   [2] Installs chocolatey package manager
-  [3] Installs the chocolatey package nexus-repository
+  [3] Installs the chocolatey package nexus-repository (WITH SWITCH --allowEmptyChecksums!)
 "@
 
 clear-host
@@ -66,4 +66,4 @@ If (!(Test-Path env:ChocolateyInstall))
 
 Write-Output "Chocolatey is installed and enabled for use in this session..."
 
-choco install nexus-repository -confirm
+choco install nexus-repository -confirm --allowEmptyChecksums

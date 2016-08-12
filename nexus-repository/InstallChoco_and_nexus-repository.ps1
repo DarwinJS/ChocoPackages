@@ -66,4 +66,8 @@ If (!(Test-Path env:ChocolateyInstall))
 
 Write-Output "Chocolatey is installed and enabled for use in this session..."
 
-choco install nexus-repository -confirm --allowEmptyChecksums
+If ([version](choco version).split('v')[1] -ge [version]"0.10.0")
+{
+  $opts = '--allowEmptyChecksums'
+}
+choco install $opts nexus-repository -confirm

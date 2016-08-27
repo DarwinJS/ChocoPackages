@@ -314,7 +314,7 @@ If ($SSHServerFeature)
   }
   Else
   {
-    If ((OSBits -eq 64) -and (!(Test-Path "$env:windir\syswow64")))
+    If (($OSBits -eq 64) -and (!(Test-Path "$env:windir\syswow64")))
     {
       Write-Warning "This 64-bit system does not have the WOW64 subsystem installed, please manually grant the right SeLogonAsAService to `"NT SERVICE\SSHD`"."
       Write-Warning "OR try again WITHOUT the /UseNTRights switch."

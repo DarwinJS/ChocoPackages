@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- Do not remove this test for UTF-8: if “Ω” doesn’t appear as greek uppercase omega letter enclosed in quotation marks, you should use an editor that supports UTF-8, not this one. -->
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
+    <id>win32-openssh</id>
+    <title>Win32 OpenSSH (Microsoft Port)</title>
+    <version>2016.05.30.20160827</version>
+    <authors>Microsoft</authors>
+    <owners>DarwinJS</owners>
+    <summary>Open SSH tools for Windows - work in all CLIs.</summary>
+    <description>Open SSH tools for Windows.
+      This is the Microsoft PowerShell Team's recent port.
+      Works in all CLIs and does not require .NET.
+      Includes the following tools:
+      * ssh.exe
+      * ssh-add.exe
+      * ssh-agent.exe
+      * ssh-keygen.exe
+      * ssh-keyscan.exe
+      * ssh-keysign.exe
+      * ssh-pkcs11-helper.exe
+      * scp.exe
+      * sftp.exe
+      * sshd.exe (server)
+      * sftp-server.exe
+
+      This package performs the following operations that you normally have to hack at until you get what you want:
+      * Install Appropriate Bitness for the version of Windows
+      * Install to Program Files (malware protection and following advice of dev team)
+      * Add SSH location to System PATH
+      * Optionally install sshd windows service (Requires parameter - see below)
+      * Optionally install sshd server "key based authentication" (Requires parameter - see below)
+      * Cleanly uninstall all of the above (removing config files and server keys requires special switch - see below)
+
+      The package also attempts to keep you out of trouble when configuring the sshd service:
+        * Will not install sshd server if an different sshd server is already running
+        * Will not delete server keys on uninstall or reinstall (unless you override with switch below)
+        * Will not upgrade or uninstall if the service is running and you did not specify /SSHServerFeature (you forget about the service on a machine where you want to upgrade the client tools)
+        * If you use the server's Key Based Authentication feature, install and uninstall behave differently to account for the integration of this component
+
+      This package supports the following parameters:
+
+      -params '"/SSHServerFeature"' (Install and Uninstall)
+      Also install sshd Windows Service - including opening port 22.
+      If this parameter is not included on an upgrade or uninstall and
+      the sshd server is installed - an error is generated.  You must
+      use this switch to indicate you have made preparations for the
+      sshd service to be interrupted or removed.
+
+      -params '"/SSHServerFeature /KeyBasedAuthenticationFeature"'
+      Also install sshd Windows Service - including opening port 22 and
+      it with Key Based Authentication (reboot required before active)
+
+      -params '"/SSHServerFeature /KeyBasedAuthenticationFeature /DeleteServerKeysAfterInstalled"'
+      Also install sshd Windows Service - including opening port 22 and
+      it with Key Based Authentication (reboot required before active)
+      Server keys are deleted after added to the ssh-agent (you will not have an opportunity to copy them)
+
+      -params '"/DeleteConfigAndServerKeys"' (Uninstall)
+      By default an uninstall does not remove config files nor server keys.
+
+      -params '"/UseNTRights"'
+      By default the install uses PowerShell code that was tested on Nano - which means it should work on server core without WOW64.
+      If this code does not work for you, you can use this switch to invoke the 32-bit ntrights.exe
+      Please be aware that 32-bit ntrights.exe will NOT work on Windows Systems that doe not have WOW64 installed - this would mainly
+      affect Server Core where this feature is optional and not installed by default and Server Nano where 32-bit is not supported.
+
+    </description>
+    <projectUrl>https://github.com/PowerShell/Win32-OpenSSH</projectUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/win32-openssh</packageSourceUrl>
+    <projectSourceUrl>https://github.com/PowerShell/Win32-OpenSSH</projectSourceUrl>
+    <docsUrl>https://github.com/PowerShell/Win32-OpenSSH/wiki</docsUrl>
+    <bugTrackerUrl>https://github.com/PowerShell/Win32-OpenSSH/issues</bugTrackerUrl>
+    <tags>win32-openssh admin</tags>
+    <copyright>Microsoft</copyright>
+    <licenseUrl>https://raw.githubusercontent.com/PowerShell/Win32-OpenSSH/L1/LICENCE</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/win32-openssh/appicon.png</iconUrl>
+    <releaseNotes>
+    WARNING: Target folder is changing to re-align with current Win32-OpenSSH installation from the product team.
+      It is recommended that you uninstall and reinstall if you have an older version.
+    With switch /UseNTRights Package uses ntrights.exe on 32-bit windows and on 64-bit windows - ONLY IF THE 32-bit SUBSYSTEM IS INSTALLED - otherwise it attempts to use Posh Code to grant logonasaservice right.
+    Code used for setting rights WITHOUT /UseNTRights was tested as working on Nano, which means it should work on server core without WOW64.
+    Package explicity sets log level to QUIET because on some systems the current version of sshd repeatedly logs the same line at a rate of about 1 GB / 2 hours with default log settings.
+    Package incorporates securing of the server keys using the SSH agent as per the product release notes below.
+    Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/5_15_2016
+    https://github.com/PowerShell/Win32-OpenSSH/releases/tag/5_30_2016
+    </releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

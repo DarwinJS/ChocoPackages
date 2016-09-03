@@ -66,4 +66,4 @@ If (!(Test-Path env:ChocolateyInstall))
 
 Write-Output "Chocolatey is installed and enabled for use in this session..."
 
-choco install win32-openssh -params '"/SSHServerFeature /KeyBasedAuthenticationFeature"' -confirm
+choco install win32-openssh -params '"/SSHServerFeature"' -confirm

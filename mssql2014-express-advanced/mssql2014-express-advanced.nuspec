@@ -5,9 +5,12 @@
     <version>12.0.4100.1</version>
     <title>SQL Server 2014 Express Advanced SP1</title>
     <authors>Microsoft</authors>
+    <projectUrl>http://www.microsoft.com/sqlserver/en/us/editions/express.aspx</projectUrl>
     <owners>DarwinJS</owners>
+    <copyright>Microsoft</copyright>
     <licenseUrl>http://download.microsoft.com/download/B/4/E/B4E604D9-9D38-4BBA-A927-56E4C872E41C/SQL_Server_2014_Licensing_Guide.pdf</licenseUrl>
     <projectUrl>http://www.microsoft.com/sqlserver/en/us/default.aspx</projectUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/mssql2014-express-advanced/MsSqlServerManagementStudio2014Express.svg</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <summary>SQL 2014 Express Advanced SP1.  Can take same command line you use for Non-Express SQL Server installer so that you can get an Express install that most exactly replicates your full product install.</summary>
     <description>SQL 2014 Express Advanced.  Can take same command line you use for Non-Express SQL Server installer so that you can get an Express install that most exactly replicates your full product install.

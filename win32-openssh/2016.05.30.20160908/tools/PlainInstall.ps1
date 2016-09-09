@@ -5,6 +5,11 @@ This script allows the SSH install to proceed even when your system does not hav
 
 The use cases are Server Nano and Server Core without WOW64 installed.
 
+To use PlainInstall.ps1, expand the .nupkg that this file is contained in
+and then place the \tools folder on the target system.
+
+To push to Nano use 'Copy-Item -tosession $sessionvariable tools c:\tools -recurse'
+
 .\Plaininstall.ps1 -SSHServerFeature
 #>
 

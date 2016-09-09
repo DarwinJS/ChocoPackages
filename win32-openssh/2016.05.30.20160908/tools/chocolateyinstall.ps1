@@ -189,12 +189,15 @@ If ($RunningUnderChocolatey)
 Else
 {
   #Unzip to targetfolder
+<#
+#This bombs on nano because the cmdlet is there, but the .net assembly to back it is not
   If ([bool](Get-command expand-archive -ea SilentlyContinue))
   {
     #covers server 2016
     Expand-Archive -Path $filename -DestinationPath $ExtractFolder
   }
   Else
+#>
   If (Test-Path "$toolsdir\7z.exe")
   {
     #covers nano
@@ -212,12 +215,12 @@ Else
 Copy-Item "$ExtractFolder\*" "$PF" -Force -Recurse
 Remove-Item "$ExtractFolder" -Force -Recurse
 
-$SSHLsaVersionChanged = $true
+$SSHLsaVersionChanged = $false
 If (Test-Path "$env:windir\system32\ssh-lsa.dll")
 {
   #Using file size because open ssh files are not currently versioned.  Submitted problem report asking for versioning to be done
-  If (((get-item $env:windir\system32\ssh-lsa.dll).length) -eq ((get-item $TargetFolder\ssh-lsa.dll).length))
-  {$SSHLsaVersionChanged = $false}
+  If (((get-item $env:windir\system32\ssh-lsa.dll).length) -ne ((get-item $TargetFolder\ssh-lsa.dll).length))
+  {$SSHLsaVersionChanged = $true}
 }
 
 
@@ -306,6 +309,7 @@ If ($SSHServerFeature)
   {
     #The code in this .PS1 has been tested on Nano - the hardest case to date for setting special privileges in script
     . "$toolsdir\AddAccountToAssignPrimaryToken.ps1" -AccountToAdd "NT SERVICE\SSHD"
+    . "$toolsdir\AddAccountToLogonAsAService.ps1" -AccountToAdd "NT SERVICE\SSHD"
   }
   Else
   {

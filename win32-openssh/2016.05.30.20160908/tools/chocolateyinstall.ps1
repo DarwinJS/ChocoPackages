@@ -189,13 +189,12 @@ If ($RunningUnderChocolatey)
 Else
 {
   #Unzip to targetfolder
-  <#If ([bool](Get-command expand-archive -ea SilentlyContinue))
+  If ([bool](Get-command expand-archive -ea SilentlyContinue))
   {
     #covers server 2016
     Expand-Archive -Path $filename -DestinationPath $ExtractFolder
   }
   Else
-  #>
   If (Test-Path "$toolsdir\7z.exe")
   {
     #covers nano

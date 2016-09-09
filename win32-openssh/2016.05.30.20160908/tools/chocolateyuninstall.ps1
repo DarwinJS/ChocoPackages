@@ -1,10 +1,14 @@
 
 $ErrorActionPreference = 'Stop'; # stop on all errors
-
+If (Test-Path variable:shimgen)
+{
+  $RunningUnderChocolatey = $True
+  Write-Output "Running under Chocolatey"
+}
 $packageName= 'win32-openssh'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
-$OSBits = Get-ProcessorBits
+$OSBits = ([System.IntPtr]::Size * 8) #Get-ProcessorBits
 
 #On 64-bit, always favor 64-bit Program Files no matter what our execution is now (works back past XP / Server 2003)
 If ($env:ProgramFiles.contains('x86'))
@@ -20,13 +24,15 @@ Else
 $TargetFolder = "$PF\OpenSSH-Win$($OSBits)"
 $TargetFolderOld = "$PF\OpenSSH-Win$($OSBits)"
 
-# Default the values
-$SSHServerFeature = $false
-$KeyBasedAuthenticationFeature = $false
+If ($RunningUnderChocolatey)
+{
+  # Default the values before reading params
+  $SSHServerFeature = $false
+  $KeyBasedAuthenticationFeature = $false
 
-$arguments = @{};
-$packageParameters = $env:chocolateyPackageParameters;
-
+  $arguments = @{};
+  $packageParameters = $env:chocolateyPackageParameters
+}
 # Now parse the packageParameters using good old regular expression
 if ($packageParameters) {
     $match_pattern = "\/(?<option>([a-zA-Z]+)):(?<value>([`"'])?([a-zA-Z0-9- _\\:\.]+)([`"'])?)|\/(?<option>([a-zA-Z]+))"
@@ -61,7 +67,18 @@ if ($packageParameters) {
     Write-Debug "No Package Parameters Passed in";
 }
 
-$SSHServiceInstanceExistsAndIsOurs = ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike 'sshd'} | select -expand PathName) -ilike "*$TargetFolder*"))
+Function CheckServicePath ($ServiceEXE,$FolderToCheck)
+{
+  #The modern way:
+  #Return ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike "*$ServiceEXE*"} | select -expand PathName) -ilike "*$FolderToCheck*"))
+  #The NANO TP5 Compatible Way:
+  Return ([bool]((wmic service | ?{$_ -ilike "*$ServiceEXE*"}) -ilike "*$FolderToCheck*"))
+}
+
+#$SSHServiceInstanceExistsAndIsOurs = ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike 'sshd'} | select -expand PathName) -ilike "*$TargetFolder*"))
+$SSHServiceInstanceExistsAndIsOurs = CheckServicePath 'sshd' "$TargetFolder"
+#$SSHAGENTServiceInstanceExistsAndIsOurs = ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike 'ssh-agent'} | select -expand PathName) -ilike "*$TargetFolder*"))
+$SSHAGENTServiceInstanceExistsAndIsOurs = CheckServicePath 'ssh-agent' "$TargetFolder"
 
 If ($SSHServerFeature -AND (!$SSHServiceInstanceExistsAndIsOurs) -AND (Get-Service sshd -ErrorAction SilentlyContinue))
 {
@@ -103,28 +120,12 @@ If ((get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa').getvalue("a
   $KeyBasedAuthenticationFeatureINSTALLED = $True
 }
 
-If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
-{
-#Shutdown and unregister service for upgrade
-    Stop-Service sshd -Force
-    If (([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
-    {
-      Throw "Could not stop the SSHD service, please stop manually and retry this package."
-    }
-    Stop-Service ssh-agent -Force
-    Start-Sleep -seconds 3
-    If (([bool](Get-Service ssh-agent | where {$_.Status -ieq 'Running'})))
-    {
-      Throw "Could not stop the ssh-agent service, please stop manually and retry this package."
-    }
-}
-
 If ($SSHServiceInstanceExistsAndIsOurs -AND ($SSHServerFeature))
 {
   Stop-Service sshd
-  sc.exe delete sshd 1> null
+  sc.exe delete sshd  | out-null
   Stop-Service ssh-agent
-  sc.exe delete ssh-agent 1> null
+  sc.exe delete ssh-agent | out-null
 }
 
 If ($KeyBasedAuthenticationFeatureINSTALLED)
@@ -170,7 +171,9 @@ Else
 netsh advfirewall firewall delete rule name='SSHD Port win32-openssh'
 
 $PathToRemove = "$TargetFolder"
-foreach ($path in [Environment]::GetEnvironmentVariable("PATH","Machine").split(';'))
+#Code has been modified to work with Nano - do not change method of environment variable access
+#foreach ($path in [Environment]::GetEnvironmentVariable("PATH","Machine").split(';'))
+foreach ($path in ((Get-ItemProperty 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment').path.split(';')))
 {
   If ($Path)
   {
@@ -182,4 +185,5 @@ foreach ($path in [Environment]::GetEnvironmentVariable("PATH","Machine").split(
 }
 $AssembledNewPath = ($newpath -join(';')).trimend(';')
 
-[Environment]::SetEnvironmentVariable("PATH",$AssembledNewPath,"Machine")
+Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'PATH' -Value "$AssembledNewPath"
+#[Environment]::SetEnvironmentVariable("PATH",$AssembledNewPath,"Machine")

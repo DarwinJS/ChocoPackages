@@ -78,6 +78,8 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/win32-openssh/appicon.png</iconUrl>
     <releaseNotes>
+
+
     Switch "/KeyBasedAuthenticationFeature" is retired - key based authentication always configured when using "/SSHServerFeature"
     With switch /UseNTRights Package uses ntrights.exe on 32-bit windows and on 64-bit windows - ONLY IF THE 32-bit SUBSYSTEM IS INSTALLED - otherwise it attempts to use Posh Code to grant SeAssignPrimaryTokenPrivilege.
     Code used for setting rights WITHOUT /UseNTRights was tested as working on Nano, which means it should work on server core without WOW64.

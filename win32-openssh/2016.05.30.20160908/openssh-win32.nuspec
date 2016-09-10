@@ -78,11 +78,21 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/win32-openssh/appicon.png</iconUrl>
     <releaseNotes>
+      2016.05.30.20160902
+      - NEW: Code can be used to install on Nano and ServerCore w/out WOW64 (Chocolatey not needed) like this:
+          1) Expand this .nupkg
+          2) Push the ..\tools folder to the target system (use Copy-Item -ToSession for Nano)
+          3) CD to \tools
+          4) To install, run '.\barebonesinstaller.ps1 -SSHServerFeature'
+          5) To uninstall, run '.\barebonesinstaller.ps1 -SSHServerFeature -Uninstall'
+      - Source files are now internal (makes for easier curation and easier for above barebonesinstaller.ps1)
+      - Fixes to uninstall that were creating errors
 
+      2016.05.30.20160827
+      - Switch "/KeyBasedAuthenticationFeature" is retired - key based authentication always configured when using "/SSHServerFeature"
+      - With switch /UseNTRights Package uses ntrights.exe on 32-bit windows and on 64-bit windows - ONLY IF THE 32-bit SUBSYSTEM IS INSTALLED - otherwise it attempts to use Posh Code to grant SeAssignPrimaryTokenPrivilege.
+        Code used for setting rights WITHOUT /UseNTRights was tested as working on Nano, which means it should work on server core without WOW64.
 
-    Switch "/KeyBasedAuthenticationFeature" is retired - key based authentication always configured when using "/SSHServerFeature"
-    With switch /UseNTRights Package uses ntrights.exe on 32-bit windows and on 64-bit windows - ONLY IF THE 32-bit SUBSYSTEM IS INSTALLED - otherwise it attempts to use Posh Code to grant SeAssignPrimaryTokenPrivilege.
-    Code used for setting rights WITHOUT /UseNTRights was tested as working on Nano, which means it should work on server core without WOW64.
     Package explicity sets log level to QUIET because on some systems the current version of sshd repeatedly logs the same line at a rate of about 1 GB / 2 hours with default log settings.
     Package incorporates securing of the server keys using the SSH agent as per the product release notes below.
     Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/5_15_2016

@@ -2,9 +2,10 @@
 .SYNOPSIS
 Enables installing SSH even when your system does not have WOW64 or Chocolatey.
 .DESCRIPTION
-This script enables installing  SSH even when your system does not have:
+This script enables installing  SSH even when your system does NOT have:
   [1] Chocolatey installed
   [2] WOW64 installed
+  [3] .NET Core (Nano)
 
 The use cases are Server Nano and Server Core without WOW64 installed.
 

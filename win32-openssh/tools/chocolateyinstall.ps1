@@ -1,4 +1,4 @@
-$ErrorActionPreference = 'Stop'; # stop on all errors
+n$ErrorActionPreference = 'Stop'; # stop on all errors
 
 $ProductName = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name 'ProductName').ProductName
 $EditionId = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name 'EditionID').EditionId
@@ -39,10 +39,10 @@ $packageArgs = @{
   url           = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win32.zip'
   url64bit      = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win64.zip'
 
-  checksum      = 'B44CC37CCF9C3E4917440B1DFEBB8052'
-  checksumType  = 'md5'
-  checksum64    = '1D9574A785EB0CD45380DD33DB11D7B0'
-  checksumType64= 'md5'
+  checksum      = 'AEE95E0E428BF66BF9C2D6F1FB9FA72E202427DE'
+  checksumType  = 'SHA1'
+  checksum64    = 'E2D1B6506C0DC3446AA60FF5631A5B5D9F472EEE'
+  checksumType64= 'SHA1'
 }
 
 If ($RunningUnderChocolatey)
@@ -256,9 +256,16 @@ If ($SSHServerFeature)
     #Don't destroy other values
     $key = get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa'
     $values = $key.GetValue("Authentication Packages")
-    $values += 'ssh-lsa'
-    Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\" "Authentication Packages" $values
-
+    If (!($Values -contains 'ssh-lsa'))
+    {
+      Write-Output "Adding ssh-lsa to authentication packages..."
+      $values += 'ssh-lsa'
+      Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\" "Authentication Packages" $values
+    }
+    Else
+    {
+      Write-Output "ssh-lsa already configured in authentication packages..."
+    }
 
   If((Test-Path "$TargetFolder\sshd_config") -AND ([bool]((gc "$TargetFolder\sshd_config") -ilike "*#LogLevel INFO*")))
   {

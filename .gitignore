@@ -1,3 +1,4 @@
 *.nupkg
 *.zip
 *.exe
+*.dll

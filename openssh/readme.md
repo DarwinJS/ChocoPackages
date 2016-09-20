@@ -39,6 +39,7 @@ Requirements: PowerShell 5 for the PackageManagement Provider
 
 ### Only Client Tools:
 **Note**: Server EXEs are still placed on machine, but not configured
+
 1. Open an ELEVATED PowerShell Prompt
 2. Paste this command into the console (get the whole line - it's long and is a single line):
    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_openssh.ps1'))

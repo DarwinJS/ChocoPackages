@@ -12,11 +12,12 @@ openssh all in one command line - see later in this document.
 ## Installing on Nano w/out Chocolatey Nor .NET Core Installed (should work for Server 2016 as well)
 
 Requirements: PowerShell 5 for the PackageManagement Provider
+
 1. Open a command line on the target (remoting for Nano) and run:
 2. Install-PackageProvider NuGet -forcebootstrap -force
 3. Register-PackageSource -name chocolatey -provider nuget -location http://chocolatey.org/api/v2/ -trusted
 4. Install-Package openssh -provider NuGet
-5. cd "$((dir "$env:ProgramFiles\nuget\packages\Win32-openssh*\tools" |select -last 1).fullname)"
+5. cd "$((dir "$env:ProgramFiles\nuget\packages\openssh*\tools" |select -last 1).fullname)"
 6. .".\barebonesinstaller.ps1" #Client Tools only
 7. .".\barebonesinstaller.ps1" -SSHServerFeature #SSH Server (& client tools)
 8. .".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall #Uninstall

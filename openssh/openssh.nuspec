@@ -48,6 +48,9 @@
       use this switch to indicate you have made preparations for the
       sshd service to be interrupted or removed.
 
+      -params '"/SSHServerFeature /SSHServerPort:3834"'
+      Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.
+
       RETIRED: -params '"/KeyBasedAuthenticationFeature"'
       NO LONGER NECESSARY - KeyBasedAuthentiation is always configured
       if the /SSHServerFeature switch is used.
@@ -78,7 +81,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/openssh/appicon.png</iconUrl>
     <releaseNotes>
-      0.0.0.9 / 2016.05.30.20160902
+      0.0.0.9
+      - NEW: Chocolatey package id is now "openssh"
+      - NEW: Set listenting port with parameter /SSHServerPort
+      - NEW: Enhanced detection of possible port conflicts with requested listening port
+             Specifically calls out Developer Mode SSH (Windows 10 Developer Mode)
       - NEW: more complete readme: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
       - NEW: install on Nano and ServerCore w/out WOW64 (Chocolatey not needed) like this (PSH 5 required):
           1) Open a command line on the target (remoting for Nano) and run:
@@ -90,7 +97,7 @@
       - Fix to prevent repeatedly adding "ssh-lsa" when already present (on forced installs, etc.)
       - Fix to uninstall to prevent leaving lsa-ssh authentication provider entries on system
       - Source files are now internal (makes for easier curation and easier for above barebonesinstaller.ps1)
-      - Fixes to uninstall that were creating errors
+      - Fix crashing uninstall script
 
       2016.05.30.20160827
       - Switch "/KeyBasedAuthenticationFeature" is retired - key based authentication always configured when using "/SSHServerFeature"

@@ -130,9 +130,9 @@ If ((get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa').getvalue("a
 
 If ($SSHServiceInstanceExistsAndIsOurs -AND ($SSHServerFeature))
 {
-  Stop-Service sshd
+  Stop-Service sshd -Force
   sc.exe delete sshd  | out-null
-  Stop-Service ssh-agent
+  Stop-Service ssh-agent -Force
   sc.exe delete ssh-agent | out-null
 }
 

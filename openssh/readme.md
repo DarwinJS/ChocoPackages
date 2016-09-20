@@ -18,8 +18,8 @@ Requirements: PowerShell 5 for the PackageManagement Provider
 4. Install-Package openssh -provider NuGet
 5. cd "$((dir "$env:ProgramFiles\nuget\packages\Win32-openssh*\tools" |select -last 1).fullname)"
 6. .".\barebonesinstaller.ps1" #Client Tools only
-6. .".\barebonesinstaller.ps1" -SSHServerFeature #SSH Server (& client tools)
-6. .".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall #Uninstall
+7. .".\barebonesinstaller.ps1" -SSHServerFeature #SSH Server (& client tools)
+8. .".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall #Uninstall
 
 ## Complete Offline Install (w/out Chocolatey, Nor WOW64, Nor PowerShell 5):
 1. Expand this .nupkg
@@ -50,6 +50,9 @@ If this parameter is not included on an upgrade or uninstall and
 the sshd server is installed - an error is generated.  You must
 use this switch to indicate you have made preparations for the
 sshd service to be interrupted or removed.
+
+## -params '"/SSHServerFeature /SSHServerPort:3834"'
+Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.
 
 ## -params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'
 When installing the server, server keys are deleted after added to the ssh-agent (you will not have an opportunity to copy them).

@@ -39,9 +39,12 @@
       If ($line[4].length -ge 1)
       {
         $ProcessInfo = Get-Process -id $($line[4])
-        $ProcessEXEPath = wmic process where "ProcessId='$($line[4])'" get ExecutablePath | select-object -skip 1 | ?{$_ -ne ''}
+        #$ProcessEXEPath = wmic process where "ProcessId='$($line[4])'" get ExecutablePath | select-object -skip 1 | ?{$_ -ne ''}
+        If ((wmic process where "ProcessId='$($line[4])'" get ExecutablePath) -match "[A-Z]:\\.*")
+        {
+          $ProcessEXEPath = $Matches[0]
+        }
       }
-
 			# Define the properties
 			$properties = @{
 				Protocol = $line[0]

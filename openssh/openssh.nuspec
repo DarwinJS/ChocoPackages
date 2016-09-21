@@ -92,7 +92,7 @@
           2) Install-Packagerovider NuGet -forcebootstrap -force
           3) Register-PackageSource -name chocolatey -provider nuget -location http://chocolatey.org/api/v2/ -trusted
           4) Install-Package openssh -provider NuGet
-          5) cd "$((dir "$env:ProgramFiles\nuget\packages\Win32-OpenSSH*\tools" |select -last 1).fullname)"
+          5) cd "$((dir "$env:ProgramFiles\nuget\packages\OpenSSH*\tools" |select -last 1).fullname)"
           6) .".\barebonesinstaller.ps1" -SSHServerFeature
       - Fix to prevent repeatedly adding "ssh-lsa" when already present (on forced installs, etc.)
       - Fix to uninstall to prevent leaving lsa-ssh authentication provider entries on system

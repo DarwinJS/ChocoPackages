@@ -53,7 +53,6 @@ If ($RunningUnderChocolatey)
   $DeleteServerKeysAfterInstalled = $false
   $UseNTRights = $false
   $SSHDPort = '22'
-  $DisableDeveloperModeSSH = $false
 
   $arguments = @{};
   $packageParameters = $env:chocolateyPackageParameters
@@ -278,14 +277,17 @@ Else
   {
     #covers nano
     cd $toolsdir
-    .\7z.exe x $filename -o"$ExtractFolder"
+    .\7z.exe x $filename -o"$ExtractFolder" -aoa
   }
   Else
   {
     Throw "You need a copy of 7z.exe next to this script for this operating system.  You can get a copy at 7-zip.org"
   }
 
-  #add to path
+  If ($env:Path -inotlike "*$TargetFolder*")
+  {
+    Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'PATH' -Value "$env:Path;$TargetFolder"
+  }
 }
 
 Copy-Item "$ExtractFolder\*" "$PF" -Force -Recurse
@@ -411,6 +413,7 @@ If ($SSHServerFeature)
     #The code in this .PS1 has been tested on Nano - the hardest case to date for setting special privileges in script
     . "$toolsdir\AddAccountToAssignPrimaryToken.ps1" -AccountToAdd "NT SERVICE\SSHD"
     . "$toolsdir\AddAccountToLogonAsAService.ps1" -AccountToAdd "NT SERVICE\SSHD"
+    . "$toolsdir\AddAccountToLogonAsAService.ps1" -AccountToAdd "NT SERVICE\SSH-Agent"
   }
   Else
   {

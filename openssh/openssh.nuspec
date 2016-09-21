@@ -94,11 +94,12 @@
           4) Install-Package openssh -provider NuGet
           5) cd "$((dir "$env:ProgramFiles\nuget\packages\OpenSSH*\tools" |select -last 1).fullname)"
           6) .".\barebonesinstaller.ps1" -SSHServerFeature
-      - Fix to prevent repeatedly adding "ssh-lsa" when already present (on forced installs, etc.)
-      - Fix to uninstall to prevent leaving lsa-ssh authentication provider entries on system
-      - Source files are now internal (makes for easier curation and easier for above barebonesinstaller.ps1)
-      - Fix crashing uninstall script
-
+      - FIX: to prevent repeatedly adding "ssh-lsa" when already present (on forced installs, etc.)
+      - FIX: to uninstall to prevent leaving lsa-ssh authentication provider entries on system
+      - NEW: ource files are now internal (makes for easier curation and easier for above barebonesinstaller.ps1)
+      - FIX: crashing uninstall script
+      - FIX: properly add SSH folder to path on Nano
+      
       2016.05.30.20160827
       - Switch "/KeyBasedAuthenticationFeature" is retired - key based authentication always configured when using "/SSHServerFeature"
       - With switch /UseNTRights Package uses ntrights.exe on 32-bit windows and on 64-bit windows - ONLY IF THE 32-bit SUBSYSTEM IS INSTALLED - otherwise it attempts to use Posh Code to grant SeAssignPrimaryTokenPrivilege.

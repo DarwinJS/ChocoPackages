@@ -11,8 +11,8 @@ openssh all in one command line - see later in this document.
 
 ## Installing on Nano w/out Chocolatey Nor .NET Core Installed (should work for Server 2016 as well)
 
-Requirements: PowerShell 5 for the PackageManagement Provider  
-Works On: Nano TP5
+**Requirements:** PowerShell 5 for the PackageManagement Provider  
+**Works On:** Nano TP5
 
 1. Open a command line on the target (remoting for Nano) and run:
 2. Install-PackageProvider NuGet -forcebootstrap -force

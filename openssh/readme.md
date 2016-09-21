@@ -23,9 +23,9 @@ Requirements: PowerShell 5 for the PackageManagement Provider
 8. .".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall #Uninstall
 
 ## Complete Offline Install (w/out Chocolatey, Nor WOW64, Nor PowerShell 5):
-1. Expand this .nupkg
+1. Expand the openssh .nupkg (rename it to .zip and use your favorite unzipper)
 2. Push the ..\tools folder to the target system (use Copy-Item -ToSession for Nano)
-3. CD to \tools
+3. CD to "..\tools"
 4. To install only client tools, run '.\barebonesinstaller.ps1'
 5. To install client tools and Server, run '.\barebonesinstaller.ps1 -SSHServerFeature'
 6. To uninstall, run '.\barebonesinstaller.ps1 -SSHServerFeature -Uninstall'

@@ -100,7 +100,7 @@
       - FIX: crashing uninstall script
       - FIX: properly add SSH folder to path on Nano
       
-      2016.05.30.20160827
+      2016.05.30.20160827 (package ID: Win32-OpenSSH)
       - Switch "/KeyBasedAuthenticationFeature" is retired - key based authentication always configured when using "/SSHServerFeature"
       - With switch /UseNTRights Package uses ntrights.exe on 32-bit windows and on 64-bit windows - ONLY IF THE 32-bit SUBSYSTEM IS INSTALLED - otherwise it attempts to use Posh Code to grant SeAssignPrimaryTokenPrivilege.
         Code used for setting rights WITHOUT /UseNTRights was tested as working on Nano, which means it should work on server core without WOW64.

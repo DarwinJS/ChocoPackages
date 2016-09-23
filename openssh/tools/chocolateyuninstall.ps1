@@ -37,6 +37,7 @@ If ($RunningUnderChocolatey)
   # Default the values before reading params
   $SSHServerFeature = $false
   $KeyBasedAuthenticationFeature = $false
+  $DeleteConfigAndServerKeys = $false
 
   $arguments = @{};
   $packageParameters = $env:chocolateyPackageParameters

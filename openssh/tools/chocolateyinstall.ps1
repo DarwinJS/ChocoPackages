@@ -52,7 +52,7 @@ If ($RunningUnderChocolatey)
   $KeyBasedAuthenticationFeature = $false
   $DeleteServerKeysAfterInstalled = $false
   $UseNTRights = $false
-  $SSHDPort = '22'
+  $SSHServerPort = '22'
 
   $arguments = @{};
   $packageParameters = $env:chocolateyPackageParameters
@@ -95,8 +95,8 @@ if ($packageParameters) {
     }
 
     if ($arguments.ContainsKey("SSHServerPort")) {
-        $SSHDPort = $arguments.Get_Item("SSHServerPort")
-        Write-Host "/SSHServerPort was used, attempting to use SSHD listening port $SSHDPort."
+        $SSHServerPort = $arguments.Get_Item("SSHServerPort")
+        Write-Host "/SSHServerPort was used, attempting to use SSHD listening port $SSHServerPort."
         If (!$SSHServerFeature)
         {
           Write-Host "You forgot to specify /SSHServerFeature with /SSHServerPort, autofixing for you, enabling /SSHServerFeature"
@@ -137,48 +137,41 @@ Function CheckServicePath ($ServiceEXE,$FolderToCheck)
 
 
 If ($SSHServerFeature)
-{  #Check if anything is already listening on port $SSHDPort, which is not a previous version of this software.
-  Write-Output "Probing for possible conflicts with SSHD server to be configured on port $SSHDPort ..."
+{  #Check if anything is already listening on port $SSHServerPort, which is not a previous version of this software.
+  $AtLeastOneSSHDPortListenerIsNotUs = $False
+  Write-Output "Probing for possible conflicts with SSHD server to be configured on port $SSHServerPort ..."
   . "$toolsdir\Get-NetStat.ps1"
-  $AllProcsandPorts = get-netstat
+  $procslisteningonRequestedSSHDPort = @(Get-Netstat -GetProcessDetails -FilterOnPort $SSHServerPort)
   If ((checkservicepath 'svchost.exe -k SshBrokerGroup' 'Part of Microsoft SSH Server for Windows') -AND (checkservicepath 'svchost.exe -k SshProxyGroup' 'Part of Microsoft SSH Server for Windows'))
   {
     Write-Warning "  > Detected that Developer Mode SSH is present (Probably due to enabling Windows 10 Developer Mode)"
     $DeveloperModeSSHIsPresent = $True
   }
-  $procslisteningonRequestedSSHDPort = @($AllProcsandPorts | ? {$_.LocalAddressPort -eq $SSHDPort})
 
   If ($procslisteningonRequestedSSHDPort.count -ge 1)
   {
     ForEach ($proconRequestedSSHDPort in $procslisteningonRequestedSSHDPort)
     {
-      Write-Debug "  > Checking $($proconRequestedSSHDPort.Localaddressprocesspath) against path $TargetFolder"
+      Write-output "  > Checking $($proconRequestedSSHDPort.Localaddressprocesspath) against path $TargetFolder"
       If ("$($proconRequestedSSHDPort.Localaddressprocesspath)" -ilike "*$TargetFolder*")
       {
-        Write-Output "  > Found a previous version of Win32-OpenSSH installed by this package on $SSHDPort."
+        Write-Output "  > Found a previous version of Win32-OpenSSH installed by this package on $SSHServerPort."
       }
       Else
       {
         $AtLeastOneSSHDPortListenerIsNotUs = $True
-        Write-Warning "  > Found something listening on Port $SSHDPort that was not installed by this package."
-        Write-Warning "      $($proconRequestedSSHDPort.LocalAddressProcessPath) is listening on Port $SSHDPort"
+        Write-Warning "  > Found something listening on Port $SSHServerPort that was not installed by this package."
+        Write-Warning "      $($proconRequestedSSHDPort.LocalAddressProcessPath) is listening on Port $SSHServerPort"
+        $ProcessOccupyingPort = "$($proconRequestedSSHDPort.LocalAddressProcessPath)"
       }
     }
-  }
-
-  $Win32OpenSSHOnAnotherPort = $null
-  $Win32OpenSSHOnAnotherPort = $AllProcsandPorts | ? {($_.LocalAddressProcessPath -ilike "*TargetFolder*") -AND ($_.LocalAddressProcessPath -ne $SSHDPort)}
-
-  If ($Win32OpenSSHOnAnotherPort.LocalAddressPort -ne $null)
-  {
-    Write-Warning "Win32-OpenSSH was found on port $($Win32OpenSSHOnAnotherPort.LocalAddressPort) - will be reconfigured for $SSHDPort"
   }
 
   If ($AtLeastOneSSHDPortListenerIsNotUs)
   {
   $errorMessagePort = @"
-Something (other than a previous version of Win32-OpenSSH installed by this package) is listening on port $SSHDPort and you have not specified a different listening port (list above) using the /SSHServerPort parameter.
-Please either deconfigure or deinstall whatever is running on Port $SSHDPort and try again OR specify a different port for this SSHD Server using the /SSHServerPort package parameter.
+"$ProcessOccupyingPort" is listening on port $SSHServerPort and you have not specified a different listening port (list above) using the /SSHServerPort parameter.
+Please either deconfigure or deinstall whatever is running on Port $SSHServerPort and try again OR specify a different port for this SSHD Server using the /SSHServerPort package parameter.
 If you see the message 'Detected that Developer Mode SSH is present' above, you may be able to simply disable the services 'SSHBroker' and 'SSHProxy'
 "@
   Throw $errorMessagePort
@@ -304,7 +297,7 @@ If (Test-Path "$env:windir\system32\ssh-lsa.dll")
 
 If ($SSHServerFeature)
 {
-  Write-Warning "You have specified SSHServerFeature - this machine is being configured as an SSH Server including opening port $SSHDPort."
+  Write-Warning "You have specified SSHServerFeature - this machine is being configured as an SSH Server including opening port $SSHServerPort."
 
     Write-Warning "You have specified SSHServerFeature - a new lsa provider will be installed."
     If (Test-Path "$env:windir\sysnative")
@@ -347,14 +340,14 @@ If ($SSHServerFeature)
     (Get-Content "$TargetFolder\sshd_config") -replace '#LogLevel INFO', 'LogLevel QUIET' | Set-Content "$TargetFolder\sshd_config"
 
      $CurrentPortConfig = ((gc "$TargetFolder\sshd_config") -match "^#*Port\s\d*\s*$")
-     If ([bool]($CurrentPortConfig -notmatch "^Port $SSHDPort"))
+     If ([bool]($CurrentPortConfig -notmatch "^Port $SSHServerPort"))
      {
-       Write-Output "Current port setting in `"$TargetFolder\sshd_config`" is `"$CurrentPortConfig`", setting it to `"Port $SSHDPort`""
-       (Get-Content "$TargetFolder\sshd_config") -replace "^#*Port\s\d*\s*$", "Port $SSHDPort" | Set-Content "$TargetFolder\sshd_config"
+       Write-Output "Current port setting in `"$TargetFolder\sshd_config`" is `"$CurrentPortConfig`", setting it to `"Port $SSHServerPort`""
+       (Get-Content "$TargetFolder\sshd_config") -replace "^#*Port\s\d*\s*$", "Port $SSHServerPort" | Set-Content "$TargetFolder\sshd_config"
      }
      Else
      {
-       Write-Output "Current port setting in `"$TargetFolder\sshd_config`" already matches `"Port $SSHDPort`", no action necessary."
+       Write-Output "Current port setting in `"$TargetFolder\sshd_config`" already matches `"Port $SSHServerPort`", no action necessary."
      }
   }
 
@@ -370,7 +363,7 @@ If ($SSHServerFeature)
     Write-Warning "Found existing server ssh keys in $TargetFolder, you must delete them manually to generate new ones."
   }
 
-  netsh advfirewall firewall add rule name='SSHD Port OpenSSH (chocolatey package: openssh)' dir=in action=allow protocol=TCP localport=$SSHDPort
+  netsh advfirewall firewall add rule name='SSHD Port OpenSSH (chocolatey package: openssh)' dir=in action=allow protocol=TCP localport=$SSHServerPort
   New-Service -Name ssh-agent -BinaryPathName "$TargetFolder\ssh-agent.exe" -Description "SSH Agent" -StartupType Automatic | Out-Null
   cmd.exe /c 'sc.exe sdset ssh-agent D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)(A;;RP;;;AU)'
 

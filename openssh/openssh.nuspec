@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Microsoft Port)</title>
-    <version>0.0.0.9</version>
+    <version>0.0.0.901</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - work in all CLIs.</summary>
@@ -99,7 +99,7 @@
       - NEW: ource files are now internal (makes for easier curation and easier for above barebonesinstaller.ps1)
       - FIX: crashing uninstall script
       - FIX: properly add SSH folder to path on Nano
-      
+
       2016.05.30.20160827 (package ID: Win32-OpenSSH)
       - Switch "/KeyBasedAuthenticationFeature" is retired - key based authentication always configured when using "/SSHServerFeature"
       - With switch /UseNTRights Package uses ntrights.exe on 32-bit windows and on 64-bit windows - ONLY IF THE 32-bit SUBSYSTEM IS INSTALLED - otherwise it attempts to use Posh Code to grant SeAssignPrimaryTokenPrivilege.

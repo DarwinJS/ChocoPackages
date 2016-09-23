@@ -33,7 +33,7 @@ Param (
   [Parameter(HelpMessage="Include SSH Server Feature.")]
   [switch]$SSHServerFeature,
   [Parameter(HelpMessage="Delete server private keys after they have been secured.")]
-  [string]$SSHDPort='22',
+  [string]$SSHServerPort='22',
   [Parameter(HelpMessage="Delete server private keys after they have been secured.")]
   [switch]$DeleteServerKeysAfterInstalled,
   [Parameter(HelpMessage="Uninstall instead of Install (install is the default).")]
@@ -42,7 +42,7 @@ Param (
   [switch]$Uninstall
   )
 
-Write-Output "Configuring on Port $SSHDPort"
+Write-Output "Configuring on Port $SSHServerPort"
 
 If (!$Uninstall)
 {

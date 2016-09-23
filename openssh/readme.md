@@ -11,7 +11,7 @@ openssh all in one command line - see later in this document.
 
 ## Installing on Nano w/out Chocolatey Nor .NET Core Installed (should work for Server 2016 as well)
 
-**Requirements:** PowerShell 5 for the PackageManagement Provider  
+**Requirements:** PowerShell 5 for the PackageManagement Provider
 **Works On:** Nano TP5
 
 1. Open a command line on the target (remoting for Nano) and run:
@@ -21,7 +21,8 @@ openssh all in one command line - see later in this document.
 5. cd "$((dir "$env:ProgramFiles\nuget\packages\openssh*\tools" |select -last 1).fullname)"
 6. .".\barebonesinstaller.ps1" #Client Tools only
 7. .".\barebonesinstaller.ps1" -SSHServerFeature #SSH Server (& client tools)
-8. .".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall #Uninstall
+8. .".\barebonesinstaller.ps1" -SSHServerFeature -SSHServerPort '5555' #SSH Server on port 5555 (& client tools)
+9. .".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall #Uninstall
 
 ## Complete Offline Install (w/out Chocolatey, Nor WOW64, Nor PowerShell 5):
 1. Expand the openssh .nupkg (rename it to .zip and use your favorite unzipper)

@@ -2,13 +2,13 @@
 #Reread Environment In Case JDK dependency just ran
 Update-SessionEnvironment
 
-$url = 'https://bintray.com/artifact/download/jfrog/artifactory/jfrog-artifactory-oss-4.10.0.zip'
-$checksum = '949499822127506906589f88b887cc712931f95efcbc906584e1163e0976f058'
-$checksumtype = 'sha256'
+$url = 'https://bintray.com/artifact/download/jfrog/artifactory/jfrog-artifactory-oss-4.13.0.zip'
+$checksum = '27995D4D0E6B30AC45F154C19A698B289F29EC9D'
+$checksumtype = 'sha1'
 $validExitCodes = @(0)
 
 $packageName= 'artifactory'
-$versionedfolder = 'artifactory-oss-4.10.0'
+$versionedfolder = 'artifactory-oss-4.13.0'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 
 $OSBits = Get-ProcessorBits

@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>artifactory</id>
     <title>jFrog Artifactory OSS</title>
-    <version>4.10.0</version>
+    <version>4.13.0</version>
     <authors>jFrog</authors>
     <owners>DarwinJS</owners>
     <summary>Open source vesion of jFrog binary artifact repository including Nuget.</summary>

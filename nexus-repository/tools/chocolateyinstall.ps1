@@ -1,8 +1,8 @@
 
 $packageid = "nexus-repository"
-$url = 'http://download.sonatype.com/nexus/3/nexus-3.0.1-01-win64.exe'
-$checksum = '0ada44cef0d37033432d1af56337ea6e04461edd'
-$checksumtype = 'sha1'
+$url = 'http://download.sonatype.com/nexus/3/nexus-3.0.2-02-win64.exe'
+$checksum = '4E81380BA5AC987664E574747EB7762ADA5C5345'
+$checksumtype = 'SHA1'
 $installfolder = "c:\Program Files\Nexus"
 $silentargs = "-q -console -dir `"$installfolder`""
 $validExitCodes = @(0)

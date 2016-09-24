@@ -4,7 +4,7 @@
   <metadata>
     <id>jsonedit</id>
     <title>JSONedit</title>
-    <version>0.9.16</version>
+    <version>0.9.19</version>
     <authors>Tomasz Ostrowski</authors>
     <owners>Darwin Sanoy (CSI-Windows.com)</owners>
     <summary>Free, portable, light JSON editor that allows editing in the tree view.</summary>

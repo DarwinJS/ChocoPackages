@@ -1,4 +1,7 @@
 
+# Overview
+Tested On: Nano RTM, Server 2012 R2, Windows 10 Anniversary (resolvable clashes with Linux extensions are detected and noted by the installer)
+
 # Design of this package:
 1. Source files are internal - making it easier to curate the package into your
 own private repository and to use offline.

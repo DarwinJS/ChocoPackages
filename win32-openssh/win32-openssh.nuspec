@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/08/nuspec.xsd">
+  <metadata>
+    <id>win32-openssh</id>
+    <version>2016.05.30.20160927</version>
+    <title>[DEPRECATED] Win32 OpenSSH (Microsoft Port)</title>
+    <authors>Microsoft</authors>
+    <owners>DarwinJS</owners>
+    <licenseUrl>https://raw.githubusercontent.com/PowerShell/Win32-OpenSSH/L1/LICENCE</licenseUrl>
+    <projectUrl>https://github.com/PowerShell/Win32-OpenSSH</projectUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/win32-openssh/appicon.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Package depreciated.  Use "openssh" package instead.</description>
+    <summary>Package depreciated.  Use "openssh" package instead.</summary>
+    <releaseNotes>Package depreciated.  Use "openssh" package instead.</releaseNotes>
+    <copyright>Microsoft</copyright>
+    <tags>win32-openssh admin</tags>
+    <projectSourceUrl>https://github.com/PowerShell/Win32-OpenSSH</projectSourceUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/win32-openssh</packageSourceUrl>
+    <docsUrl>https://github.com/PowerShell/Win32-OpenSSH/wiki</docsUrl>
+    <bugTrackerUrl>https://github.com/PowerShell/Win32-OpenSSH/issues</bugTrackerUrl>
+  </metadata>
+</package>

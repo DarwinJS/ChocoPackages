@@ -173,8 +173,7 @@ If ($DeleteConfigAndServerKeys)
 Else
 {
 
-  If (Test-Path $TargetFolder) {Remove-Item "$TargetFolder\*.*" -include *.exe,*.dll,*.cmd -Recurse -Force}
-  If (Test-Path $TargetFolderOLD) {Remove-Item "$TargetFolder\*.*" -include *.exe,*.dll,*.cmd -Recurse -Force}
+  If (Test-Path $TargetFolder) {Get-ChildItem "$TargetFolder\*.*" -include *.exe,*.dll,*.cmd | Remove-Item -Recurse -Force}
   Write-Warning "NOT REMOVED: Config files and any keys in `"$TargetFolder`" were NOT REMOVED - you must remove them manually or use the package uninstall parameter /DeleteConfigAndServerKeys."
 }
 netsh advfirewall firewall delete rule name='SSHD Port OpenSSH (chocolatey package: openssh)'

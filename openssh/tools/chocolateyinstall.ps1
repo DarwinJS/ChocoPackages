@@ -39,9 +39,9 @@ $packageArgs = @{
   url           = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win32.zip'
   url64bit      = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win64.zip'
 
-  checksum      = 'AEE95E0E428BF66BF9C2D6F1FB9FA72E202427DE'
+  checksum      = 'C6BD6AB4C8F5F9575EAD93DB61073C22B3FE2858'
   checksumType  = 'SHA1'
-  checksum64    = 'E2D1B6506C0DC3446AA60FF5631A5B5D9F472EEE'
+  checksum64    = '79004104F01BF8AEFC5584E9DB114DAB70263A91'
   checksumType64= 'SHA1'
 }
 

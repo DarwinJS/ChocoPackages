@@ -15,7 +15,7 @@ document.
 4. The scripts included can install Chocolatey in-line and then install this
 openssh all in one command line - see later in this document.
 
-## Installing on Nano w/out Chocolatey Nor .NET Core Installed (should work for Server 2016 as well)
+## Installing on Nano Over the Wire w/out Chocolatey Nor .NET Core Installed (should work for Server 2016 as well)
 
 **Requirements:** PowerShell 5 for the PackageManagement Provider
 **Works On:** Nano TP5

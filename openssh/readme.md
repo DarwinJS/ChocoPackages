@@ -1,4 +1,10 @@
 
+# Overview
+Tested On: 
+* Nano RTM
+* Server 2012 R2
+* Windows 10 Anniversary (resolvable clashes with Linux extensions are detected and noted by the installer)
+
 # Design of this package:
 1. Source files are internal - making it easier to curate the package into your
 own private repository and to use offline.
@@ -9,7 +15,7 @@ document.
 4. The scripts included can install Chocolatey in-line and then install this
 openssh all in one command line - see later in this document.
 
-## Installing on Nano w/out Chocolatey Nor .NET Core Installed (should work for Server 2016 as well)
+## Installing on Nano Over the Wire w/out Chocolatey Nor .NET Core Installed (should work for Server 2016 as well)
 
 **Requirements:** PowerShell 5 for the PackageManagement Provider
 **Works On:** Nano TP5
@@ -37,14 +43,18 @@ openssh all in one command line - see later in this document.
 ### With SSH Server Install
 1. Open an ELEVATED PowerShell Prompt
 2. Paste this command into the console (get the whole line - it's long and is a single line):
+```powershell
    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_win32-openssh_with_server.ps1'))
+```
 
 ### Only Client Tools:
 **Note**: Server EXEs are still placed on machine, but not configured
 
 1. Open an ELEVATED PowerShell Prompt
 2. Paste this command into the console (get the whole line - it's long and is a single line):
+```powershell
    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_win32-openssh.ps1'))
+```
 
 # Package Parameters
 

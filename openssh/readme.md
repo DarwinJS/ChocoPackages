@@ -1,6 +1,6 @@
 
 # Overview
-Tested On: 
+Tested On:
 * Nano RTM
 * Server 2012 R2
 * Windows 10 Anniversary (resolvable clashes with Linux extensions are detected and noted by the installer)
@@ -14,6 +14,7 @@ document.
 3. It can be used to install when target machine being built has no internet access.
 4. The scripts included can install Chocolatey in-line and then install this
 openssh all in one command line - see later in this document.
+5. It can be used to install SSH under docker.
 
 ## Installing on Nano Over the Wire w/out Chocolatey Nor .NET Core Installed (should work for Server 2016 as well)
 
@@ -56,6 +57,9 @@ openssh all in one command line - see later in this document.
    [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_win32-openssh.ps1'))
 ```
 
+## Installing Using Docker (Dockerfile)
+A sample docker file for Server Core 2016 or NanoServer is here: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/Dockerfile
+
 # Package Parameters
 
 ## -params '"/SSHServerFeature"' (Install and Uninstall)
@@ -64,6 +68,11 @@ If this parameter is not included on an upgrade or uninstall and
 the sshd server is installed - an error is generated.  You must
 use this switch to indicate you have made preparations for the
 sshd service to be interrupted or removed.
+
+## -params '"/SSHAgentFeature"'
+Installs SSH Agent Service even if SSHD Server is not being installed.
+Requires admin rights to configure service.
+This option is automatically set when /SSHServerFeature is used.
 
 ## -params '"/SSHServerFeature /SSHServerPort:3834"'
 Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.

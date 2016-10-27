@@ -39,9 +39,9 @@ $packageArgs = @{
   url           = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win32.zip'
   url64bit      = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win64.zip'
 
-  checksum      = 'C6BD6AB4C8F5F9575EAD93DB61073C22B3FE2858'
+  checksum      = '0332CD1D300A9EACAD29049A53DE9A4A855DE74B'
   checksumType  = 'SHA1'
-  checksum64    = '79004104F01BF8AEFC5584E9DB114DAB70263A91'
+  checksum64    = '55A8C765F8C3CE3946BFF5FB4D8C3003A4FE1CE2'
   checksumType64= 'SHA1'
 }
 
@@ -60,10 +60,11 @@ If ($RunningUnderChocolatey)
 
 $OpeningMessage = @"
 
-********************************************************************************
-This package can install Win32-OpenSSH on Nano - See the following for details:
+************************************************************************************
+This package can install Win32-OpenSSH on Nano and Server Core and Docker Containers
+See the following for details:
 https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
-********************************************************************************
+************************************************************************************
 
 "@
 
@@ -87,6 +88,11 @@ if ($packageParameters) {
     else
     {
       throw "Package Parameters were found but were invalid (REGEX Failure)"
+    }
+
+    if ($arguments.ContainsKey("SSHAgentFeature")) {
+        Write-Host "/SSHAgentFeature was used, including SSH Agent Service."
+        $SSHAgentFeature = $true
     }
 
     if ($arguments.ContainsKey("SSHServerFeature")) {
@@ -138,6 +144,8 @@ Function CheckServicePath ($ServiceEXE,$FolderToCheck)
 
 If ($SSHServerFeature)
 {  #Check if anything is already listening on port $SSHServerPort, which is not a previous version of this software.
+  Write-Host "/SSHAgentFeature is also automatically enabled when using /SSHServerFeature."
+  $SSHAgentFeature = $true
   $AtLeastOneSSHDPortListenerIsNotUs = $False
   Write-Output "Probing for possible conflicts with SSHD server to be configured on port $SSHServerPort ..."
   . "$toolsdir\Get-NetStat.ps1"
@@ -224,11 +232,13 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorActio
 
 If ($SSHServiceInstanceExistsAndIsOurs)
 {
+  Write-output "Stopping SSHD Service for upgrade..."
   Stop-Service sshd
   sc.exe delete sshd | out-null
 }
 If ($SSHAGENTServiceInstanceExistsAndIsOurs)
 {
+  Write-output "Stopping SSH-Agent Service for upgrade..."
   Stop-Service ssh-agent -erroraction silentlycontinue
   sc.exe delete ssh-agent | out-null
 }
@@ -243,29 +253,34 @@ Else
   $SourceZipChecksum = $packageargs.checksum
   $SourceZipChecksumType = $packageargs.checksumType
 }
-If ((Get-FileHash $filename -Algorithm $SourceZipChecksumType).Hash -eq $SourceZipChecksum)
+
+If ([bool](get-command get-filehash -ea silentlycontinue))
 {
-  Write-Output "Hashes for internal source match"
+  If ((Get-FileHash $filename -Algorithm $SourceZipChecksumType).Hash -eq $SourceZipChecksum)
+  {
+    Write-Output "Hashes for internal source match"
+  }
+  Else
+  {
+    throw "Checksums for internal source do not match - something is wrong."
+  }
+}
+Else
+{
+  Write-Output "Source files are internal to the package, checksums are not required nor checked."
 }
 
 If ($RunningUnderChocolatey)
 {
-  #Install-ChocolateyZipPackage @packageArgs
+  If (Test-Path $ExtractFolder)
+  {
+    Remove-Item $ExtractFolder -Recurse -Force
+  }
   Get-ChocolateyUnzip "$filename" $ExtractFolder
   Install-ChocolateyPath "$TargetFolder" 'Machine'
 }
 Else
 {
-  #Unzip to targetfolder
-<#
-#This bombs on nano because the cmdlet is there, but the .net assembly to back it is not
-  If ([bool](Get-command expand-archive -ea SilentlyContinue))
-  {
-    #covers server 2016
-    Expand-Archive -Path $filename -DestinationPath $ExtractFolder
-  }
-  Else
-#>
   If (Test-Path "$toolsdir\7z.exe")
   {
     #covers nano
@@ -294,6 +309,34 @@ If (Test-Path "$env:windir\system32\ssh-lsa.dll")
   {$SSHLsaVersionChanged = $true}
 }
 
+If ($SSHAgentFeature)
+{
+  New-Service -Name ssh-agent -BinaryPathName "$TargetFolder\ssh-agent.exe" -Description "SSH Agent" -StartupType Automatic | Out-Null
+  cmd.exe /c 'sc.exe sdset ssh-agent D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)(A;;RP;;;AU)'
+
+  Start-Service ssh-agent
+
+  Start-Sleep -seconds 3
+
+  If (!$UseNTRights)
+  {
+    #The code in this .PS1 has been tested on Nano - the hardest case to date for setting special privileges in script
+    . "$toolsdir\AddAccountToLogonAsAService.ps1" -AccountToAdd "NT SERVICE\SSH-Agent"
+  }
+  Else
+  {
+    If (($OSBits -eq 64) -and (!(Test-Path "$env:windir\syswow64")))
+    {
+      Write-Warning "This 64-bit system does not have the WOW64 subsystem installed, please manually grant the right SeLogonAsAService to `"NT SERVICE\SSHD`"."
+      Write-Warning "OR try again WITHOUT the /UseNTRights switch."
+    }
+    Else
+    {
+      write-output "Using ntrights.exe to grant logon as service."
+      Start-Process "$TargetFolder\ntrights.exe" -ArgumentList "-u `"NT SERVICE\SSH-Agent`" +r SeAssignPrimaryTokenPrivilege"
+    }
+  }
+}
 
 If ($SSHServerFeature)
 {
@@ -351,7 +394,6 @@ If ($SSHServerFeature)
      }
   }
 
-
   If (!(Test-Path "$TargetFolder\KeysGenerated.flg"))
   { #Only ever generate a key the first time SSHD server is installed
       Write-Output "Generating sshd keys in `"$TargetFolder`""
@@ -364,23 +406,6 @@ If ($SSHServerFeature)
   }
 
   netsh advfirewall firewall add rule name='SSHD Port OpenSSH (chocolatey package: openssh)' dir=in action=allow protocol=TCP localport=$SSHServerPort
-  New-Service -Name ssh-agent -BinaryPathName "$TargetFolder\ssh-agent.exe" -Description "SSH Agent" -StartupType Automatic | Out-Null
-  cmd.exe /c 'sc.exe sdset ssh-agent D:(A;;CCLCSWRPWPDTLOCRRC;;;SY)(A;;CCDCLCSWRPWPDTLOCRSDRCWDWO;;;BA)(A;;CCLCSWLOCRRC;;;IU)(A;;CCLCSWLOCRRC;;;SU)(A;;RP;;;AU)'
-
-  Start-Service ssh-agent
-
-  Start-Sleep -seconds 3
-
-  $keylist = "ssh_host_dsa_key", "ssh_host_rsa_key", "ssh_host_ecdsa_key", "ssh_host_ed25519_key"
-  $fullpathkeylist = "'$TargetFolder\ssh_host_dsa_key'", "'$TargetFolder\ssh_host_rsa_key'", "'$TargetFolder\ssh_host_ecdsa_key'", "'$TargetFolder\ssh_host_ed25519_key'"
-
-  schtasks.exe /create /RU "NT AUTHORITY\SYSTEM" /RL HIGHEST /SC ONSTART /TN "ssh-add" /TR "'$TargetFolder\ssh-add.exe'  $fullpathkeylist" /F
-
-  schtasks.exe /Run /I /TN "ssh-add"
-
-  schtasks.exe /Delete /TN "ssh-add" /F
-
-  #Start-Process "$toolsDir\psexec.exe" -ArgumentList "-accepteula -s -w `"$TargetFolder`" ssh-add.exe $keylist " -wait
 
   If ($DeleteServerKeysAfterInstalled)
   {
@@ -406,7 +431,6 @@ If ($SSHServerFeature)
     #The code in this .PS1 has been tested on Nano - the hardest case to date for setting special privileges in script
     . "$toolsdir\AddAccountToAssignPrimaryToken.ps1" -AccountToAdd "NT SERVICE\SSHD"
     . "$toolsdir\AddAccountToLogonAsAService.ps1" -AccountToAdd "NT SERVICE\SSHD"
-    . "$toolsdir\AddAccountToLogonAsAService.ps1" -AccountToAdd "NT SERVICE\SSH-Agent"
   }
   Else
   {
@@ -421,16 +445,40 @@ If ($SSHServerFeature)
       Start-Process "$TargetFolder\ntrights.exe" -ArgumentList "-u `"NT SERVICE\SSHD`" +r SeAssignPrimaryTokenPrivilege"
     }
   }
+}
 
-  If (!$SSHLsaVersionChanged)
+If (CheckServicePath 'sshd' "$TargetFolder")
+{
+  write-output "Starting SSHD..."
+  Start-Service SSHD
+}
+If (CheckServicePath 'ssh-agent' "$TargetFolder")
+{
+  write-output "Starting SSH-Agent..."
+  Start-Service SSH-Agent
+}
+
+If ($SSHServerFeature)
+{
+  If (!(Test-Path "$TargetFolder\KeysAddedToAgent.flg"))
   {
-    Write-Output "Starting sshd Service"
-    Start-Service sshd
+    Write-Output "Installing Server Keys into SSH-Agent"
+    $keylist = "ssh_host_dsa_key", "ssh_host_rsa_key", "ssh_host_ecdsa_key", "ssh_host_ed25519_key"
+    $fullpathkeylist = "'$TargetFolder\ssh_host_dsa_key'", "'$TargetFolder\ssh_host_rsa_key'", "'$TargetFolder\ssh_host_ecdsa_key'", "'$TargetFolder\ssh_host_ed25519_key'"
+
+    schtasks.exe /create /RU "NT AUTHORITY\SYSTEM" /RL HIGHEST /SC ONSTART /TN "ssh-add" /TR "'$TargetFolder\ssh-add.exe'  $fullpathkeylist" /F
+
+    schtasks.exe /Run /I /TN "ssh-add"
+
+    schtasks.exe /Delete /TN "ssh-add" /F
+
+    New-Item "$TargetFolder\KeysAddedToAgent.flg" -type File | out-null
   }
-  Else
+
+  If ($SSHLsaVersionChanged)
   {
-    Write-Warning "You must reboot so that key based authentication can be fully installed for the SSHD Service."
+    Write-Warning "You must reboot so that key based authentication can be fully installed or upgraded for the SSHD Service."
   }
 }
 
-Write-Warning "You must start a new prompt, or re-read the environment for the tools to be available in your command line environment."
+Write-Warning "You must start a new prompt, or use the command 'refreshenv' (provided by your chocolatey install) to re-read the environment for the tools to be available in this shell session."

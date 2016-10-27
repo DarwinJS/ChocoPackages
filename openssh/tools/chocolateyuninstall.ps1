@@ -124,9 +124,16 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorActio
     }
 }
 
-If ((get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa').getvalue("authentication packages") -contains 'msv1_0\0ssh-lsa.dll')
+If ((get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa').getvalue("authentication packages") -contains '0ssh-lsa.dll')
 {
   $KeyBasedAuthenticationFeatureINSTALLED = $True
+}
+
+#uninstall agent service if it was installed without SSHD
+If ($SSHAGENTServiceInstanceExistsAndIsOurs -AND (!$SSHServiceInstanceExistsAndIsOurs))
+{
+  Stop-Service ssh-agent -Force
+  sc.exe delete ssh-agent | out-null
 }
 
 If ($SSHServiceInstanceExistsAndIsOurs -AND ($SSHServerFeature))
@@ -164,11 +171,11 @@ If ($KeyBasedAuthenticationFeatureINSTALLED)
 }
 
 #Don't remove config in case they reinstall.
-If ($DeleteConfigAndServerKeys)
+If (($SSHServiceInstanceExistsAndIsOurs -AND $DeleteConfigAndServerKeys) -OR (!$SSHServiceInstanceExistsAndIsOurs))
 {
     Write-Warning "Removing all config and server keys as requested by /DeleteConfigAndServerKeys"
-    If (Test-Path $TargetFolder) {Remove-Item "$TargetFolder\*" -Recurse -Force}
-    If (Test-Path $TargetFolderOLD) {Remove-Item "$TargetFolderOLD\*" -Recurse -Force}
+    If (Test-Path $TargetFolder) {Remove-Item "$TargetFolder" -Recurse -Force}
+    If (Test-Path $TargetFolderOLD) {Remove-Item "$TargetFolderOLD" -Recurse -Force}
 }
 Else
 {

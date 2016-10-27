@@ -1,11 +1,11 @@
-
+#requires -version 5
 <#
 ATTENTION - DO NOT replicate and run this script, instead follow these instructions
 as they work on a pristine machine no matter whether it is domain joined or not.
 
   1) Open an ELEVATED PowerShell Prompt
   2) Paste this command into the console (get the whole line - it's long):
-     [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_openssh_with_server.ps1'))
+     [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_win32-openssh_with_serverPS5.ps1'))
 #>
 
 $DoNotPrompt = $true
@@ -40,33 +40,16 @@ $choicedesc.Add((New-Object "System.Management.Automation.Host.ChoiceDescription
 $Host.ui.PromptForChoice($caption, $message, $choicedesc, $default)
 }
 
-If (!($DoNotPrompt))
-{
-  Switch (Console-Prompt -Caption "Proceed?" -Message "Running this script will make the above changes, proceed?" -choice "&Yes=Yes", "&No=No" -default -1)
-    {
-    1 {
-      Write-Warning "Installation was exited by user."
-      Exit
-      }
-    }
-}
-
 "Getting Started..." | out-default
 
 Set-ExecutionPolicy RemoteSigned -Force -ErrorAction SilentlyContinue
 
-$os = (Get-WmiObject "Win32_OperatingSystem")
+Install-PackageProvider NuGet -forcebootstrap -force
 
-If (!(Test-Path env:ChocolateyInstall))
-  {
-  "Installing Chocolatey Package Manager on $env:computername" | out-default
-  iex ((new-object net.webclient).DownloadString('https://chocolatey.org/install.ps1'))
-  $env:path = "$($env:ALLUSERSPROFILE)\chocolatey\bin;$($env:Path)"
-  }
+Register-PackageSource -name chocolatey -provider nuget -location http://chocolatey.org/api/v2/ -trusted
 
-Write-Output "Chocolatey is installed and enabled for use in this session..."
+Install-Package openssh -provider NuGet
 
-choco install openssh -params '"/SSHServerFeature"' -confirm
+cd "$((dir "$env:ProgramFiles\nuget\packages\openssh*\tools" |select -last 1).fullname)"
 
-refreshenv
-Write-Output "Environment refreshed, you should be able to use SSH in this console."
+.".\barebonesinstaller.ps1" -SSHServerFeature

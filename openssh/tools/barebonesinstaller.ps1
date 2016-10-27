@@ -44,6 +44,8 @@ Param (
 
 Write-Output "Configuring on Port $SSHServerPort"
 
+cd "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
+
 If (!$Uninstall)
 {
   . ".\chocolateyinstall.ps1"

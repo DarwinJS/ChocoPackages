@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Microsoft Port)</title>
-    <version>0.0.1.0</version>
+    <version>0.0.2.20161026</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - work in all CLIs.</summary>
@@ -48,6 +48,11 @@
       use this switch to indicate you have made preparations for the
       sshd service to be interrupted or removed.
 
+      -params '"/SSHAgentFeature"'
+      Installs SSH Agent Service even if SSHD Server is not being installed.
+      Requires admin rights to configure service.
+      This option is automatically set when /SSHServerFeature is used.
+
       -params '"/SSHServerFeature /SSHServerPort:3834"'
       Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.
 
@@ -60,7 +65,7 @@
       it with Key Based Authentication (reboot required before active)
       Server keys are deleted after added to the ssh-agent (you will not have an opportunity to copy them)
 
-      -params '"/DeleteConfigAndServerKeys"' (Uninstall)
+      -params '"/SSHServerFeature /DeleteConfigAndServerKeys"' (Uninstall)
       By default an uninstall does not remove config files nor server keys.
 
       -params '"/UseNTRights"'
@@ -81,6 +86,20 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/openssh/appicon.png</iconUrl>
     <releaseNotes>
+
+      0.0.2.20161026
+      - FIX: "Get-FileHash" is only used if it is available
+
+      0.0.2.0
+      - NEW: /SSHAgentFeature - enables SSH agent for use with client tools when /SSHServerFeature is not used.
+      - NEW: Sample Dockerfile included for Server Core 2016 or Nano.
+      - FIX: Uninstall improved.
+      - NEW: InstallChoco_and_win32-openssh.ps1 and InstallChoco_and_win32-openssh_with_server.ps1 both refresh
+             the environment after installing OpenSSH so it can be used in the same console it was installed in.
+      - FIX: ssh-add is only run after ssh-agent is started.
+      - FIX: sshd and ssh-agent are always started (if installed), however, a warning to reboot is still generated
+             if key based authentication is being used.
+
       0.0.0.9
       - NEW: Chocolatey package id is now "openssh"
       - NEW: Set listenting port with parameter /SSHServerPort
@@ -107,7 +126,7 @@
 
     Package explicity sets log level to QUIET because on some systems the current version of sshd repeatedly logs the same line at a rate of about 1 GB / 2 hours with default log settings.
     Package incorporates securing of the server keys using the SSH agent as per the product release notes below.
-    Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.0.9
+    Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.2.0
     </releaseNotes>
   </metadata>
   <files>

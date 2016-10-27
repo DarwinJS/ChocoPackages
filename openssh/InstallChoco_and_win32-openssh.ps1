@@ -67,3 +67,6 @@ If (!(Test-Path env:ChocolateyInstall))
 Write-Output "Chocolatey is installed and enabled for use in this session..."
 
 choco install openssh -confirm
+
+refreshenv
+Write-Output "Environment refreshed, you should be able to use SSH in this console."

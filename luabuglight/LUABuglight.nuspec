@@ -4,9 +4,9 @@
   <metadata>
     <id>luabuglight</id>
     <title>LUA Buglight</title>
-    <version>2.3</version>
+    <version>2.3.20161105</version>
     <authors>Aaron Margosis</authors>
-    <owners>Darwin Sanoy (CSI-Windows.com)</owners>
+    <owners>DarwinJS</owners>
     <summary>Identifies and isolates problems with applications that attempt operations that require admin rights when they should not.</summary>
     <description>
 Identifies and isolates problems with applications that attempt operations that require admin rights when they should not.

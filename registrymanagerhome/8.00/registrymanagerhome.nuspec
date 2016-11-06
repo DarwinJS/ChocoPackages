@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>registrymanager</id>
     <title>Registrar Registry Manager (Home/Free Edition)</title>
-    <version>8.00</version>
+    <version>8.0.20161106</version>
     <authors>Daniel Terhell</authors>
     <owners>DarwinJS</owners>
     <summary>Registry management tool with many enhanced capabilities.</summary>

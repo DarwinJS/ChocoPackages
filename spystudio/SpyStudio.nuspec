@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>spystudio</id>
     <title>Nektra SpyStudio</title>
-    <version>2.9.2.0</version>
+    <version>2.9.2.20161106</version>
     <authors>Nektra Advanced Computing</authors>
     <owners>DarwinJS</owners>
     <summary>Create and compare process traces, similar to procmon (but better ;).</summary>

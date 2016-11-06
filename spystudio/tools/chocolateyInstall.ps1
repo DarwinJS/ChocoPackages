@@ -7,7 +7,11 @@ $packageArgs = @{
   packageName   = $packageName
   unzipLocation = $toolsDir
   url           = 'http://www.nektra.com/files/SpyStudio/SpyStudio-v2.zip'
+  checksum      = '8314992B090BBA6CB53E94DE8957F98E0E150F3A'
+  checksumtype  = 'sha1'
   url64         = 'http://www.nektra.com/files/SpyStudio/SpyStudio-v2-x64.zip'
+  checksum64    = '7DEA4A35800500B64F917F31F2A1B6AD4EF9DBFC'
+  checksumtype64= 'sha1'
   validExitCodes= @(0, 3010, 1641)
 }
 

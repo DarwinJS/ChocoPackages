@@ -4,7 +4,7 @@
   <metadata>
     <id>appinstallrecorder</id>
     <title>App Install Recorder PowerShell Scripts</title>
-    <version>1.0.0</version>
+    <version>1.0.0.20161105</version>
     <authors>Aaron Margosis</authors>
     <owners>Darwin Sanoy (CSI-Windows.com)</owners>
     <summary>Parses a procmon trace to create an installer of whatever was traced.  Creates a populated folder structure and a .REG</summary>

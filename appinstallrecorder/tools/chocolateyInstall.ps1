@@ -1,5 +1,5 @@
 $PackageName = 'appinstallrecorder'
-$url = 'http://blogs.msdn.com/cfs-file.ashx/__key/communityserver-components-postattachments/00-10-55-52-66/AppInstallRecorderScripts.zip'
+$url = 'https://msdnshared.blob.core.windows.net/media/MSDNBlogsFS/prod.evol.blogs.msdn.com/CommunityServer.Components.PostAttachments/00/10/55/52/66/AppInstallRecorderScripts.zip'
 $validExitCodes = @(0)
 $checksum      = '9C909029F8354E616185BFF964D09A0F5FAAE303'
 $checksumType  = 'sha1'

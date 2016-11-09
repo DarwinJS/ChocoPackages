@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Microsoft Port)</title>
-    <version>0.0.2.20161026</version>
+    <version>0.0.3.0</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - work in all CLIs.</summary>
@@ -86,6 +86,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/openssh/appicon.png</iconUrl>
     <releaseNotes>
+      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.3.0
+
+      Package Release Notes:
+      0.0.3.0
+      - NEW: If ssh-lsa.dll is locked at install time, package schedules it to be updated at reboot
+             displays a "CRITICAL" message noting that a reboot is needed.
 
       0.0.2.20161026
       - FIX: "Get-FileHash" is only used if it is available
@@ -126,7 +132,7 @@
 
     Package explicity sets log level to QUIET because on some systems the current version of sshd repeatedly logs the same line at a rate of about 1 GB / 2 hours with default log settings.
     Package incorporates securing of the server keys using the SSH agent as per the product release notes below.
-    Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.2.0
+
     </releaseNotes>
   </metadata>
   <files>

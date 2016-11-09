@@ -39,9 +39,9 @@ $packageArgs = @{
   url           = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win32.zip'
   url64bit      = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win64.zip'
 
-  checksum      = '0332CD1D300A9EACAD29049A53DE9A4A855DE74B'
+  checksum      = '3DA832214B3679CB02433114A884302C82047C83'
   checksumType  = 'SHA1'
-  checksum64    = '55A8C765F8C3CE3946BFF5FB4D8C3003A4FE1CE2'
+  checksum64    = '40B3C4AD3F266362347E1ABC3DA5EB2CEAEE4D6E'
   checksumType64= 'SHA1'
 }
 
@@ -354,7 +354,8 @@ If ($SSHServerFeature)
 
     If ($SSHLsaVersionChanged)
     {
-      Copy-Item "$TargetFolder\ssh-lsa.dll" "$sys32dir\ssh-lsa.dll" -Force
+      . "$toolsdir\fileinuseutils.ps1"
+      $CopyLSAResult = Copy-FileEvenIfLocked "$TargetFolder\ssh-lsa.dll" "$sys32dir\ssh-lsa.dll"
     }
 
     #Don't destroy other values
@@ -458,13 +459,14 @@ If (CheckServicePath 'ssh-agent' "$TargetFolder")
   Start-Service SSH-Agent
 }
 
+$keylist = "ssh_host_dsa_key", "ssh_host_rsa_key", "ssh_host_ecdsa_key", "ssh_host_ed25519_key"
+$fullpathkeylist = "'$TargetFolder\ssh_host_dsa_key'", "'$TargetFolder\ssh_host_rsa_key'", "'$TargetFolder\ssh_host_ecdsa_key'", "'$TargetFolder\ssh_host_ed25519_key'"
+
 If ($SSHServerFeature)
 {
   If (!(Test-Path "$TargetFolder\KeysAddedToAgent.flg"))
   {
     Write-Output "Installing Server Keys into SSH-Agent"
-    $keylist = "ssh_host_dsa_key", "ssh_host_rsa_key", "ssh_host_ecdsa_key", "ssh_host_ed25519_key"
-    $fullpathkeylist = "'$TargetFolder\ssh_host_dsa_key'", "'$TargetFolder\ssh_host_rsa_key'", "'$TargetFolder\ssh_host_ecdsa_key'", "'$TargetFolder\ssh_host_ed25519_key'"
 
     schtasks.exe /create /RU "NT AUTHORITY\SYSTEM" /RL HIGHEST /SC ONSTART /TN "ssh-add" /TR "'$TargetFolder\ssh-add.exe'  $fullpathkeylist" /F
 
@@ -477,8 +479,13 @@ If ($SSHServerFeature)
 
   If ($SSHLsaVersionChanged)
   {
-    Write-Warning "You must reboot so that key based authentication can be fully installed or upgraded for the SSHD Service."
+    Write-Warning "IMPORTANT: You must reboot so that key based authentication can be fully installed or upgraded for the SSHD Service."
   }
+  If ($CopyLSAResult)
+  {
+    Write-Warning "CRITICAL: ssh-lsa.dll was locked - a reboot required to fully install the new version."
+  }
+
 }
 
 Write-Warning "You must start a new prompt, or use the command 'refreshenv' (provided by your chocolatey install) to re-read the environment for the tools to be available in this shell session."

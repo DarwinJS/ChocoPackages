@@ -21,7 +21,9 @@
     <licenseUrl>http://download.microsoft.com/download/2/5/3/253ed8fa-2f17-44ab-8a6a-53b0423a7b15/visualstudio2012andmsdnlicensingwhitepaper-january-2013.doc</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/visualstudiotestagents2015/msagents.png</iconUrl>
-    <releaseNotes>https://www.visualstudio.com/vs/release-notes/</releaseNotes>
+    <releaseNotes>
+      Shout out to @JorritSalverda for the pull request for update 3!
+      https://www.visualstudio.com/vs/release-notes/</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

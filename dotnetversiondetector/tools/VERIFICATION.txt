@@ -1,0 +1,15 @@
+﻿
+Note: Include this file if including binaries you have the right to distribute.
+Otherwise delete. this file.
+
+===DELETE ABOVE THIS LINE AND THIS LINE===
+
+VERIFICATION
+Verification is intended to assist the Chocolatey moderators and community
+in verifying that this package's contents are trustworthy.
+
+The appropriate checksum for the package has been encoded in the normal checksum fields in chocolateyinstall.ps1.
+
+This means that the package will display "hashes match" even though the source installer is embedded.
+
+To verify, execute "Get-FileHash netver.zip -algorithm sha1" and compare the output value to that in chocolateyinstall.ps1

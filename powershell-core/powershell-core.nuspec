@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>powershell-core</id>
+    <version>6.0.0-alpha12</version>
+    <packageSourceUrl>https://github.com/darwinjs/chocopackages/powershell-core</packageSourceUrl>
+    <owners>DarwinJS</owners>
+    <title>powershell-core (Install)</title>
+    <authors>Microsoft</authors>
+    <projectUrl>https://github.com/PowerShell/PowerShell</projectUrl>
+    <iconUrl>http://cdn.rawgit.com/__REPLACE_YOUR_REPO__/master/icons/powershell-core.png</iconUrl>
+    <copyright>Microsoft</copyright>
+    <licenseUrl>https://github.com/PowerShell/PowerShell/blob/master/LICENSE.txt</licenseUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <projectSourceUrl>https://github.com/PowerShell/PowerShell</projectSourceUrl>
+    <docsUrl>https://github.com/PowerShell/PowerShell-Docs</docsUrl>
+    <bugTrackerUrl>https://github.com/PowerShell/PowerShell/issues</bugTrackerUrl>
+    <tags>powershell-core admin</tags>
+    <summary>PowerShell Core is the multiplatform version of PowerShell</summary>
+    <description>PowerShell Core is the multiplatform version of PowerShell</description>
+    <releaseNotes>https://github.com/PowerShell/PowerShell/releases/tag/v6.0.0-alpha.11</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

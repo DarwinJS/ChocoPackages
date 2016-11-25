@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>powershell-core</id>
-    <version>6.0.0-alpha12-20161116</version>
+    <version>6.0.0-alpha13</version>
     <packageSourceUrl>https://github.com/darwinjs/chocopackages/powershell-core</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>powershell-core (Install)</title>
@@ -18,7 +18,10 @@
     <tags>powershell-core admin</tags>
     <summary>PowerShell Core is the multiplatform version of PowerShell</summary>
     <description>PowerShell Core is the multiplatform version of PowerShell</description>
-    <releaseNotes>https://github.com/PowerShell/PowerShell/releases/tag/v6.0.0-alpha.11</releaseNotes>
+    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.0.0-alpha.13
+    Package release Notes:
+    Alpha 13 - supports 32-bit and 64-bit windows 7 because PowerShell Core now has packages for these.
+    </releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

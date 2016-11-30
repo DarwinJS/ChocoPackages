@@ -36,12 +36,10 @@ $packageArgs = @{
   packageName   = 'openssh'
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
-  url           = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win32.zip'
-  url64bit      = 'https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win64.zip'
 
-  checksum      = '3DA832214B3679CB02433114A884302C82047C83'
+  checksum      = 'F82F6AFCCE4A2E2FE01B182AE069EA5EECAD2B22'
   checksumType  = 'SHA1'
-  checksum64    = '40B3C4AD3F266362347E1ABC3DA5EB2CEAEE4D6E'
+  checksum64    = 'A710F655DBA890CA6DA675463388A22EB35D1597'
   checksumType64= 'SHA1'
 }
 
@@ -461,6 +459,7 @@ If (CheckServicePath 'ssh-agent' "$TargetFolder")
 
 $keylist = "ssh_host_dsa_key", "ssh_host_rsa_key", "ssh_host_ecdsa_key", "ssh_host_ed25519_key"
 $fullpathkeylist = "'$TargetFolder\ssh_host_dsa_key'", "'$TargetFolder\ssh_host_rsa_key'", "'$TargetFolder\ssh_host_ecdsa_key'", "'$TargetFolder\ssh_host_ed25519_key'"
+
 
 If ($SSHServerFeature)
 {

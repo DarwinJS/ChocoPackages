@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Microsoft Port)</title>
-    <version>0.0.4.0</version>
+    <version>0.0.5.0</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - work in all CLIs.</summary>
@@ -86,9 +86,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/openssh/appicon.png</iconUrl>
     <releaseNotes>
-      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.4.0
+      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.5.0
 
-      Package Release Notes:
+      Release Note for Chocolatey Packaging:
+      0.0.5.0 - none
+
       0.0.4.0 - none
 
       0.0.3.0

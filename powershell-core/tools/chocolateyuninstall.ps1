@@ -1,8 +1,10 @@
 $ErrorActionPreference = 'Stop';
 
 $packageName = 'powershell-core'
+$Version = '6.0.0.14'
 $softwareName = 'powershell_6*'
 $installerType = 'MSI'
+$InstallFolder = "$env:ProgramFiles\PowerShell\$Version"
 
 $silentArgs = '/qn /norestart'
 $validExitCodes = @(0, 3010, 1605, 1614, 1641)
@@ -32,4 +34,17 @@ if ($key.Count -eq 1) {
   Write-Warning "To prevent accidental data loss, no programs will be uninstalled."
   Write-Warning "Please alert package maintainer the following keys were matched:"
   $key | % {Write-Warning "- $_.DisplayName"}
+}
+
+$shortcutname = "PowerShell_$Version"
+$shortcutpaths = @("$([Environment]::GetFolderPath('CommonDesktopDirectory'))", "$([Environment]::GetFolderPath('CommonStartMenu'))\Programs\PowerShell_$version")
+Foreach ($SCPath in $shortcutpaths)
+{
+  If (Test-Path "$SCPath\$shortcutname") {Remove-Item "$SCPath\$shortcutname" -force}
+  If ((Get-ChildItem "$SCPath").count -lt 1) {Remove-Item "$SCPath" -force}
+}
+
+If ((get-childitem $InstallFolder).count -lt 1)
+{
+  Remove-Item $InstallFolder -Force
 }

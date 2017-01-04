@@ -4,19 +4,19 @@
 
 $ErrorActionPreference = 'Stop'; # stop on all errors
 
-$Version = '6.0.0.13'
-$InstallFolder = "$env:ProgramFiles\$Version"
+$Version = '6.0.0.14'
+$InstallFolder = "$env:ProgramFiles\PowerShell\$Version"
 
 $packageName= 'powershell-core' # arbitrary name for the package, used in messages
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.13/PowerShell_6.0.0.13-alpha.13-win10-x64.msi'
-$checksumwin10 = '1085c8fae76a9e8984c42a58740b71cf456b48495747453c0ae3a86fb4f1bf2a'
-$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.13/PowerShell_6.0.0.13-alpha.13-win81-x64.msi'
-$checksumwin8 = '486c2494e382a70bf4559a4a56655e352dc34abe83fe02646849b43961f745be'
-$urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.13/PowerShell_6.0.0.13-alpha.13-win7-x64.msi'
-$checksumwin7 = '1a64f92533ef50ee412390c0c88aaa4c0e570fe8be7304596901915863747133'
-$urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.13/PowerShell_6.0.0.13-alpha.13-win7-x86.msi'
-$checksumwin732 = '95aadecb26ac7d25659cda8960313a25152d9a0d618fae6979922d7ee27b479e'
+$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.14/PowerShell_6.0.0.14-alpha.14-win10-x64.msi'
+$checksumwin10 = '503F3AD52223699765895D3E9615FBD7988194693BCB725BE90C9EF0CD594447'
+$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.14/PowerShell_6.0.0.14-alpha.14-win81-x64.msi'
+$checksumwin8 = '19A94B7533A5A2292E5E8BFFAB0143AEF31867A531447EAADCAAE714121E541A'
+$urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.14/PowerShell_6.0.0.14-alpha.14-win7-x64.msi'
+$checksumwin7 = '689E59C8A97A7F6F136104A56BE397D9456D46069AA2C1121BBDA421C14852F8'
+$urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.14/PowerShell_6.0.0.14-alpha.14-win7-x86.msi'
+$checksumwin732 = '3763A0D4E5859B16495CDA68279614E70A36FF51EA82148F302A54AC0D62E116'
 
 $OSBits = ([System.IntPtr]::Size * 8)
 $Net4Version = (get-itemproperty "hklm:software\microsoft\net framework setup\ndp\v4\full" -ea silentlycontinue | Select -Expand Release -ea silentlycontinue)
@@ -25,6 +25,12 @@ $osVersion = (Get-WmiObject Win32_OperatingSystem).Version
 If (($OSBits -lt 64) -AND ($_ -gt [version]"6.2"))
 {
   Throw "$packageName $version is only available for 64-bit editions of this version of Windows.  32-bit is available for Windows 7 / Server 2008 only."
+}
+
+If (Test-Path "$InstallFolder\powershell.exe")
+{
+  Write-output "$packagename version $vesion is already installed by another means."
+  Exit 0
 }
 
 switch ([version]$osVersion) {
@@ -57,12 +63,6 @@ switch ([version]$osVersion) {
     }
   }
 
-If (Test-Path $InstallFolder)
-{
-  Write-output "$packagename version $vesion is already installed by another means."
-  Exit 0
-}
-
 $packageArgs = @{
   packageName   = $packageName
   unzipLocation = $toolsDir
@@ -83,7 +83,18 @@ $packageArgs = @{
 
 Install-ChocolateyPackage @packageArgs
 
-Write-Output "****************************************************************"
-Write-Output "*  INSTRUCTIONS: To start PowerShell Core $version, execute:   *"
-Write-Output "*      `"$installfolder`"   *"
-Write-Output "****************************************************************"
+$codeblock = "{Write-output `'`r`nWARNING: Testing under PowerShell Core on Windows does not account for`r`nplatform differences with Linux or Mac OS.`r`n`'}"
+$shortcutname = "PowerShell_$Version"
+$shortcutpaths = @("$([Environment]::GetFolderPath('CommonDesktopDirectory'))", "$([Environment]::GetFolderPath('CommonStartMenu'))\Programs\PowerShell_$version")
+Foreach ($SCPath in $shortcutpaths)
+{
+  If (Test-Path "$SCPath\$shortcutname.lnk") {Remove-Item "$SCPath\$shortcutname.lnk" -force}
+  Install-ChocolateyShortcut -ShortcutFilePath "$SCPath\$shortcutname.lnk" -TargetPath "$InstallFolder\PowerShell.exe" -IconLocation "$InstallFolder\assets\Powershell_256.ico" -Arguments "-noexit & $codeblock" -WorkingDirectory "$env:home"
+}
+
+Write-Output "************************************************************************************"
+Write-Output "*  INSTRUCTIONS: Your system default PowerShell version has not been changed:      *"
+Write-Output "*   To start PowerShell Core $version, execute:                                    *"
+Write-Output "*      `"$installfolder\PowerShell.exe`"                                *"
+Write-Output "*   Or start it from the desktop or start menu shortcut installed by this package. *"
+Write-Output "************************************************************************************"

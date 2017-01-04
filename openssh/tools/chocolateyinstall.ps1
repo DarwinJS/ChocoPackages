@@ -37,9 +37,9 @@ $packageArgs = @{
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = '9F5ACC3288ACC9A41508CA7C42A8BF38B898BE8B'
+  checksum      = '0348047502ABCAF4EE330BCF263BF9BEBDFC3FDD'
   checksumType  = 'SHA1'
-  checksum64    = '3228EBF75B22EE00F733425B9962C8C6EF9659CE'
+  checksum64    = 'CF5CBAB5154145FF29626A57CFA39C2ABA5D308F'
   checksumType64= 'SHA1'
 }
 
@@ -161,7 +161,7 @@ If ($SSHServerFeature)
       Write-output "  > Checking $($proconRequestedSSHDPort.Localaddressprocesspath) against path $TargetFolder"
       If ("$($proconRequestedSSHDPort.Localaddressprocesspath)" -ilike "*$TargetFolder*")
       {
-        Write-Output "  > Found a previous version of Win32-OpenSSH installed by this package on $SSHServerPort."
+        Write-Output "  > Found a previous version of Win32-OpenSSH installed by this package on Port $SSHServerPort."
       }
       Else
       {

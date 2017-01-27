@@ -4,19 +4,19 @@
 
 $ErrorActionPreference = 'Stop'; # stop on all errors
 
-$Version = '6.0.0.14'
+$Version = '6.0.0.15'
 $InstallFolder = "$env:ProgramFiles\PowerShell\$Version"
 
 $packageName= 'powershell-core' # arbitrary name for the package, used in messages
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.14/PowerShell_6.0.0.14-alpha.14-win10-x64.msi'
-$checksumwin10 = '503F3AD52223699765895D3E9615FBD7988194693BCB725BE90C9EF0CD594447'
-$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.14/PowerShell_6.0.0.14-alpha.14-win81-x64.msi'
-$checksumwin8 = '9BAF5D38719C28AE98A76683647AB9161A3A151A399781C050D43942D37C096C'
-$urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.14/PowerShell_6.0.0.14-alpha.14-win7-x64.msi'
-$checksumwin7 = '19A94B7533A5A2292E5E8BFFAB0143AEF31867A531447EAADCAAE714121E541A'
-$urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.14/PowerShell_6.0.0.14-alpha.14-win7-x86.msi'
-$checksumwin732 = '3763A0D4E5859B16495CDA68279614E70A36FF51EA82148F302A54AC0D62E116'
+$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.15/PowerShell_6.0.0-alpha.15-win10-win2k16-x64.msi'
+$checksumwin10 = 'CC52D21F3287E412B9C3B73C98BB5B06F8056D49D63201072216DF92B7F2E59B'
+$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.15/PowerShell_6.0.0-alpha.15-win81-win2k12r2-x64.msi'
+$checksumwin8 = '0E691F474E3B8D7A457995667151CDB9981CEC3BC3834F957B9FAAB5DCB71D3C'
+$urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.15/PowerShell_6.0.0-alpha.15-win7-win2k8r2-x64.msi'
+$checksumwin7 = 'D3384B9C8C2B5152B113791193A89DFE4AB01EE94CAF8F995633906258FD14C3'
+$urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.15/PowerShell_6.0.0-alpha.15-win7-x86.msi'
+$checksumwin732 = '19CE135B43C8E7FCCE4EBE36000B887EC3B119D8972F6C895369A116FE8039DC'
 
 $OSBits = ([System.IntPtr]::Size * 8)
 $Net4Version = (get-itemproperty "hklm:software\microsoft\net framework setup\ndp\v4\full" -ea silentlycontinue | Select -Expand Release -ea silentlycontinue)

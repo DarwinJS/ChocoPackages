@@ -37,9 +37,9 @@ $packageArgs = @{
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = '9190B1AE2E9E4300A88A5006B5243BB0752DBB2C'
+  checksum      = '59A1A7A0E4664CE16C212452459E2B21522FA46D'
   checksumType  = 'SHA1'
-  checksum64    = '8CF6E597B8AB6EBD3C4E22BCF9317723BDB425A8'
+  checksum64    = '46D61364B3B948F3A2B2D204ED8DFADCF687A192'
   checksumType64= 'SHA1'
 }
 
@@ -136,7 +136,7 @@ Function CheckServicePath ($ServiceEXE,$FolderToCheck)
   #The modern way:
   #Return ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike "*$ServiceEXE*"} | select -expand PathName) -ilike "*$FolderToCheck*"))
   #The NANO TP5 Compatible Way:
-  Return ([bool]((wmic service | ?{$_ -ilike "*$ServiceEXE*"}) -ilike "*$FolderToCheck*"))
+  Return ([bool](@(wmic service | ?{$_ -ilike "*$ServiceEXE*"}) -ilike "*$FolderToCheck*"))
 }
 
 
@@ -185,9 +185,9 @@ If you see the message 'Detected that Developer Mode SSH is present' above, you 
 }
 
 #$SSHServiceInstanceExistsAndIsOurs = ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike 'sshd'} | select -expand PathName) -ilike "*$TargetFolder*"))
-$SSHServiceInstanceExistsAndIsOurs = CheckServicePath 'sshd' "$TargetFolder"
+$SSHServiceInstanceExistsAndIsOurs = CheckServicePath 'sshd.exe' "$TargetFolder"
 #$SSHAGENTServiceInstanceExistsAndIsOurs = ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike 'ssh-agent'} | select -expand PathName) -ilike "*$TargetFolder*"))
-$SSHAGENTServiceInstanceExistsAndIsOurs = CheckServicePath 'ssh-agent' "$TargetFolder"
+$SSHAGENTServiceInstanceExistsAndIsOurs = CheckServicePath 'ssh-agent.exe' "$TargetFolder"
 
 If ($SSHServerFeature -AND (!$SSHServiceInstanceExistsAndIsOurs) -AND ([bool](Get-Service sshd -ErrorAction SilentlyContinue)))
 {
@@ -446,12 +446,12 @@ If ($SSHServerFeature)
   }
 }
 
-If (CheckServicePath 'sshd' "$TargetFolder")
+If (CheckServicePath 'sshd.exe' "$TargetFolder")
 {
   write-output "Starting SSHD..."
   Start-Service SSHD
 }
-If (CheckServicePath 'ssh-agent' "$TargetFolder")
+If (CheckServicePath 'ssh-agent.exe' "$TargetFolder")
 {
   write-output "Starting SSH-Agent..."
   Start-Service SSH-Agent

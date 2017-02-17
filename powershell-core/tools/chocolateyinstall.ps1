@@ -4,19 +4,19 @@
 
 $ErrorActionPreference = 'Stop'; # stop on all errors
 
-$Version = '6.0.0.15'
+$Version = '6.0.0.16'
 $InstallFolder = "$env:ProgramFiles\PowerShell\$Version"
 
 $packageName= 'powershell-core' # arbitrary name for the package, used in messages
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.15/PowerShell_6.0.0-alpha.15-win10-win2k16-x64.msi'
-$checksumwin10 = 'CC52D21F3287E412B9C3B73C98BB5B06F8056D49D63201072216DF92B7F2E59B'
-$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.15/PowerShell_6.0.0-alpha.15-win81-win2k12r2-x64.msi'
-$checksumwin8 = '0E691F474E3B8D7A457995667151CDB9981CEC3BC3834F957B9FAAB5DCB71D3C'
-$urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.15/PowerShell_6.0.0-alpha.15-win7-win2k8r2-x64.msi'
-$checksumwin7 = 'D3384B9C8C2B5152B113791193A89DFE4AB01EE94CAF8F995633906258FD14C3'
-$urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.15/PowerShell_6.0.0-alpha.15-win7-x86.msi'
-$checksumwin732 = '19CE135B43C8E7FCCE4EBE36000B887EC3B119D8972F6C895369A116FE8039DC'
+$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.16/PowerShell_6.0.0-alpha.16-win10-win2016-x64.msi'
+$checksumwin10 = 'FFE54DEB7BB04269318DC6C31F6C682C7B705CBCDA8BA37A6BE2B4955BB11940'
+$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.16/PowerShell_6.0.0-alpha.16-win81-win2012r2-x64.msi'
+$checksumwin8 = '58C704DF587BAAA760CA60EFB5C5A6FC9257D114CEFEBC7C824D21A876FC1434'
+$urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.16/PowerShell_6.0.0-alpha.16-win7-win2008r2-x64.msi'
+$checksumwin7 = '5825CE8626213E2CCD56C4071D87659C2EB6C33F38A4EA92AE9FEF357AB323A6'
+$urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.16/PowerShell_6.0.0-alpha.16-win7-x86.msi'
+$checksumwin732 = 'D053765B2000E3E6934E65CE43764C6A9DADF56E7848ACCF7A44895365A064BB'
 
 $OSBits = ([System.IntPtr]::Size * 8)
 $Net4Version = (get-itemproperty "hklm:software\microsoft\net framework setup\ndp\v4\full" -ea silentlycontinue | Select -Expand Release -ea silentlycontinue)

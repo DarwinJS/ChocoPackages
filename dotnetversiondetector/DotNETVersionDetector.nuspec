@@ -2,18 +2,18 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>dotnetversiondetector</id>
-    <version>16.2</version>
+    <version>16.3.2</version>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/dotnetversiondetector</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>dotnetversiondetector (Install)</title>
     <authors>Nick Asseloos</authors>
     <projectUrl>http://www.asoft.be/prod_netver.html</projectUrl>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/dotnetversiondetector/appicon.png</iconUrl>
-    <copyright>2006-2016</copyright>
+    <copyright>2006-2017</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <docsUrl>http://www.asoft.be/prod_netver.html</docsUrl>
     <bugTrackerUrl>mailto:support@asoft-ware.com</bugTrackerUrl>
-    <tags>dotnetversiondetector admin SPACE_SEPARATED</tags>
+    <tags>dotnetversiondetector admin</tags>
     <summary>Display all installed versions of .NET and their service pack levels.</summary>
     <description> Detects and displays all .NET versions installed on the current machine.  Can export to a file.
 Utility itself does not use .NET so that it will work regardless of whether .NET is installed or what versions are installed.

@@ -10,6 +10,7 @@
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/9ee55e72/windows-performance-toolkit/appicon.png</iconUrl>
     <copyright>2013 Microsoft Corporation</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/windows-performance-toolkit</packageSourceUrl>
     <docsUrl>https://msdn.microsoft.com/en-us/windows/hardware/commercialize/test/wpt/index</docsUrl>
     <tags>wpt admin debugging</tags>
     <summary>Windows Performance Toolkit contains Windows Performance Recorder and Windows Performance Anaylzer - the most recent generation of performance trace capturing and analyzing tools from Microsoft.</summary>

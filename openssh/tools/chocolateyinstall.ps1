@@ -299,12 +299,16 @@ Else
 Copy-Item "$ExtractFolder\*" "$PF" -Force -Recurse
 Remove-Item "$ExtractFolder" -Force -Recurse
 
-$SSHLsaVersionChanged = $false
+$SSHLsaNeedsUpdating = $false
 If (Test-Path "$env:windir\system32\ssh-lsa.dll")
 {
   #Using file size because open ssh files are not currently versioned.  Submitted problem report asking for versioning to be done
   If (((get-item $env:windir\system32\ssh-lsa.dll).length) -ne ((get-item $TargetFolder\ssh-lsa.dll).length))
-  {$SSHLsaVersionChanged = $true}
+  {$SSHLsaNeedsUpdating = $true}
+}
+Else
+{
+  $SSHLsaNeedsUpdating = $true
 }
 
 If ($SSHAgentFeature)
@@ -350,7 +354,7 @@ If ($SSHServerFeature)
       $sys32dir = "$env:windir\system32"
     }
 
-    If ($SSHLsaVersionChanged)
+    If ($SSHLsaNeedsUpdating)
     {
       . "$toolsdir\fileinuseutils.ps1"
       $CopyLSAResult = Copy-FileEvenIfLocked "$TargetFolder\ssh-lsa.dll" "$sys32dir\ssh-lsa.dll"
@@ -476,7 +480,7 @@ If ($SSHServerFeature)
     New-Item "$TargetFolder\KeysAddedToAgent.flg" -type File | out-null
   }
 
-  If ($SSHLsaVersionChanged)
+  If ($SSHLsaNeedsUpdating)
   {
     Write-Warning "IMPORTANT: You must reboot so that key based authentication can be fully installed or upgraded for the SSHD Service."
   }

@@ -55,7 +55,7 @@ $packageArgs = @{
   url           = $url
   url64bit      = $url
 
-  softwareName  = 'wpt*'
+  softwareName = 'Windows Assessment and Deployment Kit for Windows*'
 
   checksum      = $checksum
   checksumType  = $checksumtype

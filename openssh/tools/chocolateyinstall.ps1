@@ -300,11 +300,14 @@ Copy-Item "$ExtractFolder\*" "$PF" -Force -Recurse
 Remove-Item "$ExtractFolder" -Force -Recurse
 
 $SSHLsaVersionChanged = $false
+$SSHLsaMissing = $false
 If (Test-Path "$env:windir\system32\ssh-lsa.dll")
 {
   #Using file size because open ssh files are not currently versioned.  Submitted problem report asking for versioning to be done
   If (((get-item $env:windir\system32\ssh-lsa.dll).length) -ne ((get-item $TargetFolder\ssh-lsa.dll).length))
   {$SSHLsaVersionChanged = $true}
+} else {
+  $SSHLsaMissing = $true
 }
 
 If ($SSHAgentFeature)
@@ -350,7 +353,7 @@ If ($SSHServerFeature)
       $sys32dir = "$env:windir\system32"
     }
 
-    If ($SSHLsaVersionChanged)
+    If ($SSHLsaVersionChanged -or $SSHLsaMissing)
     {
       . "$toolsdir\fileinuseutils.ps1"
       $CopyLSAResult = Copy-FileEvenIfLocked "$TargetFolder\ssh-lsa.dll" "$sys32dir\ssh-lsa.dll"

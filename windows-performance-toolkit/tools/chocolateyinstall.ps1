@@ -12,6 +12,8 @@ $checksumwin101511 = 'B0F5CD130D9BE84B6AF2A5F3F4BAAF0BFA261431D6F6605FF8C4F026D1
 $urlwin101607        = 'https://go.microsoft.com/fwlink/p/?LinkId=526740'
 $checksumwin101607 = 'B0F5CD130D9BE84B6AF2A5F3F4BAAF0BFA261431D6F6605FF8C4F026D16D29EB'
 
+$InstallPath = 'C:\Program Files (x86)\Windows Kits\8.1' #same as SDK version it came from.
+
 $os = Get-WmiObject Win32_OperatingSystem
 $osVersion = $os.version
 
@@ -60,12 +62,12 @@ $packageArgs = @{
   checksum64    = $checksum
   checksumType64= $checksumtype
 
-  silentArgs    = "/ceip off /installpath `"C:\Program Files (x86)\Windows Kits\8.0`" /promptrestart /log `"$env:temp\adk_wpt_install.log`" /quiet /features OptionId.WindowsPerformanceToolkit"
+  silentArgs    = "/ceip off /installpath `"$InstallPath`" /promptrestart /log `"$env:temp\adk_wpt_install.log`" /quiet /features OptionId.WindowsPerformanceToolkit"
   validExitCodes= @(0, 3010, 1641)
 }
 
 Install-ChocolateyPackage @packageArgs
 
 Write-Output "*************************************************************************************************************************************"
-Write-Output "*  INSTRUCTIONS: You can find the toolkit utilities in `"C:\Program Files (x86)\Windows Kits\8.0\Windows Performance Toolkit`".       *"
+Write-Output "*  INSTRUCTIONS: You can find the toolkit utilities in `"$InstallPath\Windows Performance Toolkit`".       *"
 Write-Output "*************************************************************************************************************************************"

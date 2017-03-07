@@ -283,7 +283,7 @@ Else
   {
     #covers nano
     cd $toolsdir
-    .\7z.exe x $filename -o"$ExtractFolder" -aoa
+    start-process .\7z.exe -argumentlist "x $filename -o`"$ExtractFolder`" -aoa" -nonewwindow -wait
   }
   Else
   {

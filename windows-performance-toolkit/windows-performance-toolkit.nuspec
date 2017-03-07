@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>windows-performance-toolkit</id>
+    <version>8.1</version>
+    <title>Windows Performance Toolkit (Install)</title>
+    <authors>Microsoft</authors>
+    <projectUrl>https://msdn.microsoft.com/en-us/windows/hardware/commercialize/test/wpt/index</projectUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/windows-performance-toolkit/appicon.png</iconUrl>
+    <copyright>2013 Microsoft Corporation</copyright>
+    <!-- <licenseUrl>Software License Location __REMOVE_OR_FILL_OUT__</licenseUrl>-->
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <docsUrl>https://msdn.microsoft.com/en-us/windows/hardware/commercialize/test/wpt/index</docsUrl>
+    <tags>wpt admin debugging</tags>
+    <summary>Windows Performance Toolkit contains Windows Performance Recorder and Windows Performance Anaylzer - the most recent generation of performance trace capturing and analyzing tools from Microsoft.</summary>
+    <description>Allows analysis of Windows Performance via ETW controllers, providers and consumers specifically oriented around analyzing and finding performance problems.</description>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

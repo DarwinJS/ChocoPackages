@@ -69,7 +69,10 @@ Function Copy-FileEvenIfLocked
   {
     $Path = (Resolve-Path $path -ErrorAction Stop).Path
     Write-output "`$path is now $path"
-    $Destination = (Resolve-Path $Destination -ErrorAction Stop).Path
+    If (Test-Path $Destination)
+    {
+      $Destination = (Resolve-Path $Destination -ErrorAction Stop).Path
+    }
     Write-output "`$Destination is now $Destination"
 
     try

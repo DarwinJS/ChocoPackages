@@ -486,7 +486,7 @@ If ($SSHServerFeature)
   }
   If ($CopyLSAResult)
   {
-    Write-Warning "CRITICAL: ssh-lsa.dll was locked - a reboot required to fully install the new version."
+    Write-Warning "CRITICAL: ssh-lsa.dll was updated - a reboot required to fully activate it."
   }
 
 }

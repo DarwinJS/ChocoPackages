@@ -9,7 +9,8 @@
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/7935ba43/filetypeeditor/appicon.png</iconUrl>
     <copyright>Gunner</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
-    <docsUrl>>http://www.gunnerinc.com/gfte.htm</docsUrl>
+    <docsUrl>http://www.gunnerinc.com/gfte.htm</docsUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/filetypeeditor</packageSourceUrl>    
     <tags>filetypeeditor admin</tags>
     <summary>Graphical editor for modifying and protect Windows file type associations without using the registry.</summary>
         <description>

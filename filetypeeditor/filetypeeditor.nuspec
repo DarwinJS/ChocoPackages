@@ -6,7 +6,7 @@
     <title>Gunner's File Type Editor (Install)</title>
     <authors>Gunner</authors>
     <projectUrl>http://www.gunnerinc.com/gfte.htm</projectUrl>
-    <iconUrl>http://cdn.rawgit.com/__REPLACE_YOUR_REPO__/master/icons/filetypeeditor.png</iconUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/7935ba43/filetypeeditor/appicon.png</iconUrl>
     <copyright>Gunner</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <docsUrl>>http://www.gunnerinc.com/gfte.htm</docsUrl>

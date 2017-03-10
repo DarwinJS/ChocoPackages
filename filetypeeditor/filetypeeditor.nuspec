@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>filetypeeditor</id>
+    <version>3.1.4.20170309</version>
+    <title>Gunner's File Type Editor (Install)</title>
+    <authors>Gunner</authors>
+    <projectUrl>http://www.gunnerinc.com/gfte.htm</projectUrl>
+    <iconUrl>http://cdn.rawgit.com/__REPLACE_YOUR_REPO__/master/icons/filetypeeditor.png</iconUrl>
+    <copyright>Gunner</copyright>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <docsUrl>>http://www.gunnerinc.com/gfte.htm</docsUrl>
+    <tags>filetypeeditor admin</tags>
+    <summary>Graphical editor for modifying and protect Windows file type associations without using the registry.</summary>
+        <description>
+Graphical editor for modifying and protect Windows file type associations without using the registry.
+    </description>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>

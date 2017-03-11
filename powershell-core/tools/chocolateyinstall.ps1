@@ -1,22 +1,19 @@
-#Handle:
-#Verify auto-uninstall works.
-#Check minimum OS - version and 64 bitness
 
-$ErrorActionPreference = 'Stop'; # stop on all errors
+$ErrorActionPreference = 'Stop';
 
-$Version = '6.0.0.16'
+$Version = '6.0.0.17'
 $InstallFolder = "$env:ProgramFiles\PowerShell\$Version"
 
-$packageName= 'powershell-core' # arbitrary name for the package, used in messages
+$packageName= 'powershell-core'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.16/PowerShell_6.0.0-alpha.16-win10-win2016-x64.msi'
-$checksumwin10 = 'FFE54DEB7BB04269318DC6C31F6C682C7B705CBCDA8BA37A6BE2B4955BB11940'
-$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.16/PowerShell_6.0.0-alpha.16-win81-win2012r2-x64.msi'
-$checksumwin8 = '58C704DF587BAAA760CA60EFB5C5A6FC9257D114CEFEBC7C824D21A876FC1434'
-$urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.16/PowerShell_6.0.0-alpha.16-win7-win2008r2-x64.msi'
-$checksumwin7 = '5825CE8626213E2CCD56C4071D87659C2EB6C33F38A4EA92AE9FEF357AB323A6'
-$urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.16/PowerShell_6.0.0-alpha.16-win7-x86.msi'
-$checksumwin732 = 'D053765B2000E3E6934E65CE43764C6A9DADF56E7848ACCF7A44895365A064BB'
+$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.17/PowerShell_6.0.0-alpha.17-win10-win2016-x64.msi'
+$checksumwin10 = '07CAAB19CE891131AF7A64F267D59C15865B85ADB679E206389189E928C2E597'
+$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.17/PowerShell_6.0.0-alpha.17-win81-win2012r2-x64.msi'
+$checksumwin8 = 'F9403DE5D5225B1B57196003C3382BFD0C0FA7147119900C44D1A6F789728E6D'
+$urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.17/PowerShell_6.0.0-alpha.17-win7-win2008r2-x64.msi'
+$checksumwin7 = 'B8C0C785CAF7EC6E7A6036332DC747C686B39EE2E361A3C44DF0E09733D6755F'
+$urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.17/PowerShell_6.0.0-alpha.17-win7-x86.msi'
+$checksumwin732 = '79E9ECDA9119887DCE334AB4A2559BBFE30A80513C746CFE55166E37F837F18C'
 
 $OSBits = ([System.IntPtr]::Size * 8)
 $Net4Version = (get-itemproperty "hklm:software\microsoft\net framework setup\ndp\v4\full" -ea silentlycontinue | Select -Expand Release -ea silentlycontinue)

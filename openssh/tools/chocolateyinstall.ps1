@@ -98,6 +98,11 @@ if ($packageParameters) {
         $SSHServerFeature = $true
     }
 
+    if ($arguments.ContainsKey("OverWriteSSHDConf")) {
+        Write-Host "/OverWriteSSHDConf was used, will overwrite any existing sshd_conf with one from install media."
+        $OverWriteSSHDConf = $true
+    }
+
     if ($arguments.ContainsKey("SSHServerPort")) {
         $SSHServerPort = $arguments.Get_Item("SSHServerPort")
         Write-Host "/SSHServerPort was used, attempting to use SSHD listening port $SSHServerPort."
@@ -106,6 +111,20 @@ if ($packageParameters) {
           Write-Host "You forgot to specify /SSHServerFeature with /SSHServerPort, autofixing for you, enabling /SSHServerFeature"
           $SSHServerFeature = $true
         }
+    }
+
+    if ($arguments.ContainsKey("SSHLogLevel")) {
+
+      $ValidLogSettings = @('QUIET', 'FATAL', 'ERROR', 'INFO', 'VERBOSE', 'DEBUG', 'DEBUG1', 'DEBUG2','DEBUG3')
+      $SSHLogLevel = $arguments.Get_Item("SSHLogLevel").toupper()
+      If ($ValidLogSettings -inotcontains $SSHLogLevel)
+      {Throw "$SSHLogLevel is not one of the valid values: $(($ValidLogSettings -join ' ') | out-string)"}
+      Write-Host "/SSHLogLevel was used, setting LogLevel in sshd_conf to $SSHLogLevel"
+
+    }
+    Else
+    {
+      $SSHLogLevel = $null
     }
 
     if ($arguments.ContainsKey("UseNTRights")) {
@@ -296,7 +315,18 @@ Else
   }
 }
 
-Copy-Item "$ExtractFolder\*" "$PF" -Force -Recurse
+$ExcludeParams = @{}
+If ((Test-Path "$TargetFolder\sshd_config") -AND !($OverWriteSSHDConf))
+{
+  Write-Output "sshd_config already exists, not overwriting"
+  $ExcludeParams.Add("Exclude","sshd_config")
+}
+
+Copy-Item "$ExtractFolder\*" "$PF" @ExcludeParams -Force -Recurse
+If (!(Test-Path "$TargetFolder\Logs"))
+{
+  New-Item "$TargetFolder\Logs" -ItemType Directory | out-null
+}
 Remove-Item "$ExtractFolder" -Force -Recurse
 
 $SSHLsaNeedsUpdating = $false
@@ -374,16 +404,28 @@ If ($SSHServerFeature)
       Write-Output "ssh-lsa already configured in authentication packages..."
     }
 
-  If((Test-Path "$TargetFolder\sshd_config") -AND ([bool]((gc "$TargetFolder\sshd_config") -ilike "*#LogLevel INFO*")))
-  {
-    Write-Warning "Explicitly disabling sshd logging as it currently logs about .5 GB / hour"
-    (Get-Content "$TargetFolder\sshd_config") -replace '#LogLevel INFO', 'LogLevel QUIET' | Set-Content "$TargetFolder\sshd_config"
-  }
-
   If((Test-Path "$TargetFolder\sshd_config"))
   {
     #(Get-Content "$TargetFolder\sshd_config") -replace '#LogLevel INFO', 'LogLevel QUIET' | Set-Content "$TargetFolder\sshd_config"
-    (Get-Content "$TargetFolder\sshd_config") -replace '#LogLevel INFO', 'LogLevel QUIET' | Set-Content "$TargetFolder\sshd_config"
+
+    $CurrentLogLevelConfig = ((gc "$TargetFolder\sshd_config") -imatch "^#*LogLevel\s\w*\b.*$")
+    Write-Output 'Setting up SSH Logging'
+    If ($SSHLogLevel)
+    { #command line specified a log level - override whatever is there
+      If ([bool]($CurrentLogLevelConfig -inotmatch "^LogLevel\s$SSHLogLevel\s*$"))
+      {
+        Write-Output "Current LogLevel setting in `"$TargetFolder\sshd_config`" is `"$CurrentLogLevelConfig`", setting it to `"LogLevel $SSHLogLevel`""
+        (Get-Content "$TargetFolder\sshd_config") -replace "^#*LogLevel\s\w*\b.*$", "LogLevel $SSHLogLevel" | Set-Content "$TargetFolder\sshd_config"
+      }
+    }
+    Else
+    { #command line did not specify a log level, set it to QUIET - only if it has never been set (currently commented INFO setting)
+      If((Test-Path "$TargetFolder\sshd_config") -AND ([bool]((gc "$TargetFolder\sshd_config") -ilike "#LogLevel INFO*")))
+      {
+        Write-Warning "Explicitly disabling sshd logging as it currently logs about .5 GB / hour"
+        (Get-Content "$TargetFolder\sshd_config") -replace '#LogLevel INFO', 'LogLevel QUIET' | Set-Content "$TargetFolder\sshd_config"
+      }
+    }
 
      $CurrentPortConfig = ((gc "$TargetFolder\sshd_config") -match "^#*Port\s\d*\s*$")
      If ([bool]($CurrentPortConfig -notmatch "^Port $SSHServerPort"))

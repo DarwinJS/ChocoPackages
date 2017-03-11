@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Microsoft Port)</title>
-    <version>0.0.9.20170308</version>
+    <version>0.0.9.20170311</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -56,9 +56,16 @@
       -params '"/SSHServerFeature /SSHServerPort:3834"'
       Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.
 
-      RETIRED: -params '"/KeyBasedAuthenticationFeature"'
-      NO LONGER NECESSARY - KeyBasedAuthentiation is always configured
-      if the /SSHServerFeature switch is used.
+      -params '"/OverWriteSSHDConf"'
+      Introduced in Version: 0.0.9.20170311
+      By default an existing sshd_conf file will not be overwritten (previous packaging versions always overwrote)
+      Use this switch to overwrite an existing sshd_conf with the one from the current install media
+
+      -params '"/SSHLogLevel:VERBOSE"'
+      Introduced in Version: 0.0.9.20170311
+      Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.
+      Valid Options: QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, DEBUG3
+      On a fresh install LogLevel is set to QUIET
 
       -params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'
       Also install sshd Windows Service - including opening port 22 and
@@ -71,9 +78,6 @@
       -params '"/UseNTRights"'
       By default the install uses PowerShell code that works on operating systems that cannot run the 32-bit ntrights.exe (Nano, Server Core w/out WOW64).
       If this code does not work for you, you can use this switch to invoke the 32-bit ntrights.exe
-      Please be aware that 32-bit ntrights.exe will NOT work on Windows Systems that doe not have WOW64 installed - this would mainly
-      affect Server Core where this feature is optional and not installed by default and Server Nano where 32-bit is not supported.
-
     </description>
     <projectUrl>https://github.com/PowerShell/Win32-OpenSSH</projectUrl>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/openssh</packageSourceUrl>
@@ -88,7 +92,12 @@
     <releaseNotes>
       Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.9.0
 
-      Release Note for Chocolatey Packaging:
+      Release Notes for Chocolatey Packaging:
+      0.0.9.20170311
+         - no longer overwrites sshd_conf if it already exists, unless /OverWriteSSHDConf is used
+         - supports setting SSHD LogLevel during install or upgrade using /SSHLogLevel
+         - automatically creates "logs" subfolder in install folder so that if logging is enabled 
+           in the config file it starts without requiring a manual folder creation
       0.0.9.20170308 - fix to fileinuseutiles.ps1 to not resolve path when target does not exist
       0.0.9.20170306 - fix to ensure sshlsa.dll always gets installed when it should (thanks @felfert !)
       0.0.9.20170226 - fix to allow barebones.ps1 to work on PSH 2 (e.g. Server 2008 R2)

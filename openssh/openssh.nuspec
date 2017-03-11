@@ -63,7 +63,7 @@
 
       -params '"/SSHLogLevel:VERBOSE"'
       Introduced in Version: 0.0.9.20170311
-      Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.
+      Allows the setup of the SSH logging level.
       Valid Options: QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, DEBUG3
       On a fresh install LogLevel is set to QUIET
 

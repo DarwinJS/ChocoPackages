@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>sizer</id>
     <title>Sizer</title>
-    <version>3.34</version>
+    <version>4.0.550</version>
     <authors>BrianApps</authors>
     <owners>Darwin Sanoy</owners>
     <summary>Adds a control to all windows on your system to easily resize and place windows.  Great for aligning standard sized windows (e.g. 1280x720) to a screencast recording window.</summary>

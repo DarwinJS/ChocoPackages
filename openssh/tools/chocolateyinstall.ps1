@@ -468,7 +468,7 @@ If ($SSHServerFeature)
   {
     Write-Warning "The following private keys should be removed from the machine: $keylist"
   }
-  New-Service -Name sshd -BinaryPathName "$TargetFolder\sshd.exe" -Description "SSH Deamon" -StartupType Automatic -DependsOn ssh-agent | Out-Null
+  New-Service -Name sshd -BinaryPathName "$TargetFolder\sshd.exe" -Description "SSH Daemon" -StartupType Automatic -DependsOn ssh-agent | Out-Null
   sc.exe config sshd obj= "NT SERVICE\SSHD"
 
   If (!$UseNTRights)

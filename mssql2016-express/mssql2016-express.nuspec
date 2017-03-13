@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+  <metadata>
+    <id>mssql2016-express</id>
+    <version>12.0.4100.1</version>
+    <title>SQL Server 2016 Express</title>
+    <authors>Microsoft</authors>
+    <projectUrl>http://www.microsoft.com/sqlserver/en/us/editions/express.aspx</projectUrl>
+    <owners>DarwinJS</owners>
+    <copyright>Microsoft</copyright>
+    <licenseUrl>http://download.microsoft.com/download/B/4/E/B4E604D9-9D38-4BBA-A927-56E4C872E41C/SQL_Server_2016_Licensing_Guide.pdf</licenseUrl>
+    <projectUrl>http://www.microsoft.com/sqlserver/en/us/default.aspx</projectUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/mssql2016-express/MsSqlServerManagementStudio2016Express.svg</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <summary>SQL 2016 Express.  Can take same command line you use for Non-Express SQL Server installer so that you can get an Express install that most exactly replicates your full product install.</summary>
+    <description>SQL 2016 Express Advanced.  Can take same command line you use for Non-Express SQL Server installer so that you can get an Express install that most exactly replicates your full product install.
+    Handles databases up to 10 GB.
+    Downloads install source (1/5 the 5 GB full product size) anywhere on the planet.
+
+    List of SQL Limitations by edition: [https://msdn.microsoft.com/en-us/library/cc645993(v=sql.120).aspx]
+
+Developer: https://t.co/MlBORdH8ZQ
+Download: SQL Server 2016 Easy Installers:
+Dev Edition
+http://download.microsoft.com/download/8/A/5/8A54ED1B-709B-4A93-B229-20554A51754D/SQLServer2016-SSEI-Dev.exe
+http://download.microsoft.com/download/F/2/E/F2E4FC77-8167-4807-927A-65BF37755832/SQLServer2016-SSEI-Eval.exe
+http://download.microsoft.com/download/9/A/E/9AE09369-C53D-4FB7-985B-5CF0D547AE9F/SQLServer2016-SSEI-Expr.exe
+
+    Requires 1.2 GB of bandwidth.
+    Requires 6 GB of disk (including room for download and decompression of installation files)
+
+    Can take same command line you use for Non-Express SQL Server installer so that
+    you can experiment with whether SQL Express can be used instead of the full version for non-production environments
+    such as developer workstations, CI build agents, test environments, etc.
+
+    The limitations of SQL Express have been continually expanded, which means it can be suitable for many of these purposes.
+
+    Here is the list of SQL limitations by edition: [https://msdn.microsoft.com/en-us/library/cc645993(v=sql.120).aspx]
+
+    Using Express allows this package to:
+      [a] Download 1.4 GB of install source files, rather than 5 GB for full licensed editions.
+      [b] Easy install *anywhere* because SQL Express install source is downloadable from Microsoft.
+
+      Requires 1.2 GB of bandwidth.
+      Requires 6 GB of disk (including room for download and decompression of installation files)
+
+   This package can take the following command line parameter:
+
+     Command line defaults in addition to below items you change:
+     "/ACTION=Install /Q /INDICATEPROGRESS /IACCEPTSQLSERVERLICENSETERMS"
+
+     -params '"/SQL_WhatIf:true"' (just show the SQL command line, don't run SQL setup)
+        It takes a long time to run SQL setup - this command line lets you make sure you
+        are getting the SQL setup command line you want before you commit to full install testing
+
+     -params '"/SQL_SecurityMode:SQL"'
+     -params '"/SQL_QuietSwitch:QS"' (Default: Q, "QS" shows progress on screen)
+     -params '"/SQL_SAPwd:ComplexEnough2Count!"' (Default: "ComplexEnough2Count!") #Password must meet operating system configured complexity requirements or install will fail.
+     -params '"/SQL_Features:SQLENGINE"' (Default: SQLENGINE,FULLTEXT,CONN,IS,BC,SDK,SSMS,ADV_SSMS)
+     -params '"/SQL_InstanceName:SQLEXPRESS"' (Default: SQLEXPRESS)
+     -params '"/SQL_BROWSERSVCSTARTUPTYPE:Automatic"' (Default: Automatic)
+     -params '"/SQL_SQLSVCSTARTUPTYPE:Automatic"' (Default: Automatic)
+
+     -params '"/OverrideSQLCMDLineFile=$env:public\sqlparams.txt"'
+       Completely Override the package's internal command line with one from a text file which contains one line with the exact SQL command line.
+       Don't forget to add every option you need - don't forget these: "/ACTION=Install /Q /INDICATEPROGRESS /IACCEPTSQLSERVERLICENSETERMS"
+
+    Examples:
+     -params '"/SQL_WhatIf:true /OverrideSQLCMDLineFile=$env:public\sqlparams.txt"'
+       Just show the command from the file, but don't run it.
+
+     -params '"/SQL_QuietSwitch:QS /SQL_SAPwd:ComplexEnough2Count! /SQL_SecurityMode:SQL /SQL_InstanceName:MSSQLSERVER"'
+       Use instance name from SQL full version and enable Mixed Mode security and show progress dialogs.
+
+    </description>
+    <releaseNotes>https://msdn.microsoft.com/en-us/library/dn876712.aspx
+      https://msdn.microsoft.com/en-us/library/bb500435.aspx
+    </releaseNotes>
+    <tags>mssql2016-express admin Microsoft SQL Server 2016 Express</tags>
+    <dependencies>
+      <dependency id="dotnet3.5"/>
+    </dependencies>
+  </metadata>
+</package>

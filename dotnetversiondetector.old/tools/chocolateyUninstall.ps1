@@ -1,0 +1,2 @@
+
+Uninstall-ChocolateyZipPackage dotnetversiondetector netver.zip

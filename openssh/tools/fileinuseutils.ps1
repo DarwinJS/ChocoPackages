@@ -33,7 +33,7 @@ Add-Type @'
 
 Function Remove-FileEvenIfLocked
 {
-  param ([parameter(mandatory=$true,ValueFromPipeline)][string]$Path)
+  param ([parameter(mandatory=$true,ValueFromPipeline=$true)][string]$Path)
   Process
   {
     $path = (Resolve-Path $path -ErrorAction Stop).Path
@@ -63,8 +63,8 @@ Function Remove-FileEvenIfLocked
 
 Function Copy-FileEvenIfLocked
 {
-  param ([parameter(mandatory=$true,ValueFromPipeline)][string]$Path,
-         [parameter(mandatory=$true,ValueFromPipeline)][string]$Destination)
+  param ([parameter(mandatory=$true,ValueFromPipeline=$true)][string]$Path,
+         [parameter(mandatory=$true,ValueFromPipeline=$true)][string]$Destination)
   Process
   {
     $Path = (Resolve-Path $path -ErrorAction Stop).Path

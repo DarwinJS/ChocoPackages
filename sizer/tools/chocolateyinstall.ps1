@@ -1,21 +1,21 @@
-﻿$ErrorActionPreference = 'Stop'; # stop on all errors
+﻿$ErrorActionPreference = 'Stop';
 
-$packageName= 'sizer' # arbitrary name for the package, used in messages
+$packageName= 'sizer'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = 'http://www.brianapps.net/sizer/sizer334.msi' # download url
+$url        = 'http://www.brianapps.net/sizer4/sizer4_dev550.msi'
 $LogFile    = "`"$env:TEMP\chocolatey\$($packageName)\$($packageName).MsiInstall.log`""
 $packageArgs = @{
   packageName   = $packageName
   unzipLocation = $toolsDir
-  fileType      = 'MSI' #only one of these: exe, msi, msu
+  fileType      = 'MSI'
   url           = $url
 
   #MSI
-  silentArgs    = "/qn /norestart /l*v $LogFile" # ALLUSERS=1 DISABLEDESKTOPSHORTCUT=1 ADDDESKTOPICON=0 ADDSTARTMENU=0
+  silentArgs    = "/qn /norestart /l*v $LogFile"
   validExitCodes= @(0, 3010, 1641)
 
-  softwareName  = 'sizer*' #part or all of the Display Name as you see it in Programs and Features. It should be enough to be unique
-  checksum      = '5CE3BCEE86C58065442B8E88AE3433A5BEBA7A91'
+  softwareName  = 'sizer*'
+  checksum      = '43BF377195D62C80E3B3CF8B2577F805C24327D5'
   checksumtype  = 'sha1'
 }
 

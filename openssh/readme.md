@@ -25,7 +25,7 @@ openssh all in one command line - see later in this document.
 2. Install-PackageProvider NuGet -forcebootstrap -force
 3. Register-PackageSource -name chocolatey -provider nuget -location http://chocolatey.org/api/v2/ -trusted
 4. Install-Package openssh -provider NuGet
-5. cd "$((dir "$env:ProgramFiles\nuget\packages\openssh*\tools" |select -last 1).fullname)"
+5. cd ("$env:ProgramFiles\nuget\packages\openssh." + "$((dir "$env:ProgramFiles\nuget\packages\openssh*" | %{[version]$_.name.trimstart('openssh.')} | sort | select -last 1) -join '.')\tools")
 6. .".\barebonesinstaller.ps1" #Client Tools only
 7. .".\barebonesinstaller.ps1" -SSHServerFeature #SSH Server (& client tools)
 8. .".\barebonesinstaller.ps1" -SSHServerFeature -SSHServerPort '5555' #SSH Server on port 5555 (& client tools)

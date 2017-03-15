@@ -37,9 +37,9 @@ $packageArgs = @{
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = '59A1A7A0E4664CE16C212452459E2B21522FA46D'
+  checksum      = 'EBBFD787E6727A671C43B84A8667DA33E9084398'
   checksumType  = 'SHA1'
-  checksum64    = '46D61364B3B948F3A2B2D204ED8DFADCF687A192'
+  checksum64    = '164DD33320C89A27340D3554065F0672380F20C0'
   checksumType64= 'SHA1'
 }
 
@@ -59,8 +59,8 @@ If ($RunningUnderChocolatey)
 $OpeningMessage = @"
 
 ************************************************************************************
-This package can install Win32-OpenSSH on Nano and Server Core and Docker Containers
-See the following for details:
+This package can ALSO install Win32-OpenSSH on Nano and Server Core and Docker Containers
+without requiring Chocolatey to be installed.  See the following for details:
 https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
 ************************************************************************************
 
@@ -203,15 +203,12 @@ If you see the message 'Detected that Developer Mode SSH is present' above, you 
   }
 }
 
-#$SSHServiceInstanceExistsAndIsOurs = ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike 'sshd'} | select -expand PathName) -ilike "*$TargetFolder*"))
 $SSHServiceInstanceExistsAndIsOurs = CheckServicePath 'sshd.exe' "$TargetFolder"
-#$SSHAGENTServiceInstanceExistsAndIsOurs = ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike 'ssh-agent'} | select -expand PathName) -ilike "*$TargetFolder*"))
 $SSHAGENTServiceInstanceExistsAndIsOurs = CheckServicePath 'ssh-agent.exe' "$TargetFolder"
 
 If ($SSHServerFeature -AND (!$SSHServiceInstanceExistsAndIsOurs) -AND ([bool](Get-Service sshd -ErrorAction SilentlyContinue)))
 {
   $ExistingSSHDInstancePath = split-path -parent (((wmic service | ?{$_ -ilike '*sshd*'}) -ilike "*$TargetFolder*").split('=')[1].trim())
-  #(Get-WmiObject win32_service | ?{$_.Name -ilike 'sshd'} | select -expand PathName)
   Throw "You have requested that the SSHD service be installed, but this system appears to have an instance of an SSHD service configured for another folder ($ExistingSSHDInstancePath).  You can remove the package switch /SSHServerFeature to install just the client tools, or you will need to remove that instance of SSHD to use the one that comes with this package."
 }
 
@@ -223,6 +220,18 @@ If ((!$SSHServerFeature) -AND $SSHServiceInstanceExistsAndIsOurs)
 If ([bool](get-process ssh -erroraction silentlycontinue | where {$_.Path -ilike "*$TargetFolder*"}))
 {
   Throw "It appears you have instances of ssh.exe (client) running from the folder this package installs to, please terminate them and try again."
+}
+
+If (@(dir "$TargetFolder\*.exe").count -gt 0) 
+{
+  Write-Output "`r`nCURRENT VERSIONS OF SSH EXES:"
+  Write-Output "$(dir "$TargetFolder\*.exe" | get-command | select Source,Version | out-string)"
+}
+
+If (Test-Path "$env:windir\system32\ssh-lsa.dll") 
+{
+  Write-Output "`r`nCURRENT VERSION OF SSH-LSA.DLL:"
+  Write-Output "$(get-command "$env:windir\system32\ssh-lsa.dll" | select Source,Version | out-string)"
 }
 
 If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorAction SilentlyContinue | where {$_.Status -ieq 'Running'})))
@@ -302,7 +311,7 @@ Else
   {
     #covers nano
     cd $toolsdir
-    start-process .\7z.exe -argumentlist "x $filename -o`"$ExtractFolder`" -aoa" -nonewwindow -wait
+    start-process .\7z.exe -argumentlist "x `"$filename`" -o`"$ExtractFolder`" -aoa" -nonewwindow -wait
   }
   Else
   {
@@ -521,6 +530,16 @@ If ($SSHServerFeature)
 
     New-Item "$TargetFolder\KeysAddedToAgent.flg" -type File | out-null
   }
+
+  Write-Output "`r`nNEW VERSIONS OF SSH EXES:"
+  Write-Output "$(dir "$TargetFolder\*.exe" | get-command | select Source,Version | out-string)"
+
+  If (Test-Path "$env:windir\system32\ssh-lsa.dll") 
+  {
+    Write-Output "`r`nNEW VERSION OF SSH-LSA.DLL:"
+    Write-Output "$(get-command "$env:windir\system32\ssh-lsa.dll" | select Source,Version | out-string)"
+  }
+
 
   If ($SSHLsaNeedsUpdating)
   {

@@ -222,7 +222,7 @@ If ([bool](get-process ssh -erroraction silentlycontinue | where {$_.Path -ilike
   Throw "It appears you have instances of ssh.exe (client) running from the folder this package installs to, please terminate them and try again."
 }
 
-If (@(dir "$TargetFolder\*.exe").count -gt 0) 
+If ((Test-Path $TargetFolder) -AND (@(dir "$TargetFolder\*.exe").count -gt 0)) 
 {
   Write-Output "`r`nCURRENT VERSIONS OF SSH EXES:"
   Write-Output "$(dir "$TargetFolder\*.exe" | get-command | select Source,Version | out-string)"

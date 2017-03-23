@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>dotnetversiondetector</id>
-    <version>16.3.2</version>
+    <version>16.3.2.20170323</version>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/dotnetversiondetector</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>dotnetversiondetector (Install)</title>
@@ -18,7 +18,10 @@
     <description> Detects and displays all .NET versions installed on the current machine.  Can export to a file.
 Utility itself does not use .NET so that it will work regardless of whether .NET is installed or what versions are installed.
     </description>
-    <releaseNotes>Supports up through .NET 4.6.2</releaseNotes>
+    <releaseNotes>
+    Packaging Version 16.3.2.20170323 
+      - renames exe from default of dotnet.exe to dotnetversions.exe to avoid clashes with dotnet CLI.
+    Supports up through .NET 4.6.2</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

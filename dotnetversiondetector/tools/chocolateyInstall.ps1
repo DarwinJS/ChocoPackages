@@ -21,9 +21,11 @@ $packageArgs = @{
 
 Install-ChocolateyZipPackage @packageArgs # https://chocolatey.org/docs/helpers-install-chocolatey-zip-package
 
+Move-Item $toolsdir\dotnet.exe $toolsdir\dotnetversions.exe
+
 
 Write-Output ""
 Write-Output "**********************************************************************************************************"
-Write-Output "*  INSTRUCTIONS: At a shell prompt, type 'dotnet' to start the dot net version detector utility          *"
+Write-Output "*  INSTRUCTIONS: At a shell prompt, type 'dotnetversions' to start the dot net version detector utility          *"
 Write-Output "**********************************************************************************************************"
 Write-Output ""

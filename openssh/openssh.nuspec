@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Microsoft Port)</title>
-    <version>0.0.10.0</version>
+    <version>0.0.10.20170329</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -93,6 +93,9 @@
       Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.10.0
 
       Release Notes for Chocolatey Packaging:
+      0.0.10.20170329
+        - fixed issue looking up the path of conflicting sshd service (if one exists)
+        - fixed problem for nano with listing of exe versions introdcued in 0.0.10.0
       0.0.10.0 
         - displays before and after versions of all EXES in SSH install folder and ssh-lsa.dll
         - readme updates for barebonesinstaller.ps1 (due to version 0.0.10.0 not sorting properly with previous versions)
@@ -109,11 +112,6 @@
       0.0.9.20170226 - fix to allow barebones.ps1 to work on PSH 2 (e.g. Server 2008 R2)
       0.0.9.20170222 - removal of stray file
       0.0.9.0 - fix for problem detecting our install of sshd
-      0.0.8.0 - none
-      0.0.7.0 - none
-      0.0.6.0 - none
-      0.0.5.0 - none
-      0.0.4.0 - none
 
       0.0.3.0
       - NEW: If ssh-lsa.dll is locked at install time, package schedules it to be updated at reboot

@@ -208,7 +208,7 @@ $SSHAGENTServiceInstanceExistsAndIsOurs = CheckServicePath 'ssh-agent.exe' "$Tar
 
 If ($SSHServerFeature -AND (!$SSHServiceInstanceExistsAndIsOurs) -AND ([bool](Get-Service sshd -ErrorAction SilentlyContinue)))
 {
-  $ExistingSSHDInstancePath = split-path -parent (((wmic service | ?{$_ -ilike '*sshd*'}) -ilike "*$TargetFolder*").split('=')[1].trim())
+  $ExistingSSHDInstancePath = get-itemproperty hklm:\system\currentcontrolset\services\* | where {($_.ImagePath -ilike '*sshd.exe*')} | Select -expand ImagePath
   Throw "You have requested that the SSHD service be installed, but this system appears to have an instance of an SSHD service configured for another folder ($ExistingSSHDInstancePath).  You can remove the package switch /SSHServerFeature to install just the client tools, or you will need to remove that instance of SSHD to use the one that comes with this package."
 }
 
@@ -225,7 +225,7 @@ If ([bool](get-process ssh -erroraction silentlycontinue | where {$_.Path -ilike
 If ((Test-Path $TargetFolder) -AND (@(dir "$TargetFolder\*.exe").count -gt 0)) 
 {
   Write-Output "`r`nCURRENT VERSIONS OF SSH EXES:"
-  Write-Output "$(dir "$TargetFolder\*.exe" | get-command | select Source,Version | out-string)"
+  Write-Output "$((dir "$TargetFolder\*.exe").fullname | get-command | select Source,Version | out-string)"
 }
 
 If (Test-Path "$env:windir\system32\ssh-lsa.dll") 
@@ -532,11 +532,11 @@ If ($SSHServerFeature)
   }
 
   Write-Output "`r`nNEW VERSIONS OF SSH EXES:"
-  Write-Output "$(dir "$TargetFolder\*.exe" | get-command | select Source,Version | out-string)"
+  Write-Output "$((dir "$TargetFolder\*.exe").fullname | get-command | select Source,Version | out-string)"
 
   If (Test-Path "$env:windir\system32\ssh-lsa.dll") 
   {
-    Write-Output "`r`nNEW VERSION OF SSH-LSA.DLL:"
+    Write-Output "`r`nNEW VERSION OF SSH-LSA.DLL (IF UPDATED WILL NOT REFLECT NEW VERSION UNTIL REBOOTED):"
     Write-Output "$(get-command "$env:windir\system32\ssh-lsa.dll" | select Source,Version | out-string)"
   }
 

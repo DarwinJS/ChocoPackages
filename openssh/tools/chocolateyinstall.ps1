@@ -1,3 +1,13 @@
+
+<#
+ATTENTION: This code is used extensively to run under PowerShell 2.0 to update 
+images from RTM / SP1 source for Windows 7 and Server 2008 R2.  It is also
+used under Powershell Core to add OpenSSH to Nano.  Test all enhancements and 
+fixes under these two specialty cases (speciality for Chocolatey packagers who are 
+likely up to the latest version on everything PowerShell).
+#>
+
+
 $ErrorActionPreference = 'Stop'; # stop on all errors
 
 $ProductName = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name 'ProductName').ProductName
@@ -225,13 +235,13 @@ If ([bool](get-process ssh -erroraction silentlycontinue | where {$_.Path -ilike
 If ((Test-Path $TargetFolder) -AND (@(dir "$TargetFolder\*.exe").count -gt 0)) 
 {
   Write-Output "`r`nCURRENT VERSIONS OF SSH EXES:"
-  Write-Output "$((dir "$TargetFolder\*.exe").fullname | get-command | select Source,Version | out-string)"
+  Write-Output "$(dir "$TargetFolder\*.exe"| get-command | select -expand fileversioninfo | ft filename, fileversion -auto | out-string)"
 }
 
 If (Test-Path "$env:windir\system32\ssh-lsa.dll") 
 {
   Write-Output "`r`nCURRENT VERSION OF SSH-LSA.DLL:"
-  Write-Output "$(get-command "$env:windir\system32\ssh-lsa.dll" | select Source,Version | out-string)"
+  Write-Output "$(get-command "$env:windir\system32\ssh-lsa.dll" | select -expand fileversioninfo | ft filename, fileversion -auto | out-string)"
 }
 
 If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorAction SilentlyContinue | where {$_.Status -ieq 'Running'})))
@@ -531,16 +541,6 @@ If ($SSHServerFeature)
     New-Item "$TargetFolder\KeysAddedToAgent.flg" -type File | out-null
   }
 
-  Write-Output "`r`nNEW VERSIONS OF SSH EXES:"
-  Write-Output "$((dir "$TargetFolder\*.exe").fullname | get-command | select Source,Version | out-string)"
-
-  If (Test-Path "$env:windir\system32\ssh-lsa.dll") 
-  {
-    Write-Output "`r`nNEW VERSION OF SSH-LSA.DLL (IF UPDATED WILL NOT REFLECT NEW VERSION UNTIL REBOOTED):"
-    Write-Output "$(get-command "$env:windir\system32\ssh-lsa.dll" | select Source,Version | out-string)"
-  }
-
-
   If ($SSHLsaNeedsUpdating)
   {
     Write-Warning "IMPORTANT: You must reboot so that key based authentication can be fully installed or upgraded for the SSHD Service."
@@ -550,6 +550,18 @@ If ($SSHServerFeature)
     Write-Warning "CRITICAL: ssh-lsa.dll was updated - a reboot required to fully activate it."
   }
 
+}
+
+If (Test-Path "$TargetFolder\ssh.exe") 
+{
+  Write-Output "`r`nNEW VERSIONS OF SSH EXES:"
+  Write-Output "$(dir "$TargetFolder\*.exe"| get-command | select -expand fileversioninfo | ft filename, fileversion -auto | out-string)"
+}
+
+If (Test-Path "$env:windir\system32\ssh-lsa.dll") 
+{
+  Write-Output "`r`nNEW VERSION OF SSH-LSA.DLL (IF UPDATED WILL NOT REFLECT NEW VERSION UNTIL REBOOTED):"
+  Write-Output "$(get-command "$env:windir\system32\ssh-lsa.dll" | select -expand fileversioninfo | ft filename, fileversion -auto | out-string)"
 }
 
 Write-Warning "You must start a new prompt, or use the command 'refreshenv' (provided by your chocolatey install) to re-read the environment for the tools to be available in this shell session."

@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Microsoft Port)</title>
-    <version>0.0.10.20170329</version>
+    <version>0.0.10.20170402</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -93,6 +93,10 @@
       Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.10.0
 
       Release Notes for Chocolatey Packaging:
+      0.0.10.20170402
+        - fix to looking versions of installed exes for PSH 2
+      0.0.10.20170331
+        - fix to looking versions of installed exes for Nano
       0.0.10.20170329
         - fixed issue looking up the path of conflicting sshd service (if one exists)
         - fixed problem for nano with listing of exe versions introdcued in 0.0.10.0

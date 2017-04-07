@@ -85,8 +85,8 @@ Function Copy-FileEvenIfLocked
       If ($_.exception -ilike "*used by another process*")
       {
         Write-host "$path is locked by another process, attempting to setup copy at reboot..."
-        $deleteResult = [LockedFileUtils]::CopyLockedFile($path,$Destination)
-        if ($deleteResult -eq $false)
+        $copyResult = [LockedFileUtils]::CopyLockedFile($path,$Destination)
+        if ($copyResult -eq $false)
         {
           throw "Was not able to copy in use file $path to $destination `r`n $(New-Object System.ComponentModel.Win32Exception)"
         }

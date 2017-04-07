@@ -124,9 +124,10 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorActio
     }
 }
 
-If ((get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa').getvalue("authentication packages") -contains '0ssh-lsa.dll')
+If ((get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa').getvalue("authentication packages") -contains 'ssh-lsa')
 {
   $KeyBasedAuthenticationFeatureINSTALLED = $True
+  Write-Warning "ssh-lsa.dll will be deconfigured - but not deleted.  It must be manually deleted after a reboot."
 }
 
 #uninstall agent service if it was installed without SSHD
@@ -167,7 +168,6 @@ If ($KeyBasedAuthenticationFeatureINSTALLED)
     }
   }
   Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\" "Authentication Packages" $Newauthpackages
-  del "$sys32dir\ssh-lsa.dll" -force
 }
 
 #Don't remove config in case they reinstall.

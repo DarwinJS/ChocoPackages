@@ -5,32 +5,22 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Microsoft Port)</title>
-    <version>0.0.10.20170402</version>
+    <version>0.0.11.0</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
     <description>Open SSH tools for Windows.
       This is the Microsoft PowerShell Team's recent port.
       Works in all CLIs and does not require .NET.
-      Includes the following tools:
-      * ssh.exe
-      * ssh-add.exe
-      * ssh-agent.exe
-      * ssh-keygen.exe
-      * ssh-keyscan.exe
-      * ssh-keysign.exe
-      * ssh-pkcs11-helper.exe
-      * scp.exe
-      * sftp.exe
-      * sshd.exe (server)
-      * sftp-server.exe
+
+      CloudyWindows.com Utility Scripts:
+      * Set-SSHKeyPermissions.ps1
 
       This package performs the following operations that you normally have to hack at until you get what you want:
       * Install Appropriate Bitness for the version of Windows
       * Install to Program Files (malware protection and following advice of dev team)
       * Add SSH location to System PATH
       * Optionally install sshd windows service (Requires parameter - see below)
-      * Optionally install sshd server "key based authentication" (Requires parameter - see below)
       * Cleanly uninstall all of the above (removing config files and server keys requires special switch - see below)
 
       The package also attempts to keep you out of trouble when configuring the sshd service:
@@ -52,6 +42,12 @@
       Installs SSH Agent Service even if SSHD Server is not being installed.
       Requires admin rights to configure service.
       This option is automatically set when /SSHServerFeature is used.
+
+      -params '"/SSHAgentFeature /ReleaseSSHLSAForUpgrade"'
+      If ssh-lsa.dll is locked, this switch de-configures ssh-lsa.dll from loading on bootup.
+      You then must reboot and re-run the package -force to install the new version of ssh-lsa.dll.
+      A second reboot will be required in order to make the new version active.
+      See: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
 
       -params '"/SSHServerFeature /SSHServerPort:3834"'
       Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.
@@ -90,9 +86,16 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/openssh/appicon.png</iconUrl>
     <releaseNotes>
-      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.10.0
+      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.11.0
 
       Release Notes for Chocolatey Packaging:
+      0.0.11.0
+        - /ReleaseSSHLSAForUpgrade - switch that de-configures ssh-lsa.dll in preparation for updating it after a reboot and forced reinstall (and another reboot).  See: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
+        - Set-SSHKeyPermissions.ps1 - new utility for setting permissions on all existing user's authorized_keys files is placed in SSHD binaries folder (on path)
+        - Calls Set-SSHKeyPermissions.ps1 during install to ensure existing keys are compliant with security updates in SSH 0.0.11.0
+        - Fix - uninstall was not deconfiguring ssh-lsa.dll from load at startup.
+        - updated barebonesinstaller.ps1 to take all switches chocolatey takes
+
       0.0.10.20170402
         - fix to looking versions of installed exes for PSH 2
       0.0.10.20170331
@@ -116,50 +119,6 @@
       0.0.9.20170226 - fix to allow barebones.ps1 to work on PSH 2 (e.g. Server 2008 R2)
       0.0.9.20170222 - removal of stray file
       0.0.9.0 - fix for problem detecting our install of sshd
-
-      0.0.3.0
-      - NEW: If ssh-lsa.dll is locked at install time, package schedules it to be updated at reboot
-             displays a "CRITICAL" message noting that a reboot is needed.
-
-      0.0.2.20161026
-      - FIX: "Get-FileHash" is only used if it is available
-
-      0.0.2.0
-      - NEW: /SSHAgentFeature - enables SSH agent for use with client tools when /SSHServerFeature is not used.
-      - NEW: Sample Dockerfile included for Server Core 2016 or Nano.
-      - FIX: Uninstall improved.
-      - NEW: InstallChoco_and_win32-openssh.ps1 and InstallChoco_and_win32-openssh_with_server.ps1 both refresh
-             the environment after installing OpenSSH so it can be used in the same console it was installed in.
-      - FIX: ssh-add is only run after ssh-agent is started.
-      - FIX: sshd and ssh-agent are always started (if installed), however, a warning to reboot is still generated
-             if key based authentication is being used.
-
-      0.0.0.9
-      - NEW: Chocolatey package id is now "openssh"
-      - NEW: Set listenting port with parameter /SSHServerPort
-      - NEW: Enhanced detection of possible port conflicts with requested listening port
-             Specifically calls out Developer Mode SSH (Windows 10 Developer Mode)
-      - NEW: more complete readme: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
-      - NEW: install on Nano and ServerCore w/out WOW64 (Chocolatey not needed) like this (PSH 5 required):
-          1) Open a command line on the target (remoting for Nano) and run:
-          2) Install-Packagerovider NuGet -forcebootstrap -force
-          3) Register-PackageSource -name chocolatey -provider nuget -location http://chocolatey.org/api/v2/ -trusted
-          4) Install-Package openssh -provider NuGet
-          5) cd "$((dir "$env:ProgramFiles\nuget\packages\OpenSSH*\tools" |select -last 1).fullname)"
-          6) .".\barebonesinstaller.ps1" -SSHServerFeature
-      - FIX: to prevent repeatedly adding "ssh-lsa" when already present (on forced installs, etc.)
-      - FIX: to uninstall to prevent leaving lsa-ssh authentication provider entries on system
-      - NEW: ource files are now internal (makes for easier curation and easier for above barebonesinstaller.ps1)
-      - FIX: crashing uninstall script
-      - FIX: properly add SSH folder to path on Nano
-
-      2016.05.30.20160827 (package ID: Win32-OpenSSH)
-      - Switch "/KeyBasedAuthenticationFeature" is retired - key based authentication always configured when using "/SSHServerFeature"
-      - With switch /UseNTRights Package uses ntrights.exe on 32-bit windows and on 64-bit windows - ONLY IF THE 32-bit SUBSYSTEM IS INSTALLED - otherwise it attempts to use Posh Code to grant SeAssignPrimaryTokenPrivilege.
-        Code used for setting rights WITHOUT /UseNTRights was tested as working on Nano, which means it should work on server core without WOW64.
-
-    Package explicity sets log level to QUIET because on some systems the current version of sshd repeatedly logs the same line at a rate of about 1 GB / 2 hours with default log settings.
-    Package incorporates securing of the server keys using the SSH agent as per the product release notes below.
 
     </releaseNotes>
   </metadata>

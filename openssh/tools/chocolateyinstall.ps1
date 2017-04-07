@@ -36,6 +36,14 @@ Else
   $PF = $env:ProgramFiles
 }
 
+If (Test-Path "$env:windir\sysnative")
+{ #We are running in a 32-bit process under 64-bit Windows
+  $sys32dir = "$env:windir\sysnative"
+}
+Else
+{ #We are on a 32-bit OS, or 64-bit proc on 64-bit OS
+  $sys32dir = "$env:windir\system32"
+}
 $filename = "$toolsdir\OpenSSH-Win$($OSBits).zip"
 #$TargetFolder = "$PF\OpenSSH"
 #$TargetFolderOld = "$PF\OpenSSH-Win$($OSBits)"
@@ -47,9 +55,9 @@ $packageArgs = @{
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = 'EBBFD787E6727A671C43B84A8667DA33E9084398'
+  checksum      = 'ADCA58224F9C3B7A1F8C5F2EA44C54EC821A7180'
   checksumType  = 'SHA1'
-  checksum64    = '164DD33320C89A27340D3554065F0672380F20C0'
+  checksum64    = '8AE95AA97AA06B5AC259366004B3111F47AD471F'
   checksumType64= 'SHA1'
 }
 
@@ -137,6 +145,10 @@ if ($packageParameters) {
       $SSHLogLevel = $null
     }
 
+    if ($arguments.ContainsKey("ReleaseSSHLSAForUpgrade")) {
+        $ReleaseSSHLSAForUpgrade = $true
+    }
+
     if ($arguments.ContainsKey("UseNTRights")) {
         Write-Host "Using ntrights.exe to set service permissions (will not work, but generate warning if WOW64 is not present on 64-bit machines)"
         $UseNTRights = $true
@@ -168,6 +180,137 @@ Function CheckServicePath ($ServiceEXE,$FolderToCheck)
   Return ([bool](@(wmic service | ?{$_ -ilike "*$ServiceEXE*"}) -ilike "*$FolderToCheck*"))
 }
 
+#Extract Files Early
+If ($RunningUnderChocolatey)
+{
+  If (Test-Path $ExtractFolder)
+  {
+    Remove-Item $ExtractFolder -Recurse -Force
+  }
+  Get-ChocolateyUnzip "$filename" $ExtractFolder
+}
+Else
+{
+  If (Test-Path "$toolsdir\7z.exe")
+  {
+    #covers nano
+    cd $toolsdir
+    start-process .\7z.exe -argumentlist "x `"$filename`" -o`"$ExtractFolder`" -aoa" -nonewwindow -wait
+  }
+  Else
+  {
+    Throw "You need a copy of 7z.exe next to this script for this operating system.  You can get a copy at 7-zip.org"
+  }
+}
+
+$SSHLsaNeedsUpdating = $false
+If (Test-Path "$env:windir\system32\ssh-lsa.dll")
+{
+  <#For future if file version number only updates when code updates
+  PSH 2.0 compatible, should handle ssh-lsa.dll versions that do not have a version resource as well
+  #handles when ssh-lsa.dll code is not actually changed, but version is updated (checking size does not)
+  $currentsshlsaversion = get-command $env:windir\system32\ssh-lsa.dll -erroraction SilentlyContinue | select -expand FileVersionInfo | select -expand FileVersion
+  $newsshlsaversion = get-command $TargetFolder\ssh-lsa.dll | select -expand FileVersionInfo | select -expand FileVersion
+  
+  If ([version]$currentsshlsaversion -lt [version]$newsshlsaversion)
+  { 
+    $SSHLsaNeedsUpdating = $true
+  }
+  #>
+  Write-Output "Assessing whether ssh-lsa.dll needs updating.  This is done based on FILE SIZE" 
+  Write-Output "because the version is revised on each update whether the code changes"
+  Write-Output " or not - yet the dll requires two reboots to update."
+  If (((get-item $env:windir\system32\ssh-lsa.dll).length) -ne ((get-item "$ExtractFolder\OpenSSH-Win$($OSBits)\ssh-lsa.dll").length))
+  {
+    $SSHLsaNeedsUpdating = $true
+    Write-Output "ssh-lsa.dll file size has changed, an update is required."
+  }
+  else 
+  {
+    Write-Output "ssh-lsa.dll file size has NOT changed, an update is NOT required."
+    Write-Warning "IMPORTANT: the ssh-lsa.dll file version will not change to the newer version number, but does not need updating."
+    Write-Warning "  This approach is used by the Chocolatey package because it takes two reboots to update ssh-lsa.dll."
+  }
+}
+Else
+{
+  $SSHLsaNeedsInitialCopy = $true
+}
+
+If ($SSHLsaNeedsUpdating)
+{
+  try
+  {
+    Remove-Item "$sys32dir\ssh-lsa.dll"
+  }
+  catch
+  {
+    #If ($_.exception -ilike "*used by another process*")
+    #{
+       $sshlsaisLocked = $true
+    #}
+  }
+
+  If ($sshlsaisLocked)
+  {
+    If ($ReleaseSSHLSAForUpgrade)
+    {
+      $AuthpkgToRemove = 'ssh-lsa'
+      foreach ($authpackage in (get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa').getvalue("authentication packages"))
+      {
+      If ($authpackage)
+        {
+          If ($authpackage -ine "$AuthpkgToRemove")
+          {
+            [string[]]$Newauthpackages += "$authpackage"
+          }
+        }
+      }
+      Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\" "Authentication Packages" $Newauthpackages
+      Write-Warning "ATTENTION:"
+      Write-Warning "   [a] ssh-lsa.dll needs to be updated" 
+      Write-Warning "   [b] and it was found to be locked"
+      Write-Warning "   [c] and the switch /ReleaseSSHLSAForUpgrade was used."
+      Write-Warning "   ssh-lsa has been deconfigured from loading under lsass.exe, you"
+      Write-Warning "   must now reboot to release it from lsass.exe and then re-run this"
+      Write-Warning "   package with the -force switch, after which you will need to reboot again to install the new version."
+      Write-Warning ""
+      Write-Warning "CRITCAL: AT THIS POINT KEY BASED AUTHENTICATION HAS BE DE-CONFIGURED AND WILL STOP WORKING"
+      Write-Warning "    AT THE NEXT REBOOT.  TO RESTORE IT YOU MUST REBOOT AND RERUN THIS PACKAGE."
+      Write-Warning ""
+      Write-Warning "   Full Help here: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md"
+      Exit 0
+    }
+    Else
+    {
+      Write-Warning ""
+      Write-Warning "EXITING - CRITICAL:"
+      Write-Warning "   This package includes an updated version of ssh-lsa.dll compared to the one you have on"
+      Write-Warning "    your system.  ssh-lsa.dll on your system is currently locked by the critical system "
+      Write-Warning "   process lsass.exe. (Terminating it will blue screen Windows) This situation will not be "
+      Write-Warning "   resolved by this run, if you wish to resolve it."
+      Write-Warning ""
+      Write-Warning "TWO OPTIONS FOR UPDATING:"
+      Write-Warning ""
+      Write-Warning "   OPTION 1: Re-run this package with the switch /ReleaseSSHLSAForUpgrade"
+      Write-Warning "   this package will release ssh-lsa.dll and exit.  Then you reboot, re-run this package"
+      Write-Warning "   with choco's -force switch and reboot again."
+      Write-Warning "   This option preserves your ssh configuration and server keys."
+      Write-Warning ""
+      Write-Warning "   OPTION 2: Uninstall this package with the command line "
+      Write-Warning "   'choco uninstall -y openssh -params '`"/SSHServerFeature /DeleteConfigurationAndServerKeys`"'"
+      Write-Warning "   Then you reboot, re-run this package.  One more reboot ensures the new version of"
+      Write-Warning "   ssh-lsa.dll is active."
+      Write-Warning "   This option DOES NOT preserve your ssh configuration and server keys."
+      Write-Warning ""
+      Write-Warning " PLEASE NOTE: STANDARD WINDOWS PENDINGFILERENAME SUPPORT DOES NOT WORK DUE TO HOW EARLY "
+      Write-Warning "     LSASS.EXE STARTS IN THE BOOT PROCESS"
+      Write-Warning ""
+      Write-Warning "   Full Help here: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md"
+      Throw "Special procedures are required to successfully update ssh-lsa.dll (key based authentication support), please see about chocolatey log statements for procedures."
+    }
+  }
+}
 
 If ($SSHServerFeature)
 {  #Check if anything is already listening on port $SSHServerPort, which is not a previous version of this software.
@@ -263,7 +406,6 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorActio
         Throw "Could not stop the ssh-agent service, please stop manually and retry this package."
       }
     }
-
 }
 
 If ($SSHServiceInstanceExistsAndIsOurs)
@@ -306,34 +448,6 @@ Else
   Write-Output "Source files are internal to the package, checksums are not required nor checked."
 }
 
-If ($RunningUnderChocolatey)
-{
-  If (Test-Path $ExtractFolder)
-  {
-    Remove-Item $ExtractFolder -Recurse -Force
-  }
-  Get-ChocolateyUnzip "$filename" $ExtractFolder
-  Install-ChocolateyPath "$TargetFolder" 'Machine'
-}
-Else
-{
-  If (Test-Path "$toolsdir\7z.exe")
-  {
-    #covers nano
-    cd $toolsdir
-    start-process .\7z.exe -argumentlist "x `"$filename`" -o`"$ExtractFolder`" -aoa" -nonewwindow -wait
-  }
-  Else
-  {
-    Throw "You need a copy of 7z.exe next to this script for this operating system.  You can get a copy at 7-zip.org"
-  }
-
-  If ($env:Path -inotlike "*$TargetFolder*")
-  {
-    Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'PATH' -Value "$env:Path;$TargetFolder"
-  }
-}
-
 $ExcludeParams = @{}
 If ((Test-Path "$TargetFolder\sshd_config") -AND !($OverWriteSSHDConf))
 {
@@ -342,22 +456,23 @@ If ((Test-Path "$TargetFolder\sshd_config") -AND !($OverWriteSSHDConf))
 }
 
 Copy-Item "$ExtractFolder\*" "$PF" @ExcludeParams -Force -Recurse
+Copy-Item "$toolsdir\Set-SSHKeyPermissions.ps1" "$TargetFolder" -Force
 If (!(Test-Path "$TargetFolder\Logs"))
 {
   New-Item "$TargetFolder\Logs" -ItemType Directory | out-null
 }
 Remove-Item "$ExtractFolder" -Force -Recurse
 
-$SSHLsaNeedsUpdating = $false
-If (Test-Path "$env:windir\system32\ssh-lsa.dll")
+If ($RunningUnderChocolatey)
 {
-  #Using file size because open ssh files are not currently versioned.  Submitted problem report asking for versioning to be done
-  If (((get-item $env:windir\system32\ssh-lsa.dll).length) -ne ((get-item $TargetFolder\ssh-lsa.dll).length))
-  {$SSHLsaNeedsUpdating = $true}
+  Install-ChocolateyPath "$TargetFolder" 'Machine'
 }
 Else
 {
-  $SSHLsaNeedsUpdating = $true
+  If ($env:Path -inotlike "*$TargetFolder*")
+  {
+    Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'PATH' -Value "$env:Path;$TargetFolder"
+  }
 }
 
 If ($SSHAgentFeature)
@@ -394,16 +509,8 @@ If ($SSHServerFeature)
   Write-Warning "You have specified SSHServerFeature - this machine is being configured as an SSH Server including opening port $SSHServerPort."
 
     Write-Warning "You have specified SSHServerFeature - a new lsa provider will be installed."
-    If (Test-Path "$env:windir\sysnative")
-    { #We are running in a 32-bit process under 64-bit Windows
-      $sys32dir = "$env:windir\sysnative"
-    }
-    Else
-    { #We are on a 32-bit OS, or 64-bit proc on 64-bit OS
-      $sys32dir = "$env:windir\system32"
-    }
 
-    If ($SSHLsaNeedsUpdating)
+    If ($SSHLsaNeedsUpdating -OR $SSHLsaNeedsInitialCopy)
     {
       . "$toolsdir\fileinuseutils.ps1"
       $CopyLSAResult = Copy-FileEvenIfLocked "$TargetFolder\ssh-lsa.dll" "$sys32dir\ssh-lsa.dll"
@@ -490,6 +597,8 @@ If ($SSHServerFeature)
   New-Service -Name sshd -BinaryPathName "$TargetFolder\sshd.exe" -Description "SSH Daemon" -StartupType Automatic -DependsOn ssh-agent | Out-Null
   sc.exe config sshd obj= "NT SERVICE\SSHD"
 
+  . "$TargetFolder\Set-SSHKeyPermissions.ps1"
+
   If (!$UseNTRights)
   {
     #The code in this .PS1 has been tested on Nano - the hardest case to date for setting special privileges in script
@@ -541,7 +650,7 @@ If ($SSHServerFeature)
     New-Item "$TargetFolder\KeysAddedToAgent.flg" -type File | out-null
   }
 
-  If ($SSHLsaNeedsUpdating)
+  If ($SSHLsaNeedsUpdating -OR $SSHLsaNeedsInitialCopy)
   {
     Write-Warning "IMPORTANT: You must reboot so that key based authentication can be fully installed or upgraded for the SSHD Service."
   }
@@ -560,7 +669,8 @@ If (Test-Path "$TargetFolder\ssh.exe")
 
 If (Test-Path "$env:windir\system32\ssh-lsa.dll") 
 {
-  Write-Output "`r`nNEW VERSION OF SSH-LSA.DLL (IF UPDATED WILL NOT REFLECT NEW VERSION UNTIL REBOOTED):"
+  Write-Output "`r`nCURRENT VERSION OF SSH-LSA.DLL (ONLY REQUIRES UPDATE IF FILE SIZE CHANGES, MUST UNINSTALL, REBOOT, REINSTALL AND REBOOT TO UPGRADE):"
+  Write-Output "`r`n  EXAMINE LOG ABOVE FOR MESSAGES AS TO WHETHER AN UPGRADE OF SSH-LSA.DLL IS ACTUALLY REQUIRED THIS TIME AROUND."
   Write-Output "$(get-command "$env:windir\system32\ssh-lsa.dll" | select -expand fileversioninfo | ft filename, fileversion -auto | out-string)"
 }
 

@@ -30,16 +30,14 @@ Uninstall (default is to install)
 #>
 
 Param (
-  [Parameter(HelpMessage="Include SSH Server Feature.")]
   [switch]$SSHServerFeature,
-  [Parameter(HelpMessage="Delete server private keys after they have been secured.")]
   [string]$SSHServerPort='22',
-  [Parameter(HelpMessage="Delete server private keys after they have been secured.")]
   [switch]$DeleteServerKeysAfterInstalled,
-  [Parameter(HelpMessage="Uninstall instead of Install (install is the default).")]
   [switch]$DeleteConfigAndServerKeys,
-  [Parameter(HelpMessage="Delete server private keys and configuration upon uninstall.")]
-  [switch]$Uninstall
+  [switch]$Uninstall,
+  [switch]$OverWriteSSHDConf,
+  [string]$SSHLogLevel,
+  [switch]$ReleaseSSHLSAForUpgrade
   )
 
 Write-Output "Configuring on Port $SSHServerPort"

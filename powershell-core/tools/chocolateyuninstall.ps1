@@ -1,7 +1,10 @@
 $ErrorActionPreference = 'Stop';
 
 $packageName = 'powershell-core'
-$Version = '6.0.0.17'
+$VersionMaj = '6.0.0'
+$versionMinor = '18'
+$Version = "$VersionMaj.$versionMinor"
+$PFSubfolder = "$VersionMaj-alpha.$versionMinor"
 $softwareName = 'powershell_6*'
 $installerType = 'MSI'
 $InstallFolder = "$env:ProgramFiles\PowerShell\$Version"

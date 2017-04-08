@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>powershell-core</id>
-    <version>6.0.0-alpha17</version>
+    <version>6.0.0-alpha18</version>
     <packageSourceUrl>https://github.com/darwinjs/chocopackages/powershell-core</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>powershell-core (Install)</title>
@@ -18,9 +18,10 @@
     <tags>powershell-core admin</tags>
     <summary>PowerShell Core is the multiplatform version of PowerShell</summary>
     <description>PowerShell Core is the multiplatform version of PowerShell</description>
-    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.0.0-alpha.17
+    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.0.0-alpha.18
     Package release Notes:
-    Alpha 16 - nothing new
+    Alpha 18 - nothing new
+    Alpha 17 - nothing new
     Alpha 16 - nothing new
     Alpha 15 - nothing new
     Alpha 14 - package creates desktop shortcut, console warning

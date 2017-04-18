@@ -49,15 +49,16 @@ $filename = "$toolsdir\OpenSSH-Win$($OSBits).zip"
 #$TargetFolderOld = "$PF\OpenSSH-Win$($OSBits)"
 $TargetFolder = "$PF\OpenSSH-Win$($OSBits)"
 $ExtractFolder = "$env:temp\OpenSSHTemp"
+$SSHLSAFeaturesDisabled = $True
 
 $packageArgs = @{
   packageName   = 'openssh'
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = 'ADCA58224F9C3B7A1F8C5F2EA44C54EC821A7180'
+  checksum      = 'F90BA5EF06F0BCB54A261A80634C52090042CE13'
   checksumType  = 'SHA1'
-  checksum64    = '8AE95AA97AA06B5AC259366004B3111F47AD471F'
+  checksum64    = '655A69B9E1BC9D6128925634FC1BF6DE58316ACB'
   checksumType64= 'SHA1'
 }
 
@@ -203,6 +204,37 @@ Else
   }
 }
 
+If (($SSHLSAFeaturesDisabled) -AND (Test-Path "$env:windir\system32\ssh-lsa.dll"))
+{
+  try
+  {
+    Remove-Item "$sys32dir\ssh-lsa.dll"
+    Write-warning "ssh-lsa.dll was deleted as it is no longer needed."
+  }
+  catch
+  {
+    $sshlsaisLocked = $true
+    Write-warning "ssh-lsa.dll is no longer required for ssh functionality, releasing the existing ssh-lsa.dll from lsass.exe."
+    Write-warning "It can be manually delete after a reboot or it will be automatically removed the next time you upgrade openssh with this script."
+    Write-warning "You must reboot to release ssh-lsa.dll"
+  
+    $AuthpkgToRemove = 'ssh-lsa'
+    foreach ($authpackage in (get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa').getvalue("authentication packages"))
+    {
+    If ($authpackage)
+      {
+        If ($authpackage -ine "$AuthpkgToRemove")
+        {
+          [string[]]$Newauthpackages += "$authpackage"
+        }
+      }
+    }
+    Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\" "Authentication Packages" $Newauthpackages
+  }
+}
+
+If (!$SSHLSAFeaturesDisabled)
+{
 $SSHLsaNeedsUpdating = $false
 If (Test-Path "$env:windir\system32\ssh-lsa.dll")
 {
@@ -311,6 +343,7 @@ If ($SSHLsaNeedsUpdating)
     }
   }
 }
+}
 
 If ($SSHServerFeature)
 {  #Check if anything is already listening on port $SSHServerPort, which is not a previous version of this software.
@@ -378,7 +411,7 @@ If ([bool](get-process ssh -erroraction silentlycontinue | where {$_.Path -ilike
 If ((Test-Path $TargetFolder) -AND (@(dir "$TargetFolder\*.exe").count -gt 0)) 
 {
   Write-Output "`r`nCURRENT VERSIONS OF SSH EXES:"
-  Write-Output "$(dir "$TargetFolder\*.exe"| get-command | select -expand fileversioninfo | ft filename, fileversion -auto | out-string)"
+    Write-Output "$(dir "$TargetFolder\*.exe"| select -expand fullname | get-command | select -expand fileversioninfo | ft filename, fileversion -auto | out-string)"
 }
 
 If (Test-Path "$env:windir\system32\ssh-lsa.dll") 
@@ -508,26 +541,28 @@ If ($SSHServerFeature)
 {
   Write-Warning "You have specified SSHServerFeature - this machine is being configured as an SSH Server including opening port $SSHServerPort."
 
-    Write-Warning "You have specified SSHServerFeature - a new lsa provider will be installed."
+    If (!$SSHLSAFeaturesDisabled)
+    {
+      Write-Warning "You have specified SSHServerFeature - a new lsa provider will be installed."
+      If ($SSHLsaNeedsUpdating -OR $SSHLsaNeedsInitialCopy)
+      {
+        . "$toolsdir\fileinuseutils.ps1"
+        $CopyLSAResult = Copy-FileEvenIfLocked "$TargetFolder\ssh-lsa.dll" "$sys32dir\ssh-lsa.dll"
+      }
 
-    If ($SSHLsaNeedsUpdating -OR $SSHLsaNeedsInitialCopy)
-    {
-      . "$toolsdir\fileinuseutils.ps1"
-      $CopyLSAResult = Copy-FileEvenIfLocked "$TargetFolder\ssh-lsa.dll" "$sys32dir\ssh-lsa.dll"
-    }
-
-    #Don't destroy other values
-    $key = get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa'
-    $values = $key.GetValue("Authentication Packages")
-    If (!($Values -contains 'ssh-lsa'))
-    {
-      Write-Output "Adding ssh-lsa to authentication packages..."
-      $values += 'ssh-lsa'
-      Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\" "Authentication Packages" $values
-    }
-    Else
-    {
-      Write-Output "ssh-lsa already configured in authentication packages..."
+      #Don't destroy other values
+      $key = get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa'
+      $values = $key.GetValue("Authentication Packages")
+      If (!($Values -contains 'ssh-lsa'))
+      {
+        Write-Output "Adding ssh-lsa to authentication packages..."
+        $values += 'ssh-lsa'
+        Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\" "Authentication Packages" $values
+      }
+      Else
+      {
+        Write-Output "ssh-lsa already configured in authentication packages..."
+      }
     }
 
   If((Test-Path "$TargetFolder\sshd_config"))
@@ -649,7 +684,9 @@ If ($SSHServerFeature)
 
     New-Item "$TargetFolder\KeysAddedToAgent.flg" -type File | out-null
   }
-
+  
+  If (!$SSHLSAFeaturesDisabled)
+  {
   If ($SSHLsaNeedsUpdating -OR $SSHLsaNeedsInitialCopy)
   {
     Write-Warning "IMPORTANT: You must reboot so that key based authentication can be fully installed or upgraded for the SSHD Service."
@@ -658,20 +695,31 @@ If ($SSHServerFeature)
   {
     Write-Warning "CRITICAL: ssh-lsa.dll was updated - a reboot required to fully activate it."
   }
+  }
 
 }
 
 If (Test-Path "$TargetFolder\ssh.exe") 
 {
   Write-Output "`r`nNEW VERSIONS OF SSH EXES:"
-  Write-Output "$(dir "$TargetFolder\*.exe"| get-command | select -expand fileversioninfo | ft filename, fileversion -auto | out-string)"
+  Write-Output "$(dir "$TargetFolder\*.exe" | select -expand fullname | get-command | select -expand fileversioninfo | ft filename, fileversion -auto | out-string)"
 }
 
+If (!$SSHLSAFeaturesDisabled)
+{
 If (Test-Path "$env:windir\system32\ssh-lsa.dll") 
 {
   Write-Output "`r`nCURRENT VERSION OF SSH-LSA.DLL (ONLY REQUIRES UPDATE IF FILE SIZE CHANGES, MUST UNINSTALL, REBOOT, REINSTALL AND REBOOT TO UPGRADE):"
   Write-Output "`r`n  EXAMINE LOG ABOVE FOR MESSAGES AS TO WHETHER AN UPGRADE OF SSH-LSA.DLL IS ACTUALLY REQUIRED THIS TIME AROUND."
   Write-Output "$(get-command "$env:windir\system32\ssh-lsa.dll" | select -expand fileversioninfo | ft filename, fileversion -auto | out-string)"
 }
+}
 
+If ($sshlsaisLocked)
+{
+  write-output ""
+  Write-warning " YOU MUST REBOOT TO COMPLETELY REMOVE SSH-LSA.DLL FROM MEMORY AS IT IS NOT USED BY THIS VERSION OF OPENSSH"
+}
+
+write-output ""
 Write-Warning "You must start a new prompt, or use the command 'refreshenv' (provided by your chocolatey install) to re-read the environment for the tools to be available in this shell session."

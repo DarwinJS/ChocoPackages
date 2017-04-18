@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Microsoft Port)</title>
-    <version>0.0.11.0</version>
+    <version>0.0.12.0</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -89,13 +89,16 @@
       Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.11.0
 
       Release Notes for Chocolatey Packaging:
+      0.0.12.0
+        - ssh-lsa.dll is no longer needed and no longer configured (switch /ReleaseSSHLSAForUpgrade is ignored)
+        - if ssh-lsa.dll is found during upgrade a delete attempt is made - if unsuccessful (file locked), ssh-lsa.dll 
+          will be deconfigured as an authentication package and it will be delete on the next upgrade.
       0.0.11.0
         - /ReleaseSSHLSAForUpgrade - switch that de-configures ssh-lsa.dll in preparation for updating it after a reboot and forced reinstall (and another reboot).  See: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
         - Set-SSHKeyPermissions.ps1 - new utility for setting permissions on all existing user's authorized_keys files is placed in SSHD binaries folder (on path)
         - Calls Set-SSHKeyPermissions.ps1 during install to ensure existing keys are compliant with security updates in SSH 0.0.11.0
         - Fix - uninstall was not deconfiguring ssh-lsa.dll from load at startup.
         - updated barebonesinstaller.ps1 to take all switches chocolatey takes
-
       0.0.10.20170402
         - fix to looking versions of installed exes for PSH 2
       0.0.10.20170331

@@ -1,3 +1,6 @@
+# The Universal Openssh Installer
+## Chocolatey NOT REQUIRED
+Yes you read that right - although packaged as a chocolatey .nupkg, this installer and it's helper scripts can install completely without Chocolatey in situations where it can't be used (Nano) or you are not allowed to use it.
 
 - [The Universal Openssh Installer](#the-universal-openssh-installer)
     - [Chocolatey NOT REQUIRED](#chocolatey-not-required)
@@ -22,9 +25,6 @@
 - [Utility Script Set-SSHKeyPermissions.ps1](#utility-script-set-sshkeypermissions-ps1)
 - [Ancient Version History](#ancient-version-history)
 
-# The Universal Openssh Installer
-## Chocolatey NOT REQUIRED
-Yes you read that right - although packaged as a chocolatey .nupkg, this installer and it's helper scripts can install completely without Chocolatey in situations where it can't be used (Nano) or you are not allowed to use it.
 
 ## Tested On
 * Nano RTM (PSH 5 & PackageManagement & no 32-bit)

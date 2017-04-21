@@ -1,7 +1,6 @@
-# The Universal Openssh Installer
 
 - [The Universal Openssh Installer](#the-universal-openssh-installer)
-- [Overview](#overview)
+    - [Chocolatey NOT REQUIRED](#chocolatey-not-required)
     - [Tested On](#tested-on)
     - [NO RESTRICTIONS](#no-restrictions)
 - [Design of this package:](#design-of-this-package)
@@ -23,7 +22,10 @@
 - [Utility Script Set-SSHKeyPermissions.ps1](#utility-script-set-sshkeypermissions-ps1)
 - [Ancient Version History](#ancient-version-history)
 
-# Overview
+# The Universal Openssh Installer
+## Chocolatey NOT REQUIRED
+Yes you read that right - although packaged as a chocolatey .nupkg, this installer and it's helper scripts can install completely without Chocolatey in situations where it can't be used (Nano) or you are not allowed to use it.
+
 ## Tested On
 * Nano RTM (PSH 5 & PackageManagement & no 32-bit)
 * Server 2012 R2 (PSH 4)
@@ -32,7 +34,6 @@
 
 ## NO RESTRICTIONS
 Other installation methods may require one or more of the following that are NOT required for this universal installer
-* **NOT REQUIRED: Chocolatey** - yes you read that right - although packaged as a chocolatey .nupkg, this installer and it's helper scripts can install completely without Chocolatey in situations where it can't be used (Nano) or you are not allowed to use it.
 * **NOT REQUIRED: 32-bit Subsystem (WOW64)** - some installers utilize 32-bit utilities like psexec.exe or ntrights.exe
 * **NOT REQUIRED: Full .NET** - some installers use CMDLets beyond those in .NET COre
 * **NOT REQUIRED: Internet Access** - some installers source everything from public repositories - download everything you need to on-premises.

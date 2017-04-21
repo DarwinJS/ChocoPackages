@@ -1,15 +1,53 @@
+# The Universal Openssh Installer
+
+- [The Universal Openssh Installer](#the-universal-openssh-installer)
+- [Overview](#overview)
+    - [Tested On](#tested-on)
+    - [NO RESTRICTIONS](#no-restrictions)
+- [Design of this package:](#design-of-this-package)
+- [Install Scenario 1: Chocolatey Already Installed](#install-scenario-1-chocolatey-already-installed)
+- [Install Scenario 1b: Auto-Install Chocolatey to Install OpenSSH](#install-scenario-1b-auto-install-chocolatey-to-install-openssh)
+- [Install Scenario 2: Non-Chocolatey Using PSH 5 PackageManagement](#install-scenario-2-non-chocolatey-using-psh-5-packagemanagement)
+- [Install Scenario 3: Docker](#install-scenario-3-docker)
+    - [Pre-made Docker Files:](#pre-made-docker-files)
+- [Install Scenario 4: Complete Offline Install (w/out Chocolatey, w/out WOW64, w/out PowerShell 5, w/out Internet):](#install-scenario-4-complete-offline-install-w-out-chocolatey-w-out-wow64-w-out-powershell-5-w-out-internet)
+- [Package Parameters](#package-parameters)
+    - [-params '"/SSHServerFeature"' (Install and Uninstall)](#params-sshserverfeature-install-and-uninstall)
+    - [-params '"/SSHAgentFeature"'](#params-sshagentfeature)
+    - [-params '"/SSHServerFeature /SSHServerPort:3834"'](#params-sshserverfeature-sshserverport-3834)
+    - [-params '"/OverWriteSSHDConf"'](#params-overwritesshdconf)
+    - [-params '"/SSHLogLevel:VERBOSE"'](#params-sshloglevel-verbose)
+    - [-params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'](#params-sshserverfeature-deleteserverkeysafterinstalled)
+    - [-params '"/DeleteConfigAndServerKeys"' (during uninstall command)](#params-deleteconfigandserverkeys-during-uninstall-command)
+    - [-params '"/UseNTRights"'](#params-usentrights)
+- [Utility Script Set-SSHKeyPermissions.ps1](#utility-script-set-sshkeypermissions-ps1)
+- [Ancient Version History](#ancient-version-history)
 
 # Overview
-Tested On:
-* Nano RTM
-* Server 2012 R2
-* Windows 10 Anniversary (resolvable clashes with Linux extensions are detected and noted by the installer)
-* Windows 7 x64
+## Tested On
+* Nano RTM (PSH 5 & PackageManagement & no 32-bit)
+* Server 2012 R2 (PSH 4)
+* Windows 10 Anniversary (PSH 5, Chocolatey)
+* Windows 7 x64 (PSH 2, Chocolatey)
+
+## NO RESTRICTIONS
+Other installation methods may require one or more of the following that are NOT required for this universal installer
+* **NOT REQUIRED: Chocolatey** - yes you read that right - although packaged as a chocolatey .nupkg, this installer and it's helper scripts can install completely without Chocolatey in situations where it can't be used (Nano) or you are not allowed to use it.
+* **NOT REQUIRED: 32-bit Subsystem (WOW64)** - some installers utilize 32-bit utilities like psexec.exe or ntrights.exe
+* **NOT REQUIRED: Full .NET** - some installers use CMDLets beyond those in .NET COre
+* **NOT REQUIRED: Internet Access** - some installers source everything from public repositories - download everything you need to on-premises.
+* **NOT REQUIRED: PowerShell Newer Than Version 2.0** - some installers use CMDlets in newer versions or using syntax that only works in 3.0 or later.
+* **NOT REQUIRED: Manual Fussing for Upgrades** - most installers presume a first time  install on a clean system - this universal installer knows when it is doing an upgrade.
+* **ENABLED: Docker** - Docker is supported and Dockerfiles are provided in this repo.
+* **ENABLED: Detects OS bitness** (32 or 64) and installs appropriate version.
+* **ENABLED: Uninstaller** - cleanly uninstalls.
+* **ENABLED: Checks for Port Conflicts**
+* **ENABLED: Advanced Configuration Switches** - allows changing the SSHD port, installing only client tools, changing the logging level, overwriting SSH_CONF to reset configuration.
 
 # Design of this package:
 1. Source files are internal - making it easier to curate the package into your
 own private repository and to use offline.
-2. It can be used to install on machines that do not have Chocolatey (Nano TP5)
+2. It can be used to install on machines that do not (or cannot) have Chocolatey (Nano)
 nor WOW64 (ServerCore w/out WOW64 installed) - see the instructions later in this
 document.
 3. It can be used to install when target machine being built has no internet access.
@@ -17,46 +55,42 @@ document.
 openssh all in one command line - see later in this document.
 5. It can be used to install SSH under docker.
 
-## Utility Script Set-SSHKeyPermissions.ps1
-Set-SSHKeyPermissions.ps1 is copied to the SSHD bin folder so that it can be called during install, at any time after install or in a scheduled task.  It sets read permissions for the SSHD service on all "authorized_keys" files found in any user profile folder.
+# Install Scenario 1: Chocolatey Already Installed
 
-## ssh-lsa.dll Challenges 
-Solutions tested on Win 7 w/ PSH 2.0 and Nano Server.
-Works with Chocolatey Package and BareBonesInstaller (Nano and non-chocolatey)
+**Steps**: [1] Fetch from Internet (Chocolatey), [2] Unpack (Chocolatey), [3] Install (Chocolatey)
 
-### Challenge 1: ssh-lsa.dll requires two reboots to upgrade
-ssh-lsa.dll is loaded by lsass.exe (local security account sub-system).  lsass.exe loads so early in the boot process that Windows normal "replace locked files on reboot" support is ineffective (registry key PendingFileRenameOperations).
+If you have chocolatey installed, then just issue either of these commands to install or upgrade:
+`choco install openssh -y`
+`choco upgrade openssh -y`
 
-Consequently the install process must be:
-1. Deconfigure ssh-lsa.dll from loading.
-2. Reboot to restart lsass.exe without ssh-lsa.dll locked.
-3. Run a forced install (because the first run to release ssh-lsa looks like it was a completed install).
-4. Reboot to load ssh-lsa.dll.
+# Install Scenario 1b: Auto-Install Chocolatey to Install OpenSSH
 
-### Solution 1: Package Support for double reboot scenario
-The chocolatey package and barebones installer support this sequence like this:
-1. If [a] you run: `choco upgrade openssh -y -params '"/SSHServerFeature"'`, and [b] ssh-lsa.dll needs an upgrade, and [c] it is currently locked - you will receive an error that outlines the next steps. [or `barebones.ps1 -SSHServerFeature`] (if ssh-lsa.dll is not locked or not present, the switch is IGNORED and a regular upgrade happens)
-2. Instead, run: `choco upgrade openssh -y -params '"/SSHServerFeature /ReleaseSSHLSAForUpgrade"'` - ssh-lsa.dll will be deconfigured and NOTHING ELSE will be done. [or `barebones.ps1 -SSHServerFeature -ReleaseSSHLSAForUpgrade`]
-3. Restart / Reboot the computer to release the lock on ssh-lsa.dll
-4. You run: `choco install -force openssh -y -params '"/SSHServerFeature"'` - now that ssh-lsa.dll is not locked (script detects this), the upgrade will proceed.  NOTE: the command has changed to `choco install` and uses the `-force` switch. [or `barebones.ps1 -SSHServerFeature`]
-5. Restart / Reboot the computer to ensure ssh-lsa.dll is loaded - key based authentication will not work until you do.
+**Steps**: [0] Installs Chocolatey (kicker script), [1] Fetch from Internet (Chocolatey), [2] Unpack (Chocolatey), [3] Install (Chocolatey)
 
-IMPORTANT: /ReleaseSSHLSAForUpgrade is IGNORED if ssh-lsa is NOT actually locked.  So you could technically use it in both above install command lines and it would be safely ignored the second time through.
+A oneliner pulled from the web which installs chocolatey in order to install the OpenSSH package:
+`iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_openssh_with_server.ps1'))`
+Include the Server Feature:
+`iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_openssh_with_server.ps1'))`
 
-### Challenge 2: ssh-lsa.dll version number changes even when the code does not.
-This wouldn't be a big deal if we didn't have to deal with the problems just described in Challenge 1.  
+1. Open an ELEVATED PowerShell Prompt
+2. Paste this command into the console (get the whole line - it's long and is a single line):
+```powershell
+   iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_win32-openssh_with_server.ps1'))
+```
 
-### Solution 2: Use DLL Size NOT Version number to determine when to upgrade
-Due to this fact, these install scripts only try to upgrade ssh-lsa.dll if THE FILE SIZE CHANGES - indicating an actual change in the dll code.  This means you only take in the double-reboot procedure when the code changes - not everytime just because the version of the dll changes.  
+# Install Scenario 2: Non-Chocolatey Using PSH 5 PackageManagement
 
-As a result, over multiple upgrades using the Chocolatey package it is likely that your ssh-lsa.dll will be an older version because the size has not changed for serveral releases.
+This works for Nano and anything else that has PSH 5 where you can't install Chocolatey (Nano) or are not allowed by company policy to install chocolatey.  It also works on Nano RTM first boot (without windows update invoke-webrequest is broken)
 
-We are trying to keep an updated history of the dll size and version here (the behavior of the script is to dynamically compare current dll size to one that is in the current package): https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/history-of-ssh-lsa-dll.md
-
-## Installing on Nano Over the Wire w/out Chocolatey Nor .NET Core Installed (should work for Server 2016 as well)
+**Steps**: [1] Fetch from Internet (PSH 5 PackageManagement), [2] Unpack (PSH 5 PackageManagement), [3] Install (run installbarebones.ps1)
 
 **Requirements:** PowerShell 5 for the PackageManagement Provider
-**Works On:** Nano TP5
+**Works On:** Nano
+
+**IMPORTANT**: The "Chocolatey" Provider for PowerShell 5 PackageManagement is still not fully functional nor reliable - so all methods in this guide that rely on PackageManagement utilize the NuGet provider instead.  In addition, the NuGet provider is required for the most basic PackageManagement operations - so even if you choose not to implement the Chocolatey PackageManagement provider when it is production ready - these methods will still work.
+
+Oneliner premade script that does the below: 
+`iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_win32-openssh_with_serverPS5.ps1'))`
 
 1. Open a command line on the target (remoting for Nano) and run:
 2. Install-PackageProvider NuGet -forcebootstrap -force
@@ -68,34 +102,37 @@ We are trying to keep an updated history of the dll size and version here (the b
 8. .".\barebonesinstaller.ps1" -SSHServerFeature -SSHServerPort '5555' #SSH Server on port 5555 (& client tools)
 9. .".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall #Uninstall
 
-## Complete Offline Install (w/out Chocolatey, Nor WOW64, Nor PowerShell 5):
+# Install Scenario 3: Docker
+
+The Dockerfile in this repository is really a variation on the immediately above scenario.  Since only Windows 2016 supports containers and it also has PSH 5 PackageMangement, we can utilize the PackageManagement scenario in a docker file for both Server 2016 Containers and Nano Containers.
+
+**Steps**: (All done in a Dockerfile )[1] Fetch from Internet (PSH 5 PackageManagement), [2] Unpack (PSH 5 PackageManagement), [3] Install (run installbarebones.ps1)
+
+**Requirements:** PowerShell 5 for the PackageManagement Provider
+**Works On:** Nano Containers, Server 2016 Containers
+
+## Pre-made Docker Files:
+
+**Nano Container:**
+https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/Dockerfile
+
+**Server 2016 Core Container:**
+https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/DockerServer2016Core/Dockerfile
+
+# Install Scenario 4: Complete Offline Install (w/out Chocolatey, w/out WOW64, w/out PowerShell 5, w/out Internet):
+This works for any version of Windows that OpenSSH can run on.  It also works in non-internet scenarios as well
+
+**Requirements:** Windows 7 SP1 / Server 2008 w/ PowerShell 2
+**Works On:** Anything from Windows 7 and later, PSH 2 and later
+
+**Steps**: [1] Fetch from Internet (manual by human), [2] Unpack (unzip util - manual or automated), [3] Install (run installbarebones.ps1)
+
 1. Expand the openssh .nupkg (rename it to .zip and use your favorite unzipper)
 2. Push the ..\tools folder to the target system (use Copy-Item -ToSession for Nano)
 3. CD to "..\tools"
 4. To install only client tools, run '.\barebonesinstaller.ps1'
 5. To install client tools and Server, run '.\barebonesinstaller.ps1 -SSHServerFeature'
 6. To uninstall, run '.\barebonesinstaller.ps1 -SSHServerFeature -Uninstall'
-
-## Automatically Installing Chocolatey and Then Win32-OpenSSH in one shot:
-
-### With SSH Server Install
-1. Open an ELEVATED PowerShell Prompt
-2. Paste this command into the console (get the whole line - it's long and is a single line):
-```powershell
-   [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_win32-openssh_with_server.ps1'))
-```
-
-### Only Client Tools:
-**Note**: Server EXEs are still placed on machine, but not configured
-
-1. Open an ELEVATED PowerShell Prompt
-2. Paste this command into the console (get the whole line - it's long and is a single line):
-```powershell
-   [System.Net.ServicePointManager]::ServerCertificateValidationCallback = {[bool]1};set-executionpolicy RemoteSigned -Force -EA 'SilentlyContinue';iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_win32-openssh.ps1'))
-```
-
-## Installing Using Docker (Dockerfile)
-A sample docker file for Server Core 2016 or NanoServer is here: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/Dockerfile
 
 # Package Parameters
 
@@ -114,6 +151,17 @@ This option is automatically set when /SSHServerFeature is used.
 ## -params '"/SSHServerFeature /SSHServerPort:3834"'
 Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.
 
+## -params '"/OverWriteSSHDConf"'
+Introduced in Version: 0.0.9.20170311
+By default an existing sshd_conf file will not be overwritten (previous packaging versions always overwrote)
+Use this switch to overwrite an existing sshd_conf with the one from the current install media
+
+## -params '"/SSHLogLevel:VERBOSE"'
+Introduced in Version: 0.0.9.20170311
+Allows the setup of the SSH logging level.
+Valid Options: QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, DEBUG3
+On a fresh install LogLevel is set to QUIET
+
 ## -params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'
 When installing the server, server keys are deleted after added to the ssh-agent (you will not have an opportunity to copy them).
 
@@ -129,7 +177,11 @@ affect Server Core where this feature is optional and not installed by default a
 **Note:** If you have tested and this switch is *absolutely required* for your deployment scenario, please file an issue so that I can enhance the code so that
 this switch is not needed for your scenario.
 
-## Ancient Version History
+
+# Utility Script Set-SSHKeyPermissions.ps1
+Set-SSHKeyPermissions.ps1 is copied to the SSHD bin folder so that it can be called during install, at any time after install or in a scheduled task.  It sets read permissions for the SSHD service on all "authorized_keys" files found in any user profile folder.
+
+# Ancient Version History
 
 0.0.3.0
 - NEW: If ssh-lsa.dll is locked at install time, package schedules it to be updated at reboot

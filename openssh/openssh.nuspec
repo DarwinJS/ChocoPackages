@@ -16,18 +16,8 @@
       CloudyWindows.com Utility Scripts:
       * Set-SSHKeyPermissions.ps1
 
-      This package performs the following operations that you normally have to hack at until you get what you want:
-      * Install Appropriate Bitness for the version of Windows
-      * Install to Program Files (malware protection and following advice of dev team)
-      * Add SSH location to System PATH
-      * Optionally install sshd windows service (Requires parameter - see below)
-      * Cleanly uninstall all of the above (removing config files and server keys requires special switch - see below)
-
-      The package also attempts to keep you out of trouble when configuring the sshd service:
-        * Will not install sshd server if an different sshd server is already running
-        * Will not delete server keys on uninstall or reinstall (unless you override with switch below)
-        * Will not upgrade or uninstall if the service is running and you did not specify /SSHServerFeature (you forget about the service on a machine where you want to upgrade the client tools)
-        * If you use the server's Key Based Authentication feature, install and uninstall behave differently to account for the integration of this component
+      This package is actually a universal installer that can install in any scenario - including without Chocolatey.
+      Read here for more information: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
 
       This package supports the following parameters:
 
@@ -42,12 +32,6 @@
       Installs SSH Agent Service even if SSHD Server is not being installed.
       Requires admin rights to configure service.
       This option is automatically set when /SSHServerFeature is used.
-
-      -params '"/SSHAgentFeature /ReleaseSSHLSAForUpgrade"'
-      If ssh-lsa.dll is locked, this switch de-configures ssh-lsa.dll from loading on bootup.
-      You then must reboot and re-run the package -force to install the new version of ssh-lsa.dll.
-      A second reboot will be required in order to make the new version active.
-      See: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
 
       -params '"/SSHServerFeature /SSHServerPort:3834"'
       Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.

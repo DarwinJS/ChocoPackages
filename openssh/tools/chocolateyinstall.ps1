@@ -78,9 +78,13 @@ If ($RunningUnderChocolatey)
 $OpeningMessage = @"
 
 ************************************************************************************
-This package can ALSO install Win32-OpenSSH on Nano and Server Core and Docker Containers
-without requiring Chocolatey to be installed.  See the following for details:
+************************************************************************************
+This package is a Universal Installer and can ALSO install Win32-OpenSSH on 
+Nano, Server Core, Docker Containers and more WITHOUT using Chocolatey.
+
+See the following for more details:
 https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
+************************************************************************************
 ************************************************************************************
 
 "@

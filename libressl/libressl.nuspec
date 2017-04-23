@@ -8,7 +8,7 @@
     <title>libressl (Install)</title>
     <authors>OpenBSD Foundation</authors>
     <projectUrl>https://www.libressl.org/</projectUrl>
-    <iconUrl>http://cdn.rawgit.com/__REPLACE_YOUR_REPO__/master/icons/libressl.png</iconUrl>
+    <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/bc5e3d4b/libressl/appicon.jpg</iconUrl>
     <copyright>2017 OpenBSD</copyright>
     <licenseUrl>https://github.com/libressl/libressl/blob/master/src/LICENSE</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -48,7 +48,7 @@
         LibreSSL will be installed to your custom location and this location
         will be added to the system path.
         If you use this option a clean uninstall will NOT be possible because
-        the custom install location is not persisted.
+        the custom install location is not remembered by the package.
     
     </description>
     <releaseNotes>Product Release Notes: https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.5.3-relnotes.txt</releaseNotes>

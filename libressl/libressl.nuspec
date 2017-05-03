@@ -26,8 +26,8 @@
 
         If neither none of the install folder parameters is  used, this install will 
         perform a a regular Chocolatey "portable install"" where the exes in the package 
-        are placed in a special chocolatey folder and the system and shim EXES are 
-        created in Chocolatey's bin folder and available immediately on the path.
+        are placed in a special chocolatey folder and shim EXEs are created in 
+        Chocolatey's bin folder, making them immediately available on the path.
 
         -params '"/ProgramFilesInstall"'
         [OPTIONAL]

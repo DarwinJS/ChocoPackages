@@ -32,13 +32,15 @@ Yes you read that right - although packaged as a chocolatey .nupkg, this install
 * Windows 10 Anniversary (PSH 5, Chocolatey)
 * Windows 7 x64 (PSH 2, Chocolatey)
 
-## NO RESTRICTIONS
+## NO RESTRICTIONS, ENHANCED FUNCTIONALITY
 Other installation methods may require one or more of the following that are NOT required for this universal installer
 * **NOT REQUIRED: 32-bit Subsystem (WOW64)** - some installers utilize 32-bit utilities like psexec.exe or ntrights.exe
 * **NOT REQUIRED: Full .NET** - some installers use CMDLets beyond those in .NET COre
 * **NOT REQUIRED: Internet Access** - some installers source everything from public repositories - download everything you need to on-premises.
 * **NOT REQUIRED: PowerShell Newer Than Version 2.0** - some installers use CMDlets in newer versions or using syntax that only works in 3.0 or later.
 * **NOT REQUIRED: Manual Fussing for Upgrades** - most installers presume a first time  install on a clean system - this universal installer knows when it is doing an upgrade.
+* **NOT REQUIRED: Chocolatey Itself** - for scenarios where it cannot or should not be installed.
+* **NOT REQUIRED: PSH 5 PackageManagement** - for scenarios where PSH 5 is not currently installed.
 * **ENABLED: Docker** - Docker is supported and Dockerfiles are provided in this repo.
 * **ENABLED: Detects OS bitness** (32 or 64) and installs appropriate version.
 * **ENABLED: Uninstaller** - cleanly uninstalls.

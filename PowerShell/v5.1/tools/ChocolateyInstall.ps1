@@ -55,13 +55,14 @@ $osversionLookup = @{
 }
 
 function Install-PowerShell5([string]$urlx86, [string]$urlx64 = $null, [string]$checksumx86 = $null,[string]$checksumx64 = $null) {
+    $MinimumNet4Version = 378389
     $Net4Version = (get-itemproperty "hklm:software\microsoft\net framework setup\ndp\v4\full" -ea silentlycontinue | Select -Expand Release -ea silentlycontinue)
-    if ($Net4Version -ge 378389) {
+    if ($Net4Version -ge $MinimumNet4Version) {
         Install-ChocolateyPackage "$packageName" "$installerType" "$silentArgs" -url $urlx86 -url64 $urlx64 -checksum $checksumx86 -ChecksumType $ChecksumType -checksum64 $checksumx64 -ChecksumType64 $ChecksumType -validExitCodes $validExitCodes
         Write-Warning "$packageName requires a reboot to complete the installation."
     }
     else {
-        throw ".NET Framework 4.5.2 or later required.  Use package named `"dotnet4.5`"."
+        throw ".NET Framework 4.5.2 or later required.  Use package named `"dotnet4.5` to upgrade.  Your .NET Release is `"$MinimumNet4Version`" but needs to be at least `"$MinimumNet4Version`"."
     }
 }
 
@@ -104,10 +105,11 @@ try
             }
             "Win7 SP1/2008R2 SP1" {
                 #Special Procedures for WMF 5.1
+                $MinimumNet4Version = 378389
                 $Net4Version = (get-itemproperty "hklm:software\microsoft\net framework setup\ndp\v4\full" -ea silentlycontinue | Select -Expand Release -ea silentlycontinue)
-                if ($Net4Version -lt 378758)
+                if ($Net4Version -lt $MinimumNet4Version)
                 {
-                  throw ".NET Framework 4.5.2 or later required.  Use package named `"dotnet4.5`"."
+                  throw ".NET Framework 4.5.2 or later required.  Use package named `"dotnet4.5` to upgrade.  Your .NET Release is `"$MinimumNet4Version`" but needs to be at least `"$MinimumNet4Version`"."
                 }
                 Else
                 {

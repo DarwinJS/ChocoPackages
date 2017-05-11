@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>PowerShell</id>
-    <version>5.1.14409.20170402</version>
+    <version>5.1.14409.20170510</version>
     <title>Windows Management Framework and PowerShell</title>
     <authors>Microsoft wrote PowerShell, IntelliTect created the Chocolatey Package</authors>
     <owners>Mark Michaelis, Darwin Sanoy (CSI-Windows.com)</owners>
@@ -28,6 +28,11 @@
     <releaseNotes>
 
       WMF 5.1 Release Notes: https://msdn.microsoft.com/en-us/powershell/wmf/5.1/release-notes
+
+     2017.05.10 
+       WMF Version: 5.1.14409.1005
+       Pkg Version: 5.1.14409.20170510
+       - fix to .NET version checking logic for Win7 / Server 2008 R2
 
      2017.04.02 
        WMF Version: 5.1.14409.1005

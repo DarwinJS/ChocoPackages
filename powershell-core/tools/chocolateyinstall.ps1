@@ -2,18 +2,18 @@
 $ErrorActionPreference = 'Stop';
 
 $VersionMaj = '6.0.0'
-$versionMinor = '18'
+$versionMinor = '1'
 $Version = "$VersionMaj.$versionMinor"
-$PFSubfolder = "$VersionMaj-alpha.$versionMinor"
+$PFSubfolder = "$VersionMaj-beta.$versionMinor"
 
 $InstallFolder = "$env:ProgramFiles\PowerShell\$PFSubfolder"
 
 $packageName= 'powershell-core'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.18/PowerShell-6.0.0-alpha.18-win10-win2016-x64.msi'
-$checksumwin10 = 'EAE329ED57BBC86D35C752A589C66B4F355FF75E41CB88EF1771AA79A35621F2'
-$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.18/PowerShell-6.0.0-alpha.18-win81-win2012r2-x64.msi'
-$checksumwin8 = 'CE51D1BFF58ED37CA70A14369C81D5E184A4CCC7A7F2EF56AFDFCDD8430DD4D3'
+$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.1/PowerShell-6.0.0-beta.1-win10-win2016-x64.msi'
+$checksumwin10 = '615FC02200E18E6811A867A03DB23D52962230F147F79750DC88FF7E7EEC45FE'
+$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.1/PowerShell-6.0.0-beta.1-win81-win2012r2-x64.msi'
+$checksumwin8 = 'EC002C2918C2B9895F37DBB5EB80B151B29FB593DCC997B5FAE2F4CEFC0CC466'
 $urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.18/PowerShell-6.0.0-alpha.18-win7-win2008r2-x64.msi'
 $checksumwin7 = '215F05BEDD048B13198B1F8A541B257B6FC64A737F953A02F220471D128A7E4C'
 $urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.18/PowerShell-6.0.0-alpha.18-win7-x86.msi'
@@ -46,6 +46,10 @@ switch ([version]$osVersion) {
       $selectedChecksum = $checksumwin8
     }
     {($_ -ge [version]"6.0") -AND ($_ -lt [version]"6.2")} {
+
+        #REMOVE WHEN WIN 7 PACKAGES ARE AVAILABLE AGAIN
+        Write-warning "THERE ARE NO WIN 7 RELEASES FOR BETA 1, INSTALLING ALPHA 18..."
+
         If ($OSBits -eq 32)
         {
           $selectedURL = $urlwin732
@@ -71,7 +75,7 @@ $packageArgs = @{
   url           = $selectedURL
   url64bit      = $selectedURL
 
-  softwareName  = "powershell_$version*"
+  softwareName  = "PowerShell-6.0.0*"
 
   checksum      = $selectedChecksum
   checksumType  = 'sha256'
@@ -84,14 +88,16 @@ $packageArgs = @{
 
 Install-ChocolateyPackage @packageArgs
 
+<#
 $codeblock = "{Write-output `'`r`nWARNING: Testing under PowerShell Core on Windows does not account for`r`nplatform differences with Linux or Mac OS.`r`n`'}"
-$shortcutname = "PowerShell_$Version"
+$shortcutname = "PowerShell_$PFSubfolder"
 $shortcutpaths = @("$([Environment]::GetFolderPath('CommonDesktopDirectory'))", "$([Environment]::GetFolderPath('CommonStartMenu'))\Programs\PowerShell_$version")
 Foreach ($SCPath in $shortcutpaths)
 {
   If (Test-Path "$SCPath\$shortcutname.lnk") {Remove-Item "$SCPath\$shortcutname.lnk" -force}
   Install-ChocolateyShortcut -ShortcutFilePath "$SCPath\$shortcutname.lnk" -TargetPath "$InstallFolder\PowerShell.exe" -IconLocation "$InstallFolder\assets\Powershell_256.ico" -Arguments "-noexit & $codeblock" -WorkingDirectory "$env:home"
 }
+#>
 
 Write-Output "************************************************************************************"
 Write-Output "*  INSTRUCTIONS: Your system default PowerShell version has not been changed:      *"

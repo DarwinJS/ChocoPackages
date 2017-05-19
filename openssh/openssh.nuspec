@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Universal Installer)</title>
-    <version>0.0.12.0</version>
+    <version>0.0.13.0</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -47,6 +47,18 @@
       Valid Options: QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, DEBUG3
       On a fresh install LogLevel is set to QUIET
 
+      -params '"/TERM:xterm-new"'
+      Introduced in Version: 0.0.13.0
+      Allows the initial setup and subsequent update of the TERM system environment variable.
+      On a fresh install TERM is set to xterm whether or not this switch is used.
+
+      -params '"/DisableKeyPermissionsReset"'
+      Introduced in Version: 0.0.13.0
+      As of 0.0.13.0 new key permissions are required for ssh keys.  By default this installer
+      reasserts these permissions whenever run.  Used this switch if you do not want the installation
+      to attempt to manage key permissions.  The utility script will still be installed and available
+      if you need to use it later to fix up permissions.
+
       -params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'
       Also install sshd Windows Service - including opening port 22 and
       it with Key Based Authentication (reboot required before active)
@@ -73,6 +85,14 @@
       Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.11.0
 
       Release Notes for Chocolatey Packaging:
+      0.0.13.0
+        - Utility script to set permissions according to new v0.0.13.0 requirements documented here:
+          https://github.com/PowerShell/Win32-OpenSSH/wiki/Security-protection-of-various-files-in-win32-openssh
+          Utility script is Reset-SSHKeyPermissions.ps1 - it is called during install and can be called at any other time.
+          Permissions are reasserted at every install / upgrade.
+          New switch /DisableKeyPermissionsReset disables this capability if you are managing permissions already
+        - by default sets a machine environment variable TERM=xterm, customize with /TERM switch
+        - updated path setting code to not make unnecessary path alterations
       0.0.12.0
         - ssh-lsa.dll is no longer needed and no longer configured (switch /ReleaseSSHLSAForUpgrade is ignored)
         - if ssh-lsa.dll is found during upgrade a delete attempt is made - if unsuccessful (file locked), ssh-lsa.dll 

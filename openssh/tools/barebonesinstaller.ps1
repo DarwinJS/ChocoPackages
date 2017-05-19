@@ -23,6 +23,8 @@ Delete server private keys after they have been secured
 Delete server private keys and configuration upon uninstall.
 .PARAMETER Uninstall
 Uninstall (default is to install)
+.PARAMETER DisableKeyPermissionsReset
+By default the install runs a custom utility script called "Reset-SSHKeyPermissions.ps1". This switch disables that functionality.
 .EXAMPLE
 .\barebonesinstaller.ps1 -SSHServerFeature
 .EXAMPLE
@@ -37,7 +39,8 @@ Param (
   [switch]$Uninstall,
   [switch]$OverWriteSSHDConf,
   [string]$SSHLogLevel,
-  [switch]$ReleaseSSHLSAForUpgrade
+  [switch]$ReleaseSSHLSAForUpgrade,
+  [switch]$DisableKeyPermissionsReset
   )
 
 Write-Output "Configuring on Port $SSHServerPort"

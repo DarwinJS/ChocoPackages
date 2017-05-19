@@ -56,9 +56,9 @@ $packageArgs = @{
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = 'F90BA5EF06F0BCB54A261A80634C52090042CE13'
+  checksum      = 'AC720DF837A8AC8ECD415722C643B04F0EB3C4DC'
   checksumType  = 'SHA1'
-  checksum64    = '655A69B9E1BC9D6128925634FC1BF6DE58316ACB'
+  checksum64    = '0C8A46CFE4CADB88C10694282EDD3BB6E9A18257'
   checksumType64= 'SHA1'
 }
 
@@ -70,6 +70,7 @@ If ($RunningUnderChocolatey)
   $DeleteServerKeysAfterInstalled = $false
   $UseNTRights = $false
   $SSHServerPort = '22'
+  $DisableKeyPermissionsReset = $False
 
   $arguments = @{};
   $packageParameters = $env:chocolateyPackageParameters
@@ -121,6 +122,11 @@ if ($packageParameters) {
         $SSHServerFeature = $true
     }
 
+    if ($arguments.ContainsKey("DisableKeyPermissionsReset")) {
+        Write-Host "/DisableKeyPermissionsReset was used, will not run Reset-SSHKeyPermissions.ps1."
+        $DisableKeyPermissionsReset = $true
+    }
+
     if ($arguments.ContainsKey("OverWriteSSHDConf")) {
         Write-Host "/OverWriteSSHDConf was used, will overwrite any existing sshd_conf with one from install media."
         $OverWriteSSHDConf = $true
@@ -150,10 +156,21 @@ if ($packageParameters) {
       $SSHLogLevel = $null
     }
 
+    if ($arguments.ContainsKey("TERM")) {
+      $TERM = $arguments.Get_Item("TERM")
+      Write-Host "/TERM was used, setting system TERM environment variable to $TERM"
+      $TERMSwitchUsed = $True
+    }
+    Else
+    {
+      $TERM = 'xterm'
+      Write-Host "Defaulting system TERM environment variable to $TERM"
+    }
+<#
     if ($arguments.ContainsKey("ReleaseSSHLSAForUpgrade")) {
         $ReleaseSSHLSAForUpgrade = $true
     }
-
+#>
     if ($arguments.ContainsKey("UseNTRights")) {
         Write-Host "Using ntrights.exe to set service permissions (will not work, but generate warning if WOW64 is not present on 64-bit machines)"
         $UseNTRights = $true
@@ -492,8 +509,9 @@ If ((Test-Path "$TargetFolder\sshd_config") -AND !($OverWriteSSHDConf))
   $ExcludeParams.Add("Exclude","sshd_config")
 }
 
-Copy-Item "$ExtractFolder\*" "$PF" @ExcludeParams -Force -Recurse
-Copy-Item "$toolsdir\Set-SSHKeyPermissions.ps1" "$TargetFolder" -Force
+Copy-Item "$ExtractFolder\*" "$PF" @ExcludeParams -Force -Recurse -Passthru -ErrorAction Stop
+Copy-Item "$toolsdir\SSH-PermsFunctions.ps1" "$TargetFolder" -Force -Passthru -ErrorAction Stop
+Copy-Item "$toolsdir\Reset-SSHKeyPermissions.ps1" "$TargetFolder" -Force -Passthru -ErrorAction Stop
 If (!(Test-Path "$TargetFolder\Logs"))
 {
   New-Item "$TargetFolder\Logs" -ItemType Directory | out-null
@@ -506,10 +524,26 @@ If ($RunningUnderChocolatey)
 }
 Else
 {
-  If ($env:Path -inotlike "*$TargetFolder*")
+  $PathToAdd = $TargetFolder
+  $ExistingPathArray = @(((Get-ItemProperty 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment').path.split(';')))
+  if (($ExistingPathArray -inotcontains $PathToAdd) -AND ($ExistingPathArray -inotcontains "$PathToAdd\"))
   {
-    Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'PATH' -Value "$env:Path;$TargetFolder"
+    $Newpath = $ExistingPathArray + @("$PathToAdd")
+    $AssembledNewPath = ($newpath -join(';')).trimend(';')
+    Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'PATH' -Value "$AssembledNewPath"
   }
+}
+If ($env:Path -inotlike "*$TargetFolder*")
+{
+  $env:path += ";$TargetFolder"
+}
+
+$TermVarExists = [bool](get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'TERM' -EA SilentlyContinue)
+
+If ((!$TermVarExists) -OR (($TermVarExists) -AND $TERMSwitchUsed))
+{ #Only write TERM envvar if it does not exist or if it was forced using the switch /TERM:<value>
+  Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'TERM' -Value "$TERM"
+  $env:TERM = "$TERM"
 }
 
 If ($SSHAgentFeature)
@@ -635,8 +669,11 @@ If ($SSHServerFeature)
   }
   New-Service -Name sshd -BinaryPathName "$TargetFolder\sshd.exe" -Description "SSH Daemon" -StartupType Automatic -DependsOn ssh-agent | Out-Null
   sc.exe config sshd obj= "NT SERVICE\SSHD"
-
-  . "$TargetFolder\Set-SSHKeyPermissions.ps1"
+  
+  If (!$DisableKeyPermissionsReset)
+  {
+    . "$TargetFolder\Reset-SSHKeyPermissions.ps1"
+  }
 
   If (!$UseNTRights)
   {

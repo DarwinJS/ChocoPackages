@@ -50,15 +50,16 @@ $filename = "$toolsdir\OpenSSH-Win$($OSBits).zip"
 $TargetFolder = "$PF\OpenSSH-Win$($OSBits)"
 $ExtractFolder = "$env:temp\OpenSSHTemp"
 $SSHLSAFeaturesDisabled = $True
+$TERMDefault = 'xterm'
 
 $packageArgs = @{
   packageName   = 'openssh'
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = 'F90BA5EF06F0BCB54A261A80634C52090042CE13'
+  checksum      = '87DD50FD3648222D9298F78BCF8FA3AF0ECD2EEC'
   checksumType  = 'SHA1'
-  checksum64    = '655A69B9E1BC9D6128925634FC1BF6DE58316ACB'
+  checksum64    = 'B952097120328ECFB995E26AB3A3760E0F0FDA9F'
   checksumType64= 'SHA1'
 }
 
@@ -148,6 +149,11 @@ if ($packageParameters) {
     Else
     {
       $SSHLogLevel = $null
+    }
+
+    if ($arguments.ContainsKey("TERM")) {
+      $TERM = $arguments.Get_Item("TERM")
+      Write-Host "/TERM was used, setting system TERM environment variable to $TERM"
     }
 
     if ($arguments.ContainsKey("ReleaseSSHLSAForUpgrade")) {
@@ -506,10 +512,29 @@ If ($RunningUnderChocolatey)
 }
 Else
 {
-  If ($env:Path -inotlike "*$TargetFolder*")
+  $PathToAdd = $TargetFolder
+  $ExistingPathArray = @(((Get-ItemProperty 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' | select -expand path).split(';')))
+  if (($ExistingPathArray -inotcontains $PathToAdd) -AND ($ExistingPathArray -inotcontains "$PathToAdd\"))
   {
-    Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'PATH' -Value "$env:Path;$TargetFolder"
+    $Newpath = $ExistingPathArray + @("$PathToAdd")
+    $AssembledNewPath = ($newpath -join(';')).trimend(';')
+    Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'PATH' -Value "$AssembledNewPath"
   }
+}
+If ($env:Path -inotlike "*$TargetFolder*")
+{
+  $env:path += ";$TargetFolder"
+}
+
+$ExistingTermValue = $null
+$ExistingTermValue = (get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -EA SilentlyContinue | Select -Expand TERM -EA SilentlyContinue)
+
+If (!$TERM) {$TERM = $TERMDefault}
+
+If ((!$ExistingTermValue) -OR ($ExistingTermValue -ine $TERM))
+{ 
+  Write-Host "Updating machine environment variable TERM from `"$ExistingTermValue`" to `"$TERM`""
+  Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'TERM' -Value "$TERM"
 }
 
 If ($SSHAgentFeature)

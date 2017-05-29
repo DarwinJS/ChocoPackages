@@ -201,4 +201,9 @@ foreach ($path in ((Get-ItemProperty 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\Curren
 $AssembledNewPath = ($newpath -join(';')).trimend(';')
 
 Set-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'PATH' -Value "$AssembledNewPath"
-#[Environment]::SetEnvironmentVariable("PATH",$AssembledNewPath,"Machine")
+
+$TermVarExists = [bool](get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'TERM' -EA SilentlyContinue)
+If ($TermVarExists)
+{
+  Remove-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -Name 'TERM'
+}

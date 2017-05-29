@@ -37,7 +37,8 @@ Param (
   [switch]$Uninstall,
   [switch]$OverWriteSSHDConf,
   [string]$SSHLogLevel,
-  [switch]$ReleaseSSHLSAForUpgrade
+  [switch]$ReleaseSSHLSAForUpgrade,
+  [string]$TERM
   )
 
 Write-Output "Configuring on Port $SSHServerPort"

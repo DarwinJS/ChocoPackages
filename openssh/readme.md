@@ -5,11 +5,12 @@ Yes you read that right - although packaged as a chocolatey .nupkg, this install
 - [The Universal Openssh Installer](#the-universal-openssh-installer)
     - [Chocolatey NOT REQUIRED](#chocolatey-not-required)
     - [Tested On](#tested-on)
-    - [NO RESTRICTIONS](#no-restrictions)
+    - [NO RESTRICTIONS, ENHANCED FUNCTIONALITY](#no-restrictions-enhanced-functionality)
 - [Design of this package:](#design-of-this-package)
 - [Install Scenario 1: Chocolatey Already Installed](#install-scenario-1-chocolatey-already-installed)
 - [Install Scenario 1b: Auto-Install Chocolatey to Install OpenSSH](#install-scenario-1b-auto-install-chocolatey-to-install-openssh)
 - [Install Scenario 2: Non-Chocolatey Using PSH 5 PackageManagement](#install-scenario-2-non-chocolatey-using-psh-5-packagemanagement)
+    - [Clean Up](#clean-up)
 - [Install Scenario 3: Docker](#install-scenario-3-docker)
     - [Pre-made Docker Files:](#pre-made-docker-files)
 - [Install Scenario 4: Complete Offline Install (w/out Chocolatey, w/out WOW64, w/out PowerShell 5, w/out Internet):](#install-scenario-4-complete-offline-install-w-out-chocolatey-w-out-wow64-w-out-powershell-5-w-out-internet)
@@ -19,6 +20,7 @@ Yes you read that right - although packaged as a chocolatey .nupkg, this install
     - [-params '"/SSHServerFeature /SSHServerPort:3834"'](#params-sshserverfeature-sshserverport-3834)
     - [-params '"/OverWriteSSHDConf"'](#params-overwritesshdconf)
     - [-params '"/SSHLogLevel:VERBOSE"'](#params-sshloglevel-verbose)
+    - [-params '"/TERM:xterm-new"'](#params-term-xterm-new)
     - [-params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'](#params-sshserverfeature-deleteserverkeysafterinstalled)
     - [-params '"/DeleteConfigAndServerKeys"' (during uninstall command)](#params-deleteconfigandserverkeys-during-uninstall-command)
     - [-params '"/UseNTRights"'](#params-usentrights)
@@ -104,6 +106,9 @@ Oneliner premade script that does the below:
 7. .".\barebonesinstaller.ps1" -SSHServerFeature #SSH Server (& client tools)
 8. .".\barebonesinstaller.ps1" -SSHServerFeature -SSHServerPort '5555' #SSH Server on port 5555 (& client tools)
 9. .".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall #Uninstall
+## Clean Up
+10. cd \
+11. rd -recurse "$env:ProgramFiles\nuget\packages\openssh"
 
 # Install Scenario 3: Docker
 
@@ -164,6 +169,11 @@ Introduced in Version: 0.0.9.20170311
 Allows the setup of the SSH logging level.
 Valid Options: QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, DEBUG3
 On a fresh install LogLevel is set to QUIET
+
+## -params '"/TERM:xterm-new"'
+Introduced in Version: 0.0.13.0
+Allows the initial setup and subsequent update of the TERM system environment variable.
+If it does not exist, TERM is defaulted to "xterm" when this switch has NOT been used.
 
 ## -params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'
 When installing the server, server keys are deleted after added to the ssh-agent (you will not have an opportunity to copy them).

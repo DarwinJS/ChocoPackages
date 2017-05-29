@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Universal Installer)</title>
-    <version>0.0.12.0</version>
+    <version>0.0.14.0</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -47,6 +47,10 @@
       Valid Options: QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, DEBUG3
       On a fresh install LogLevel is set to QUIET
 
+      -params '"/TERM:xterm-new"'
+      Introduced in Version: 0.0.14.0
+      Allows the initial setup and subsequent update of the TERM system environment variable.
+      On a fresh install TERM is set to the default 'xterm'' whether or not this switch is used.
       -params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'
       Also install sshd Windows Service - including opening port 22 and
       it with Key Based Authentication (reboot required before active)
@@ -70,9 +74,12 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/openssh/appicon.png</iconUrl>
     <releaseNotes>
-      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.11.0
+      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.14.0
 
       Release Notes for Chocolatey Packaging:
+      0.0.14.0
+        - by default sets a machine environment variable TERM=xterm, customize with /TERM switch
+        - updated path setting code to not make unnecessary path alterations
       0.0.12.0
         - ssh-lsa.dll is no longer needed and no longer configured (switch /ReleaseSSHLSAForUpgrade is ignored)
         - if ssh-lsa.dll is found during upgrade a delete attempt is made - if unsuccessful (file locked), ssh-lsa.dll 

@@ -1,5 +1,3 @@
-Copy of: https://raw.githubusercontent.com/PowerShell/Win32-OpenSSH/L1-Prod/LICENCE
-
 This file is part of the OpenSSH software.
 
 The licences which components of this software fall under are as

@@ -29,12 +29,13 @@ Write-Host "This product includes software developed by the OpenSSL Project for 
 $minchocoversion = '0.10.4.0'
 If (($env:CHOCOLATEY_VERSION) -AND ([version]$env:CHOCOLATEY_VERSION -lt [version]$minchocoversion))
 {
+  # -SpecificFolder functionality of Install-ChocolateyUnzip is broken before 10.4 (https://github.com/chocolatey/choco/pull/1023)
   Throw "You must have Chocolatey `"$minchocoversion`" or later to run this package."
 }
 
-If ([bool](get-command get-filehash -ea silentlycontinue))
+If ([bool](get-command Get-ChecksumValid -ea silentlycontinue))
 {
-  If ((Get-FileHash $FileFullPath -Algorithm $checksumType).Hash -eq $checksum)
+  If (![bool](Get-ChecksumValid -File $FileFullPath -checksumType $checksumType -checksum $checksum))
   {
     Write-Output "Hashes for internal source match"
   }

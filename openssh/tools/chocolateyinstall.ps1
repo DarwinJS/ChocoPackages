@@ -71,6 +71,7 @@ If ($RunningUnderChocolatey)
   $DeleteServerKeysAfterInstalled = $false
   $UseNTRights = $false
   $SSHServerPort = '22'
+  $DisableKeyPermissionsReset = $False
 
   $arguments = @{};
   $packageParameters = $env:chocolateyPackageParameters
@@ -122,6 +123,11 @@ if ($packageParameters) {
         $SSHServerFeature = $true
     }
 
+    if ($arguments.ContainsKey("DisableKeyPermissionsReset")) {
+        Write-Host "/DisableKeyPermissionsReset was used, will not run Reset-SSHKeyPermissions.ps1."
+        $DisableKeyPermissionsReset = $true
+    }
+
     if ($arguments.ContainsKey("OverWriteSSHDConf")) {
         Write-Host "/OverWriteSSHDConf was used, will overwrite any existing sshd_conf with one from install media."
         $OverWriteSSHDConf = $true
@@ -154,12 +160,18 @@ if ($packageParameters) {
     if ($arguments.ContainsKey("TERM")) {
       $TERM = $arguments.Get_Item("TERM")
       Write-Host "/TERM was used, setting system TERM environment variable to $TERM"
+      $TERMSwitchUsed = $True
     }
-
+    Else
+    {
+      $TERM = 'xterm'
+      Write-Host "Defaulting system TERM environment variable to $TERM"
+    }
+<#
     if ($arguments.ContainsKey("ReleaseSSHLSAForUpgrade")) {
         $ReleaseSSHLSAForUpgrade = $true
     }
-
+#>
     if ($arguments.ContainsKey("UseNTRights")) {
         Write-Host "Using ntrights.exe to set service permissions (will not work, but generate warning if WOW64 is not present on 64-bit machines)"
         $UseNTRights = $true
@@ -498,8 +510,9 @@ If ((Test-Path "$TargetFolder\sshd_config") -AND !($OverWriteSSHDConf))
   $ExcludeParams.Add("Exclude","sshd_config")
 }
 
-Copy-Item "$ExtractFolder\*" "$PF" @ExcludeParams -Force -Recurse
-Copy-Item "$toolsdir\Set-SSHKeyPermissions.ps1" "$TargetFolder" -Force
+Copy-Item "$ExtractFolder\*" "$PF" @ExcludeParams -Force -Recurse -Passthru -ErrorAction Stop
+Copy-Item "$toolsdir\SSH-PermsFunctions.ps1" "$TargetFolder" -Force -Passthru -ErrorAction Stop
+Copy-Item "$toolsdir\Reset-SSHKeyPermissions.ps1" "$TargetFolder" -Force -Passthru -ErrorAction Stop
 If (!(Test-Path "$TargetFolder\Logs"))
 {
   New-Item "$TargetFolder\Logs" -ItemType Directory | out-null
@@ -660,8 +673,11 @@ If ($SSHServerFeature)
   }
   New-Service -Name sshd -BinaryPathName "$TargetFolder\sshd.exe" -Description "SSH Daemon" -StartupType Automatic -DependsOn ssh-agent | Out-Null
   sc.exe config sshd obj= "NT SERVICE\SSHD"
-
-  . "$TargetFolder\Set-SSHKeyPermissions.ps1"
+  
+  If (!$DisableKeyPermissionsReset)
+  {
+    . "$TargetFolder\Reset-SSHKeyPermissions.ps1"
+  }
 
   If (!$UseNTRights)
   {

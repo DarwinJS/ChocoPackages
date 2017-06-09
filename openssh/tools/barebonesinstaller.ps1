@@ -40,8 +40,7 @@ Param (
   [switch]$OverWriteSSHDConf,
   [string]$SSHLogLevel,
   [switch]$ReleaseSSHLSAForUpgrade,
-  [string]$TERM
-  [switch]$ReleaseSSHLSAForUpgrade,
+  [string]$TERM,
   [switch]$DisableKeyPermissionsReset
   )
 

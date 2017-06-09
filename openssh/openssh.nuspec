@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Universal Installer)</title>
-    <version>0.0.14.0</version>
+    <version>0.0.15.0</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -48,12 +48,12 @@
       On a fresh install LogLevel is set to QUIET
 
       -params '"/TERM:xterm-new"'
-      Introduced in Version: 0.0.13.0
+      Introduced in Version: 0.0.14.0
       Allows the initial setup and subsequent update of the TERM system environment variable.
       On a fresh install TERM is set to xterm whether or not this switch is used.
 
       -params '"/DisableKeyPermissionsReset"'
-      Introduced in Version: 0.0.13.0
+      Introduced in Version: 0.0.15.0
       As of 0.0.13.0 new key permissions are required for ssh keys.  By default this installer
       reasserts these permissions whenever run.  Used this switch if you do not want the installation
       to attempt to manage key permissions.  The utility script will still be installed and available
@@ -82,18 +82,14 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/openssh/appicon.png</iconUrl>
     <releaseNotes>
-      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.14.0
+      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.15.0
 
       Release Notes for Chocolatey Packaging:
-      0.0.14.0
-        - by default sets a machine environment variable TERM=xterm, customize with /TERM switch
-        - updated path setting code to not make unnecessary path alterations
-      0.0.13.0
-        - Utility script to set permissions according to new v0.0.13.0 requirements documented here:
-          https://github.com/PowerShell/Win32-OpenSSH/wiki/Security-protection-of-various-files-in-win32-openssh
-          Utility script is Reset-SSHKeyPermissions.ps1 - it is called during install and can be called at any other time.
+      0.0.15.0
+        - Calls utility script FixUserFilePermissions.ps1 to align permissions to v.0.0.15.0 standard
           Permissions are reasserted at every install / upgrade.
-          New switch /DisableKeyPermissionsReset disables this capability if you are managing permissions already
+        - New switch /DisableKeyPermissionsReset disables this capability if you are managing permissions already
+      0.0.14.0
         - by default sets a machine environment variable TERM=xterm, customize with /TERM switch
         - updated path setting code to not make unnecessary path alterations
       0.0.12.0

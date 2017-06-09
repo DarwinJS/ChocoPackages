@@ -57,9 +57,9 @@ $packageArgs = @{
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = '87DD50FD3648222D9298F78BCF8FA3AF0ECD2EEC'
+  checksum      = 'E39CB40DAA37B493F42A77DDC7B57A4E7674997E'
   checksumType  = 'SHA1'
-  checksum64    = 'B952097120328ECFB995E26AB3A3760E0F0FDA9F'
+  checksum64    = 'B797E0DB1D4D2702F6BEE49FD178E6E94596C290'
   checksumType64= 'SHA1'
 }
 
@@ -124,7 +124,7 @@ if ($packageParameters) {
     }
 
     if ($arguments.ContainsKey("DisableKeyPermissionsReset")) {
-        Write-Host "/DisableKeyPermissionsReset was used, will not run Reset-SSHKeyPermissions.ps1."
+        Write-Host "/DisableKeyPermissionsReset was used, will not reset key permissions."
         $DisableKeyPermissionsReset = $true
     }
 
@@ -511,8 +511,10 @@ If ((Test-Path "$TargetFolder\sshd_config") -AND !($OverWriteSSHDConf))
 }
 
 Copy-Item "$ExtractFolder\*" "$PF" @ExcludeParams -Force -Recurse -Passthru -ErrorAction Stop
-Copy-Item "$toolsdir\SSH-PermsFunctions.ps1" "$TargetFolder" -Force -Passthru -ErrorAction Stop
-Copy-Item "$toolsdir\Reset-SSHKeyPermissions.ps1" "$TargetFolder" -Force -Passthru -ErrorAction Stop
+#Fixed version of module
+Write-Host "Updating to patched files for OpenSSHUtils.psm1"
+Copy-Item "$toolsdir\OpenSSHUtils.psm1" "$TargetFolder" -Force -PassThru -ErrorAction Stop
+Copy-Item "$toolsdir\Fix*FilePermissions.ps1" "$TargetFolder" -Force -PassThru -ErrorAction Stop
 If (!(Test-Path "$TargetFolder\Logs"))
 {
   New-Item "$TargetFolder\Logs" -ItemType Directory | out-null
@@ -676,7 +678,8 @@ If ($SSHServerFeature)
   
   If (!$DisableKeyPermissionsReset)
   {
-    . "$TargetFolder\Reset-SSHKeyPermissions.ps1"
+    Write-Host "Ensuring all ssh key and configuration files have correct permissions for all users"
+    . "$TargetFolder\FixHostFilePermissions.ps1" -Quiet
   }
 
   If (!$UseNTRights)

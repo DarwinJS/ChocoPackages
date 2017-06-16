@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Universal Installer)</title>
-    <version>0.0.15.0</version>
+    <version>0.0.16.0</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -82,13 +82,26 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/openssh/appicon.png</iconUrl>
     <releaseNotes>
-      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.15.0
+      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.16.0
 
       Release Notes for Chocolatey Packaging:
+      0.0.16.0
+        - Fixed incomplete permissions grant when using /NTRights switch.
+        - Fixed uninstall implementation
+        - Fixed uninstall and clean uninstall for Nano
+        - Uses version of opensshutils shipped with openssh
+      0.0.15.20170613
+        - Fixed problem for issue #35 (error with "$RunningOnNano not found").
+        - /DeleteConfigAndServerKeys now works.
+      0.0.15.20170611
+        - Sets permissions for user "NT SERVICE\sshd" to write to [sshfolder]\Logs
       0.0.15.0
-        - Calls utility script FixUserFilePermissions.ps1 to align permissions to v.0.0.15.0 standard
-          Permissions are reasserted at every install / upgrade.
-        - New switch /DisableKeyPermissionsReset disables this capability if you are managing permissions already
+        - Calls utility script FixUserFilePermissions.ps1 (included with OpenSSH) to align setup / migrate 
+          permissions to v.0.0.15.0 standard. Permissions are reasserted at every install / upgrade.
+        - A chocolatey uninstall that specifies "/DeleteConfigAndServerKeys" will fail.  This is only ever used
+          for a completely clean uninstall - not using it means that the ssh_conf and the server key files will
+          remain in the openssh install folder and will need to be removed manually after taking ownership of the files.
+        - New switch /DisableKeyPermissionsReset disables this capability if you are managing permissions separately.
       0.0.14.0
         - by default sets a machine environment variable TERM=xterm, customize with /TERM switch
         - updated path setting code to not make unnecessary path alterations

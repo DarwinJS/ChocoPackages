@@ -5,13 +5,15 @@ $EditionId = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\Curren
 
 Write-Output "Running on: $ProductName, ($EditionId)"
 
+$RunningOnNano = $False
 If ($EditionId -ilike '*Nano*')
 {$RunningOnNano = $True}
 
 If (Test-Path variable:shimgen)
 {$RunningUnderChocolatey = $True}
 Else
-{  Write-Output "Running Without Chocolatey"}
+{ Write-Output "Running Without Chocolatey"
+$RunningUnderChocolatey = $False}
 
 $packageName= 'openssh'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
@@ -43,7 +45,7 @@ If ($RunningUnderChocolatey)
   $packageParameters = $env:chocolateyPackageParameters
 }
 # Now parse the packageParameters using good old regular expression
-if ($packageParameters) {
+if ((test-path variable:packageparameters) -AND $packageParameters) {
     $match_pattern = "\/(?<option>([a-zA-Z]+)):(?<value>([`"'])?([a-zA-Z0-9- _\\:\.]+)([`"'])?)|\/(?<option>([a-zA-Z]+))"
     #"
     $option_name = 'option'
@@ -124,6 +126,7 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorActio
     }
 }
 
+$KeyBasedAuthenticationFeatureINSTALLED = $False
 If ((get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa').getvalue("authentication packages") -contains 'ssh-lsa')
 {
   $KeyBasedAuthenticationFeatureINSTALLED = $True
@@ -174,13 +177,22 @@ If ($KeyBasedAuthenticationFeatureINSTALLED)
 If (($SSHServiceInstanceExistsAndIsOurs -AND $DeleteConfigAndServerKeys) -OR (!$SSHServiceInstanceExistsAndIsOurs))
 {
     Write-Warning "Removing all config and server keys as requested by /DeleteConfigAndServerKeys"
+    
+    #Ensure we have permissions to all keys and config files:
+    #$ErrorActionPreference = 'SilentlyContinue'
+    Import-Module "$toolsdir\OpenSSHUtils" -Force
+    $RunningUser = New-Object System.Security.Principal.NTAccount($($env:USERDOMAIN), $($env:USERNAME))
+    #dir "$TargetFolder\*" | % {repair-filepermission -FilePath $_.fullname -ReadAccessOK $RunningUser -AnyAccessOK $RunningUser -ReadAccessNeeded $RunningUser -confirm:$false}
+    dir "$TargetFolder\*" | % {repair-filepermission -FilePath $_.fullname -confirm:$false}
+
     If (Test-Path $TargetFolder) {Remove-Item "$TargetFolder" -Recurse -Force}
-    If (Test-Path $TargetFolderOLD) {Remove-Item "$TargetFolderOLD" -Recurse -Force}
+    #$ErrorActionPreference = 'Stop'
 }
 Else
 {
 
-  If (Test-Path $TargetFolder) {Get-ChildItem "$TargetFolder\*.*" -include *.exe,*.dll,*.cmd,*.ps1,*.psm1 | Remove-Item -Recurse -Force}
+  If (Test-Path $TargetFolder) {Get-ChildItem "$TargetFolder\*.*" -include *.exe,*.dll,*.cmd,*.ps1,*.psm1,*.psd1 | Remove-Item -Recurse -Force}
+  If (Test-Path "$TargetFolder\logs") {Remove-Item "$TargetFolder\logs" -Recurse -Force}
   Write-Warning "NOT REMOVED: Config files and any keys in `"$TargetFolder`" were NOT REMOVED - you must remove them manually or use the package uninstall parameter /DeleteConfigAndServerKeys."
 }
 netsh advfirewall firewall delete rule name='SSHD Port OpenSSH (chocolatey package: openssh)'

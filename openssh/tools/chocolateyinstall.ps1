@@ -15,6 +15,7 @@ $EditionId = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\Curren
 
 Write-Output "Running on: $ProductName, ($EditionId)"
 
+$RunningOnNano = $False
 If ($EditionId -ilike '*Nano*')
 {$RunningOnNano = $True}
 
@@ -51,15 +52,16 @@ $TargetFolder = "$PF\OpenSSH-Win$($OSBits)"
 $ExtractFolder = "$env:temp\OpenSSHTemp"
 $SSHLSAFeaturesDisabled = $True
 $TERMDefault = 'xterm'
+$sshlsaisLocked = $false
 
 $packageArgs = @{
   packageName   = 'openssh'
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = 'E39CB40DAA37B493F42A77DDC7B57A4E7674997E'
+  checksum      = '228199C59BD0445C9E91A6675B53BF6AED71F59B'
   checksumType  = 'SHA1'
-  checksum64    = 'B797E0DB1D4D2702F6BEE49FD178E6E94596C290'
+  checksum64    = '8ED1DCF90831042D6033B365B783D3583503DF51'
   checksumType64= 'SHA1'
 }
 
@@ -512,13 +514,10 @@ If ((Test-Path "$TargetFolder\sshd_config") -AND !($OverWriteSSHDConf))
 
 Copy-Item "$ExtractFolder\*" "$PF" @ExcludeParams -Force -Recurse -Passthru -ErrorAction Stop
 #Fixed version of module
-Write-Host "Updating to patched files for OpenSSHUtils.psm1"
-Copy-Item "$toolsdir\OpenSSHUtils.psm1" "$TargetFolder" -Force -PassThru -ErrorAction Stop
-Copy-Item "$toolsdir\Fix*FilePermissions.ps1" "$TargetFolder" -Force -PassThru -ErrorAction Stop
-If (!(Test-Path "$TargetFolder\Logs"))
-{
-  New-Item "$TargetFolder\Logs" -ItemType Directory | out-null
-}
+#Write-Host "Updating OpenSSHUtils PowerShell Module to Latest"
+#Copy-Item "$toolsdir\OpenSSHUtils.ps*" "$TargetFolder" -Force -PassThru -ErrorAction Stop
+#Copy-Item "$toolsdir\Fix*FilePermissions.ps1" "$TargetFolder" -Force -PassThru -ErrorAction Stop
+
 Remove-Item "$ExtractFolder" -Force -Recurse
 
 If ($RunningUnderChocolatey)
@@ -576,7 +575,7 @@ If ($SSHAgentFeature)
     Else
     {
       write-output "Using ntrights.exe to grant logon as service."
-      Start-Process "$TargetFolder\ntrights.exe" -ArgumentList "-u `"NT SERVICE\SSH-Agent`" +r SeAssignPrimaryTokenPrivilege"
+      Start-Process "$TargetFolder\ntrights.exe" -ArgumentList "-u `"NT SERVICE\SSH-Agent`" +r SeServiceLogonRight"
     }
   }
 }
@@ -679,7 +678,27 @@ If ($SSHServerFeature)
   If (!$DisableKeyPermissionsReset)
   {
     Write-Host "Ensuring all ssh key and configuration files have correct permissions for all users"
-    . "$TargetFolder\FixHostFilePermissions.ps1" -Quiet
+    . "$TargetFolder\FixHostFilePermissions.ps1" -Confirm:$false
+  }
+
+  $logsdir = "$TargetFolder\Logs"
+  If (!(Test-Path $logsdir))
+  {
+    New-Item $logsdir -ItemType Directory | out-null
+    $rights = [System.Security.AccessControl.FileSystemRights]"Read, Write"
+    $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("NT SERVICE\sshd", $rights, "ContainerInherit,ObjectInherit", "None", "Allow")
+    If (!$RunningOnNano)
+    {
+      $aclAccess = (Get-Item -Path $logsdir).GetAccessControl('Access')
+      $aclAccess.SetAccessRule($accessRule)
+      Set-Acl -AclObject $aclAccess -Path $logsdir -Confirm:$false
+    }
+    Else
+    {
+      $aclAccess = Get-Acl -Path $logsdir
+      $aclAccess.SetAccessRule($accessRule)
+      Set-Acl -Path $logsdir -AclObject $aclAccess
+    }
   }
 
   If (!$UseNTRights)
@@ -699,6 +718,7 @@ If ($SSHServerFeature)
     {
       write-output "Using ntrights.exe to grant logon as service."
       Start-Process "$TargetFolder\ntrights.exe" -ArgumentList "-u `"NT SERVICE\SSHD`" +r SeAssignPrimaryTokenPrivilege"
+      Start-Process "$TargetFolder\ntrights.exe" -ArgumentList "-u `"NT SERVICE\SSH-Agent`" +r SeServiceLogonRight"
     }
   }
 }

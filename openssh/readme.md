@@ -10,7 +10,7 @@ Yes you read that right - although packaged as a chocolatey .nupkg, this install
 - [Install Scenario 1: Chocolatey Already Installed](#install-scenario-1-chocolatey-already-installed)
 - [Install Scenario 1b: Auto-Install Chocolatey to Install OpenSSH](#install-scenario-1b-auto-install-chocolatey-to-install-openssh)
 - [Install Scenario 2: Non-Chocolatey Using PSH 5 PackageManagement](#install-scenario-2-non-chocolatey-using-psh-5-packagemanagement)
-    - [Clean Up](#clean-up)
+    - [Uninstall and Clean Up](#uninstall-and-clean-up)
 - [Install Scenario 3: Docker](#install-scenario-3-docker)
     - [Pre-made Docker Files:](#pre-made-docker-files)
 - [Install Scenario 4: Complete Offline Install (w/out Chocolatey, w/out WOW64, w/out PowerShell 5, w/out Internet):](#install-scenario-4-complete-offline-install-w-out-chocolatey-w-out-wow64-w-out-powershell-5-w-out-internet)
@@ -24,7 +24,6 @@ Yes you read that right - although packaged as a chocolatey .nupkg, this install
     - [-params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'](#params-sshserverfeature-deleteserverkeysafterinstalled)
     - [-params '"/DeleteConfigAndServerKeys"' (during uninstall command)](#params-deleteconfigandserverkeys-during-uninstall-command)
     - [-params '"/UseNTRights"'](#params-usentrights)
-- [Utility Script Set-SSHKeyPermissions.ps1](#utility-script-set-sshkeypermissions-ps1)
 - [Ancient Version History](#ancient-version-history)
 
 
@@ -105,9 +104,11 @@ Oneliner premade script that does the below:
 6. .".\barebonesinstaller.ps1" #Client Tools only
 7. .".\barebonesinstaller.ps1" -SSHServerFeature #SSH Server (& client tools)
 8. .".\barebonesinstaller.ps1" -SSHServerFeature -SSHServerPort '5555' #SSH Server on port 5555 (& client tools)
+## Uninstall and Clean Up
 9. .".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall #Uninstall
-## Clean Up
-10. cd \
+10. .".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall -DeleteConfigAndServerKeys #Uninstall everything
+
+11. cd \
 11. rd -recurse "$env:ProgramFiles\nuget\packages\openssh"
 
 # Install Scenario 3: Docker
@@ -189,10 +190,6 @@ affect Server Core where this feature is optional and not installed by default a
 
 **Note:** If you have tested and this switch is *absolutely required* for your deployment scenario, please file an issue so that I can enhance the code so that
 this switch is not needed for your scenario.
-
-
-# Utility Script Set-SSHKeyPermissions.ps1
-Set-SSHKeyPermissions.ps1 is copied to the SSHD bin folder so that it can be called during install, at any time after install or in a scheduled task.  It sets read permissions for the SSHD service on all "authorized_keys" files found in any user profile folder.
 
 # Ancient Version History
 

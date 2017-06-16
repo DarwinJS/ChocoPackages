@@ -36,6 +36,7 @@ Param (
   [string]$SSHServerPort='22',
   [switch]$DeleteServerKeysAfterInstalled,
   [switch]$DeleteConfigAndServerKeys,
+  [switch]$UseNTRights,
   [switch]$Uninstall,
   [switch]$OverWriteSSHDConf,
   [string]$SSHLogLevel,

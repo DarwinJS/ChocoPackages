@@ -2,7 +2,7 @@
 $ErrorActionPreference = 'Stop';
 
 $VersionMaj = '6.0.0'
-$versionMinor = '1'
+$versionMinor = '3'
 $Version = "$VersionMaj.$versionMinor"
 $PFSubfolder = "$VersionMaj-beta.$versionMinor"
 
@@ -10,10 +10,10 @@ $InstallFolder = "$env:ProgramFiles\PowerShell\$PFSubfolder"
 
 $packageName= 'powershell-core'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.1/PowerShell-6.0.0-beta.1-win10-win2016-x64.msi'
-$checksumwin10 = '615FC02200E18E6811A867A03DB23D52962230F147F79750DC88FF7E7EEC45FE'
-$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.1/PowerShell-6.0.0-beta.1-win81-win2012r2-x64.msi'
-$checksumwin8 = 'EC002C2918C2B9895F37DBB5EB80B151B29FB593DCC997B5FAE2F4CEFC0CC466'
+$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.3/PowerShell-6.0.0-beta.3-win10-win2016-x64.msi'
+$checksumwin10 = '4189C0F42D7CF469C1D23003A8F488DFBC1AEC542A93275DC1381C45BEE0F410'
+$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.3/PowerShell-6.0.0-beta.3-win81-win2012r2-x64.msi'
+$checksumwin8 = 'A95C3B11429CB6DFDB629B3E6011F3A721FFBA0944DE9E639F7D910217142EBC'
 $urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.18/PowerShell-6.0.0-alpha.18-win7-win2008r2-x64.msi'
 $checksumwin7 = '215F05BEDD048B13198B1F8A541B257B6FC64A737F953A02F220471D128A7E4C'
 $urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.18/PowerShell-6.0.0-alpha.18-win7-x86.msi'
@@ -25,12 +25,12 @@ $osVersion = (Get-WmiObject Win32_OperatingSystem).Version
 
 If (($OSBits -lt 64) -AND ($_ -gt [version]"6.2"))
 {
-  Throw "$packageName $version is only available for 64-bit editions of this version of Windows.  32-bit is available for Windows 7 / Server 2008 only."
+  Throw "$packageName $PFSubfolder is only available for 64-bit editions of this version of Windows.  32-bit is available for Windows 7 / Server 2008 only."
 }
 
 If (Test-Path "$InstallFolder\powershell.exe")
 {
-  Write-output "$packagename version $vesion is already installed by another means."
+  Write-output "$packagename version $PFSubfolder is already installed by another means."
   Exit 0
 }
 

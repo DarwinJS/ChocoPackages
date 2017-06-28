@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>nexus-repository</id>
     <title>Nexus Repository OSS</title>
-    <version>3.0.2.02</version>
+    <version>3.3.2.02</version>
     <authors>Sonatype</authors>
     <owners>DarwinJS</owners>
     <summary>Free open source version of popular Nexus Repository for binary artifacts including first class Nuget support.</summary>
@@ -22,7 +22,12 @@
     <licenseUrl>http://www.eclipse.org/legal/epl-v10.html</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/nexus-repository/appicon.png</iconUrl>
-    <releaseNotes>https://support.sonatype.com/hc/en-us/articles/221755367-Nexus-Repository-Manager-3-0-1-Release-Notes
+    <releaseNotes>https://support.sonatype.com/hc/en-us/sections/203012688
+    Packaging 
+    ATTENTION BRAKING CHANGE FOR UPGRADES FROM VERSIONS BEFORE 3.3.2.02
+    Nexus no longer provided a setup.exe for installing Nexus Repository 3.x on Windows.
+    If you previously installed with a package that used the setup.exe, you must manually uninstall it first. (you can use chocolatey uninstall if installed by chocolatey)
+    Once you are on 3.3.2.02 or later, upgrades will work smoothly.
     </releaseNotes>
     <dependencies>
        <dependency id="javaruntime" />

@@ -2,14 +2,14 @@
 $validExitCodes = @(0)
 
 $packageName= 'nexus-repository'
-$installfolder = "c:\Program Files\Nexus"
+$installfolder = "$env:programdata\Nexus"
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $validExitCodes = @(0)
 
-If (Test-Path "$installfolder\bin\nexus-uninstall.exe")
+If (Test-Path "$installfolder\bin\nexus.exe")
 {
   Stop-Service nexus -force
-  Start-ChocolateyProcessAsAdmin "-q -console" "$installfolder\bin\nexus-uninstall.exe" -validExitCodes $validExitCodes
+  Remove-item  "$installfolder" -recurse -force
 }
 Else
 {

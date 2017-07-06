@@ -59,9 +59,9 @@ $packageArgs = @{
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = '228199C59BD0445C9E91A6675B53BF6AED71F59B'
+  checksum      = 'E01F41DA05CB8D4DEB21250C22C35829FDFFCBDC'
   checksumType  = 'SHA1'
-  checksum64    = '8ED1DCF90831042D6033B365B783D3583503DF51'
+  checksum64    = '92A7842A27980DF15C6AEA432750C7584C210736'
   checksumType64= 'SHA1'
 }
 
@@ -515,7 +515,7 @@ If ((Test-Path "$TargetFolder\sshd_config") -AND !($OverWriteSSHDConf))
 Copy-Item "$ExtractFolder\*" "$PF" @ExcludeParams -Force -Recurse -Passthru -ErrorAction Stop
 #Fixed version of module
 #Write-Host "Updating OpenSSHUtils PowerShell Module to Latest"
-#Copy-Item "$toolsdir\OpenSSHUtils.ps*" "$TargetFolder" -Force -PassThru -ErrorAction Stop
+Copy-Item "$toolsdir\OpenSSHUtils.ps*" "$TargetFolder" -Force -PassThru -ErrorAction Stop
 #Copy-Item "$toolsdir\Fix*FilePermissions.ps1" "$TargetFolder" -Force -PassThru -ErrorAction Stop
 
 Remove-Item "$ExtractFolder" -Force -Recurse

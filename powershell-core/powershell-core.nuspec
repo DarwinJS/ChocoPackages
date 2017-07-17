@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>powershell-core</id>
-    <version>6.0.0-beta3</version>
+    <version>6.0.0-beta4</version>
     <packageSourceUrl>https://github.com/darwinjs/chocopackages/powershell-core</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>powershell-core (Install)</title>
@@ -20,7 +20,7 @@
     <description>PowerShell Core is the multiplatform version of PowerShell</description>
     <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.0.0-beta.1
     Package release Notes:
-      Beta 1 - THERE ARE NO WIN 7 RELEASES FOR BETA 1, ALPHA 18 IS INSTALLED INSTEAD
+      Beta 1 - THERE ARE NO WIN 7 RELEASES FOR THE BETA SERIES YET, ALPHA 18 IS INSTALLED INSTEAD
         - removed custom icon creation on desktop
         - removed uninstall script as it frustrates the auto uninstaller which is doing a clean uninstall
     </releaseNotes>

@@ -30,11 +30,14 @@ if( [string]::IsNullOrEmpty($sidstr) ) {
 Write-Host "Account SID: $($sidstr)" -ForegroundColor DarkCyan
 
 $tmp = [System.IO.Path]::GetTempFileName()
+#$tmp = Join-path -Path ([Environment]::GetEnvironmentVariable('TEMP', 'Machine')) -ChildPath ([System.IO.Path]::GetRandomFileName())
 
 Write-Host "Export current Local Security Policy" -ForegroundColor DarkCyan
 secedit.exe /export /cfg "$($tmp)"
 
 $c = Get-Content -Path $tmp
+
+#Remove-Item $tmp -Force -ErrorAction SilentlyContinue
 
 $currentSetting = ""
 
@@ -67,7 +70,7 @@ SeServiceLogonRight = $($currentSetting)
 "@
 
 	$tmp2 = [System.IO.Path]::GetTempFileName()
-
+	#$tmp2 = Join-path -Path ([Environment]::GetEnvironmentVariable('TEMP', 'Machine')) -ChildPath ([System.IO.Path]::GetRandomFileName())
 
 	Write-Host "Import new settings to Local Security Policy" -ForegroundColor DarkCyan
 	$outfile | Set-Content -Path $tmp2 -Encoding Unicode -Force
@@ -81,6 +84,7 @@ SeServiceLogonRight = $($currentSetting)
 	} finally {
 		Pop-Location
 	}
+	#Remove-Item $tmp2 -Force -ErrorAction SilentlyContinue
 } else {
 	Write-Host "NO ACTIONS REQUIRED! Account already in ""Logon as a Service""" -ForegroundColor DarkCyan
 }

@@ -46,9 +46,9 @@ Set-ExecutionPolicy RemoteSigned -Force -ErrorAction SilentlyContinue
 
 Install-PackageProvider NuGet -forcebootstrap -force
 
-Register-PackageSource -name chocolatey -provider nuget -location http://chocolatey.org/api/v2/ -trusted
+Register-PackageSource -name chocolatey -provider nuget -location http://chocolatey.org/api/v2/
 
-Install-Package openssh -provider NuGet
+Install-Package openssh -provider NuGet -Force
 
 cd ("$env:ProgramFiles\nuget\packages\openssh." + "$((dir "$env:ProgramFiles\nuget\packages\openssh*" | %{[version]$_.name.trimstart('openssh.')} | sort | select -last 1) -join '.')\tools")
 

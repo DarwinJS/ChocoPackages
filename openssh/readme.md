@@ -11,6 +11,8 @@ Yes you read that right - although packaged as a chocolatey .nupkg, this install
 - [Install Scenario 1b: Auto-Install Chocolatey to Install OpenSSH](#install-scenario-1b-auto-install-chocolatey-to-install-openssh)
 - [Install Scenario 2: Non-Chocolatey Using PSH 5 PackageManagement](#install-scenario-2-non-chocolatey-using-psh-5-packagemanagement)
     - [Uninstall and Clean Up](#uninstall-and-clean-up)
+- [Uninstall](#uninstall)
+- [Uninstall leftovers (after an above command)](#uninstall-leftovers-after-an-above-command)
 - [Install Scenario 3: Docker](#install-scenario-3-docker)
     - [Pre-made Docker Files:](#pre-made-docker-files)
 - [Install Scenario 4: Complete Offline Install (w/out Chocolatey, w/out WOW64, w/out PowerShell 5, w/out Internet):](#install-scenario-4-complete-offline-install-w-out-chocolatey-w-out-wow64-w-out-powershell-5-w-out-internet)
@@ -98,15 +100,18 @@ Oneliner premade script that does the below:
 
 1. Open a command line on the target (remoting for Nano) and run:
 2. Install-PackageProvider NuGet -forcebootstrap -force
-3. Register-PackageSource -name chocolatey -provider nuget -location http://chocolatey.org/api/v2/ -trusted
-4. Install-Package openssh -provider NuGet
+3. Register-PackageSource -name chocolatey -provider nuget -location http://chocolatey.org/api/v2/ 
+4. Install-Package openssh -provider NuGet -Force
 5. cd ("$env:ProgramFiles\nuget\packages\openssh." + "$((dir "$env:ProgramFiles\nuget\packages\openssh*" | %{[version]$_.name.trimstart('openssh.')} | sort | select -last 1) -join '.')\tools")
-6. .".\barebonesinstaller.ps1" #Client Tools only
-7. .".\barebonesinstaller.ps1" -SSHServerFeature #SSH Server (& client tools)
-8. .".\barebonesinstaller.ps1" -SSHServerFeature -SSHServerPort '5555' #SSH Server on port 5555 (& client tools)
+6. & ".\barebonesinstaller.ps1" #Client Tools only
+7. & ".\barebonesinstaller.ps1" -SSHServerFeature #SSH Server (& client tools)
+8. & ".\barebonesinstaller.ps1" -SSHServerFeature -SSHServerPort '5555' #SSH Server on port 5555 (& client tools)
 ## Uninstall and Clean Up
-9. .".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall #Uninstall
-10. .".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall -DeleteConfigAndServerKeys #Uninstall everything
+9. & ".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall 
+#Uninstall
+1. & ".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall -DeleteConfigAndServerKeys 
+ 
+#Uninstall leftovers (after an above command)
 
 11. cd \
 11. rd -recurse "$env:ProgramFiles\nuget\packages\openssh"

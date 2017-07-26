@@ -30,11 +30,14 @@ if( [string]::IsNullOrEmpty($sidstr) ) {
 Write-Host "Account SID: $($sidstr)" -ForegroundColor DarkCyan
 
 $tmp = [System.IO.Path]::GetTempFileName()
+#$tmp = Join-path -Path ([Environment]::GetEnvironmentVariable('TEMP', 'Machine')) -ChildPath ([System.IO.Path]::GetRandomFileName())
 
 Write-Host "Export current Local Security Policy" -ForegroundColor DarkCyan
 secedit.exe /export /cfg "$($tmp)"
 
 $c = Get-Content -Path $tmp
+
+#Remove-Item $tmp -Force -ErrorAction SilentlyContinue
 
 $currentSetting = ""
 
@@ -67,6 +70,7 @@ SeAssignPrimaryTokenPrivilege = $($currentSetting)
 "@
 
 	$tmp2 = [System.IO.Path]::GetTempFileName()
+	#$tmp2 = Join-path -Path ([Environment]::GetEnvironmentVariable('TEMP', 'Machine')) -ChildPath ([System.IO.Path]::GetRandomFileName())
 
 
 	Write-Host "Import new settings to Local Security Policy" -ForegroundColor DarkCyan
@@ -81,6 +85,7 @@ SeAssignPrimaryTokenPrivilege = $($currentSetting)
 	} finally {
 		Pop-Location
 	}
+	#Remove-Item $tmp2 -force -ErrorAction SilentlyContinue
 } else {
 	Write-Host "NO ACTIONS REQUIRED! Account already in ""Replace a process level token""" -ForegroundColor DarkCyan
 }

@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Universal Installer)</title>
-    <version>0.0.17.0</version>
+    <version>0.0.18.0</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -85,6 +85,8 @@
       Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.17.0
 
       Release Notes for Chocolatey Packaging:
+      0.0.18.0
+        - updated instructions for non-chocolatey install so that they do not add the source location as "trusted"
       0.0.17.0
         - fixes latest opensshutils.psm1 to work on Nano
       0.0.16.0

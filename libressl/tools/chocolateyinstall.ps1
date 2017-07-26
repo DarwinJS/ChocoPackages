@@ -1,9 +1,9 @@
 ﻿$ErrorActionPreference = 'Stop'; 
 
-$version = '2.5.3'
+$version = '2.5.5'
 $packageName   = 'libressl'
 $toolsDir      = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$FileFullPath = Join-Path $toolsDir 'libressl-2.5.3-windows.zip'
+$FileFullPath = Join-Path $toolsDir 'libressl-2.5.5-windows.zip'
 
 $OSBits = Get-ProcessorBits
 If ($OSBits -eq 64)
@@ -20,7 +20,7 @@ $packageArgs = @{
   softwareName  = 'libressl*'
 }
 
-$checksum      = 'E9D6E26E4C702900F2E05130A50154590B4E3ACD'
+$checksum      = 'C825AE3DF24ABFC04545C0A5269884D3FAEEB1BB'
 $checksumType  = 'sha1'
 
 
@@ -75,7 +75,7 @@ if ($packageParameters) {
     if ($arguments.ContainsKey("ProgramFilesInstall")) {
 
       $InstallDir = "$env:programfiles\LibreSSL"
-      Write-Host "/ProgramFilesInstall was used, installing to `"$InstallDir`" and adding `"$InstallDir`"  to the System path."
+      Write-Host "/ProgramFilesInstall was used, installing to `"$InstallDir`" and adding `"$InstallDir`" to the System path."
       Write-Host "Clean uninstall will be possible."
 
     }    
@@ -83,7 +83,7 @@ if ($packageParameters) {
     if ($arguments.ContainsKey("ProgramDataInstall")) {
 
       $InstallDir = "$env:programdata\LibreSSL"
-      Write-Host "/ProgramFilesInstall was used, installing to `"$InstallDir`" and adding `"$InstallDir`"  to the System path."
+      Write-Host "/ProgramFilesInstall was used, installing to `"$InstallDir`" and adding `"$InstallDir`" to the System path."
       Write-Host "Clean uninstall will be possible."
 
     }    
@@ -91,7 +91,7 @@ if ($packageParameters) {
     if ($arguments.ContainsKey("InstallDir")) {
 
       $InstallDir = $arguments.Get_Item("InstallDir")
-      Write-Host "/InstallDir was used, installing to `"$InstallDir`" and adding `"$InstallDir`"  to the System path."
+      Write-Host "/InstallDir was used, installing to `"$InstallDir`" and adding `"$InstallDir`" to the System path."
       Write-Host "Clean Uninstall will not be possible - after uninstall, remove `"$InstallDir`" from the file system and machine path."
 
     }

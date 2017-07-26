@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>libressl</id>
-    <version>2.5.3</version>
+    <version>2.5.5</version>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/libressl</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>libressl (Install)</title>
@@ -51,7 +51,7 @@
         the custom install location is not remembered by the package.
     
     </description>
-    <releaseNotes>Product Release Notes: https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.5.3-relnotes.txt</releaseNotes>
+    <releaseNotes>Product Release Notes: https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/libressl-2.5.5-relnotes.txt</releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

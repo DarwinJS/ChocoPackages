@@ -2,7 +2,6 @@
 
 $packageName   = 'libressl'
 $toolsDir      = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$FileFullPath = Join-Path $toolsDir 'libressl-2.5.3-windows.zip'
 
 If (Test-Path "$env:ProgramFiles\LibreSSL")
 {

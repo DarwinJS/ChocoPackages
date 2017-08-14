@@ -13,7 +13,19 @@ $ErrorActionPreference = 'Stop'; # stop on all errors
 $ProductName = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name 'ProductName').ProductName
 $EditionId = (Get-ItemProperty -Path 'HKLM:\SOFTWARE\Microsoft\Windows NT\CurrentVersion' -Name 'EditionID').EditionId
 
+#This has to work for Win7 (no get-ciminstance) and Nano (no get-wmiobject) - each of which specially construct win32_operatingsystem.version to handle before and after Windows 10 version numbers (which are in different registry keys)
+If ($psversiontable.psversion.major -lt 3)
+{
+  $OSVersionString = (Get-WMIObject Win32_OperatingSystem).version
+}
+Else 
+{
+  $OSVersionString = (Get-CIMInstance Win32_OperatingSystem).version
+}
+
+
 Write-Output "Running on: $ProductName, ($EditionId)"
+Write-Output "Windows Version: $OSVersionString"
 
 $RunningOnNano = $False
 If ($EditionId -ilike '*Nano*')
@@ -51,7 +63,12 @@ $filename = "$toolsdir\OpenSSH-Win$($OSBits).zip"
 $TargetFolder = "$PF\OpenSSH-Win$($OSBits)"
 $ExtractFolder = "$env:temp\OpenSSHTemp"
 $SSHLSAFeaturesDisabled = $True
-$TERMDefault = 'xterm'
+$TERMDefault = 'xterm' #Overall Default
+If ([version]$OSVersionString -ge [version]'10.0.0')
+{
+  $TERMDefault = 'xterm-256color' #Windows 10 / 2016 default
+}
+
 $sshlsaisLocked = $false
 
 $packageArgs = @{

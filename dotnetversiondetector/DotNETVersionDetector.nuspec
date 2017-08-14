@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>dotnetversiondetector</id>
-    <version>16.3.2.20170323</version>
+    <version>17.1.2</version>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/dotnetversiondetector</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>dotnetversiondetector (Install)</title>

@@ -2,7 +2,7 @@
 $ErrorActionPreference = 'Stop';
 
 $VersionMaj = '6.0.0'
-$versionMinor = '4'
+$versionMinor = '5'
 $Version = "$VersionMaj.$versionMinor"
 $PFSubfolder = "$VersionMaj-beta.$versionMinor"
 
@@ -10,14 +10,14 @@ $InstallFolder = "$env:ProgramFiles\PowerShell\$PFSubfolder"
 
 $packageName= 'powershell-core'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.4/PowerShell-6.0.0-beta.4-win10-win2016-x64.msi'
-$checksumwin10 = '0F8A4FDEA63EE2CA81879A4F50FCB765ECA12941C02C7FBC10EC69552A4850CC'
-$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.4/PowerShell-6.0.0-beta.4-win81-win2012r2-x64.msi'
-$checksumwin8 = '18E7240666B386157D9094BA7FB4150DC34964EE592B3333B0D66CF3073C55A9'
-$urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.18/PowerShell-6.0.0-alpha.18-win7-win2008r2-x64.msi'
-$checksumwin7 = '215F05BEDD048B13198B1F8A541B257B6FC64A737F953A02F220471D128A7E4C'
-$urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-alpha.18/PowerShell-6.0.0-alpha.18-win7-x86.msi'
-$checksumwin732 = '414888AFD70EE9199CE7EB910072D5E5573C90AF393C90C5A2CD53FFE68D75DC'
+$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.5/PowerShell-6.0.0-beta.5-win10-win2016-x64.msi'
+$checksumwin10 = 'DEBCCEA48D82C39509FAF61E8E2A18630898110814A860F6FFF806430F58B118'
+$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.5/PowerShell-6.0.0-beta.5-win81-win2012r2-x64.msi'
+$checksumwin8 = '8988917E8AC7FDA51FD8C40816000266E78A19E8373A1C97FD9197EDF8C58600'
+$urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.5/PowerShell-6.0.0-beta.5-win7-win2008r2-x64.msi'
+$checksumwin7 = '3951ED36BEC38810658BC4BB69FF6710D8685CAD9E3F0553DF7D9412C3BA0BC8'
+$urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.5/PowerShell-6.0.0-beta.5-win7-x86.msi'
+$checksumwin732 = '0A1FB9CFFBC8E9BC169F47DFA2F581837368290031BFEBC704D880A480F8AB17'
 
 $OSBits = ([System.IntPtr]::Size * 8)
 $Net4Version = (get-itemproperty "hklm:software\microsoft\net framework setup\ndp\v4\full" -ea silentlycontinue | Select -Expand Release -ea silentlycontinue)
@@ -46,9 +46,6 @@ switch ([version]$osVersion) {
       $selectedChecksum = $checksumwin8
     }
     {($_ -ge [version]"6.0") -AND ($_ -lt [version]"6.2")} {
-
-        #REMOVE WHEN WIN 7 PACKAGES ARE AVAILABLE AGAIN
-        Write-warning "THERE ARE NO WIN 7 RELEASES FOR BETA 1, INSTALLING ALPHA 18..."
 
         If ($OSBits -eq 32)
         {

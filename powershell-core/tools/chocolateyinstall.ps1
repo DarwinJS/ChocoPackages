@@ -2,7 +2,7 @@
 $ErrorActionPreference = 'Stop';
 
 $VersionMaj = '6.0.0'
-$versionMinor = '5'
+$versionMinor = '6'
 $Version = "$VersionMaj.$versionMinor"
 $PFSubfolder = "$VersionMaj-beta.$versionMinor"
 
@@ -10,14 +10,14 @@ $InstallFolder = "$env:ProgramFiles\PowerShell\$PFSubfolder"
 
 $packageName= 'powershell-core'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.5/PowerShell-6.0.0-beta.5-win10-win2016-x64.msi'
-$checksumwin10 = 'DEBCCEA48D82C39509FAF61E8E2A18630898110814A860F6FFF806430F58B118'
-$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.5/PowerShell-6.0.0-beta.5-win81-win2012r2-x64.msi'
-$checksumwin8 = '8988917E8AC7FDA51FD8C40816000266E78A19E8373A1C97FD9197EDF8C58600'
-$urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.5/PowerShell-6.0.0-beta.5-win7-win2008r2-x64.msi'
-$checksumwin7 = '3951ED36BEC38810658BC4BB69FF6710D8685CAD9E3F0553DF7D9412C3BA0BC8'
-$urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.5/PowerShell-6.0.0-beta.5-win7-x86.msi'
-$checksumwin732 = '0A1FB9CFFBC8E9BC169F47DFA2F581837368290031BFEBC704D880A480F8AB17'
+$urlwin10   = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.6/PowerShell-6.0.0-beta.6-win10-win2016-x64.msi'
+$checksumwin10 = '2F0F6F030F254590C63CD47CC3C4CD1952D002639D2F27F37E616CD2A5DDE84C'
+$urlwin8      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.6/PowerShell-6.0.0-beta.6-win81-win2012r2-x64.msi'
+$checksumwin8 = '2FCC755B89F8EEF697BBB536623FF6A4A1A2A169DD0C8F251AF916CA6C9392B7'
+$urlwin7      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.6/PowerShell-6.0.0-beta.6-win7-win2008r2-x64.msi'
+$checksumwin7 = 'D79E770D12EB0EA64BCEB30496AD81421165092BE3388230EB763660F7A726C7'
+$urlwin732      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-beta.6/PowerShell-6.0.0-beta.6-win7-x86.msi'
+$checksumwin732 = '685F21A1C8C4F0348BBF6159C52AAC67CDE789FBEAF2F0D448551BA36A6287EC'
 
 $OSBits = ([System.IntPtr]::Size * 8)
 $Net4Version = (get-itemproperty "hklm:software\microsoft\net framework setup\ndp\v4\full" -ea silentlycontinue | Select -Expand Release -ea silentlycontinue)

@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>sizer</id>
     <title>Sizer</title>
-    <version>4.0.550</version>
+    <version>4.0.562</version>
     <authors>BrianApps</authors>
     <owners>Darwin Sanoy</owners>
     <summary>Adds a control to all windows on your system to easily resize and place windows.  Great for aligning standard sized windows (e.g. 1280x720) to a screencast recording window.</summary>
@@ -18,7 +18,9 @@
     <copyright>B. Apps</copyright>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/sizer/appicon.png</iconUrl>
-    <releaseNotes>http://www.brianapps.net/sizer/sizer34.html</releaseNotes>
+    <releaseNotes>http://www.brianapps.net/sizer4/
+      4.0.562 and later require that you uninstall any previously installed versions before this package will correctly install ( you will receive MSI 1638 Error if a previous version exists.)
+    </releaseNotes>
   </metadata>
   <files>
     <file src="tools\**" target="tools" />

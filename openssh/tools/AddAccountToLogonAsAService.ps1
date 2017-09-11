@@ -29,8 +29,8 @@ if( [string]::IsNullOrEmpty($sidstr) ) {
 
 Write-Host "Account SID: $($sidstr)" -ForegroundColor DarkCyan
 
-$tmp = [System.IO.Path]::GetTempFileName()
-#$tmp = Join-path -Path ([Environment]::GetEnvironmentVariable('TEMP', 'Machine')) -ChildPath ([System.IO.Path]::GetRandomFileName())
+#$tmp = [System.IO.Path]::GetTempFileName()
+Do { $tmp = "$env:windir\temp\tmp$(get-random -maximum 99999).tmp"} While (Test-Path $tmp)
 
 Write-Host "Export current Local Security Policy" -ForegroundColor DarkCyan
 secedit.exe /export /cfg "$($tmp)"
@@ -69,8 +69,8 @@ Revision=1
 SeServiceLogonRight = $($currentSetting)
 "@
 
-	$tmp2 = [System.IO.Path]::GetTempFileName()
-	#$tmp2 = Join-path -Path ([Environment]::GetEnvironmentVariable('TEMP', 'Machine')) -ChildPath ([System.IO.Path]::GetRandomFileName())
+	#$tmp2 = [System.IO.Path]::GetTempFileName()
+	Do { $tmp2 = "$env:windir\temp\tmp$(get-random -maximum 99999).tmp"} While (Test-Path $tmp2)
 
 	Write-Host "Import new settings to Local Security Policy" -ForegroundColor DarkCyan
 	$outfile | Set-Content -Path $tmp2 -Encoding Unicode -Force

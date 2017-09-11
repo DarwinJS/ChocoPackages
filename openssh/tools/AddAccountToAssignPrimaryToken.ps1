@@ -29,7 +29,8 @@ if( [string]::IsNullOrEmpty($sidstr) ) {
 
 Write-Host "Account SID: $($sidstr)" -ForegroundColor DarkCyan
 
-$tmp = [System.IO.Path]::GetTempFileName()
+#$tmp = [System.IO.Path]::GetTempFileName()
+Do { $tmp = "$env:windir\temp\tmp$(get-random -maximum 99999).tmp"} While (Test-Path $tmp)
 #$tmp = Join-path -Path ([Environment]::GetEnvironmentVariable('TEMP', 'Machine')) -ChildPath ([System.IO.Path]::GetRandomFileName())
 
 Write-Host "Export current Local Security Policy" -ForegroundColor DarkCyan
@@ -69,8 +70,8 @@ Revision=1
 SeAssignPrimaryTokenPrivilege = $($currentSetting)
 "@
 
-	$tmp2 = [System.IO.Path]::GetTempFileName()
-	#$tmp2 = Join-path -Path ([Environment]::GetEnvironmentVariable('TEMP', 'Machine')) -ChildPath ([System.IO.Path]::GetRandomFileName())
+	#$tmp2 = [System.IO.Path]::GetTempFileName()
+	Do { $tmp2 = "$env:windir\temp\tmp$(get-random -maximum 99999).tmp"} While (Test-Path $tmp2)
 
 
 	Write-Host "Import new settings to Local Security Policy" -ForegroundColor DarkCyan

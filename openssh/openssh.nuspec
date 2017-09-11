@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Universal Installer)</title>
-    <version>0.0.19.0</version>
+    <version>0.0.20.0</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -85,6 +85,9 @@
       Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.19.0
 
       Release Notes for Chocolatey Packaging:
+      0.0.20.0
+        - handle edge case error for Azure Custom Script Extensions and DSC cChocoInstalledPackage resource 
+          where GetTempFileName does not find TEMP folder when running under SYSTEM account.
       0.0.19.0
         - sshlsa features are removed from install package as this dll is no longer required for Openssh
       0.0.18.20170730

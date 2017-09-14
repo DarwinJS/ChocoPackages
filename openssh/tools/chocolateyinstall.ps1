@@ -519,6 +519,7 @@ If ($SSHServerFeature)
   }
   New-Service -Name sshd -BinaryPathName "$TargetFolder\sshd.exe" -Description "SSH Daemon" -StartupType Automatic -DependsOn ssh-agent | Out-Null
   sc.exe config sshd obj= "NT SERVICE\SSHD"
+  sc.exe privs sshd SeAssignPrimaryTokenPrivilege
   
   If (!$DisableKeyPermissionsReset)
   {

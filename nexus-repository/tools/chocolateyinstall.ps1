@@ -1,8 +1,8 @@
 
 $packageid = "nexus-repository"
-$version = '3.3.2-02'
+$version = '3.5.2-01'
 $url = "http://download.sonatype.com/nexus/3/nexus-$version-win64.zip"
-$checksum = '7e540b2ee76fcfe29f372b498418ccb678e1edde'
+$checksum = 'e4fd555e645e6bf53aa85a113d0d3adf16c57852'
 $checksumtype = 'SHA1'
 $silentargs = "-q -console -dir `"$installfolder`""
 $validExitCodes = @(0)
@@ -45,7 +45,7 @@ If (!(Test-Path "$env:programdata\sonatype-work"))
 }
 else 
 {
-  Write-Warning "`"$env:programdata\sonatype-work`" already exists, not overwriting"
+  Write-Warning "`"$env:programdata\sonatype-work`" already exists, not overwriting, residual data from previous installs will not be reset."
 }
 
 Remove-Item "$ExtractFolder" -Force -Recurse

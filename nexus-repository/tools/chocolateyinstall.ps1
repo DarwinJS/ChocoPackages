@@ -1,8 +1,8 @@
 
 $packageid = "nexus-repository"
-$version = '3.5.2-01'
+$version = '3.6.0-02'
 $url = "http://download.sonatype.com/nexus/3/nexus-$version-win64.zip"
-$checksum = 'e4fd555e645e6bf53aa85a113d0d3adf16c57852'
+$checksum = 'ED1D124EABC257664584ACE3A8FCC4BE7BB9D9C7'
 $checksumtype = 'SHA1'
 $silentargs = "-q -console -dir `"$installfolder`""
 $validExitCodes = @(0)
@@ -54,10 +54,19 @@ Start-ChocolateyProcessAsAdmin -ExeToRun "$TargetFolder\bin\nexus.exe" -Statemen
 
 #Install-ChocolateyEnvironmentVariable 'PLEXUS_NEXUS_WORK' "$NexusWorkFolder"
 
-Start-Service $servicename
+$service = Start-Service $servicename -PassThru
 Write-Host "Waiting for Nexus service to be completely ready"
-Start-Sleep -seconds 120
+$Service.WaitForStatus('Running', '00:02:00')
 
+If ($Service.Status -ine 'Running') 
+{
+  Write-Warning "The Nexus Repository service ($servicename) did not start."
+}
+else 
+{
+  #Even though windows reports service is ready - web url will not respond until Nexus is actually ready to serve content
+  Start-Sleep 120
+}
 
 Write-Warning "`r`n"
 Write-Warning "*******************************************************************************************"

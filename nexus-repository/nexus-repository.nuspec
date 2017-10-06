@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>nexus-repository</id>
     <title>Nexus Repository OSS</title>
-    <version>3.5.2.01</version>
+    <version>3.6.0.02</version>
     <authors>Sonatype</authors>
     <owners>DarwinJS</owners>
     <summary>Free open source version of popular Nexus Repository for binary artifacts including first class Nuget support.</summary>
@@ -23,7 +23,10 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/nexus-repository/appicon.png</iconUrl>
     <releaseNotes>https://help.sonatype.com/display/NXRM3/2017+Release+Notes
-    Packaging 
+    Packaging
+    3.6.0.02
+     - improved service startup checking
+     - cleaner uninstall
     ATTENTION BRAKING CHANGE FOR UPGRADES FROM VERSIONS BEFORE 3.3.2.02
     Nexus no longer provided a setup.exe for installing Nexus Repository 3.x on Windows.
     If you previously installed with a package that used the setup.exe, you must manually uninstall it first. (you can use chocolatey uninstall if installed by chocolatey)

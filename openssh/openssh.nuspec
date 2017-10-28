@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Universal Installer)</title>
-    <version>0.0.21.0</version>
+    <version>0.0.22.0</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -70,6 +70,22 @@
       -params '"/UseNTRights"'
       By default the install uses PowerShell code that works on operating systems that cannot run the 32-bit ntrights.exe (Nano, Server Core w/out WOW64).
       If this code does not work for you, you can use this switch to invoke the 32-bit ntrights.exe
+
+      -params '"/PathSpecsToProbeForShellEXEString:$env:programfiles\PowerShell\*\Powershell.exe;$env:windir\system32\windowspowershell\v1.0\powershell.exe"'
+      A set of filespecs to probe for the latest version of a given shell exe.  Wildcards can be used in the path, but not the filename.
+      The first filespec to result in a one or more valid hits will be choosen for the default SSH shell (newest version when there are multiple hits).
+      If not valid hits are located with the entire set of filespecs, the default behavior of not setting the registry key is taken (rather than an error).
+      Only exe's in either Program Files folder or either System32 folder (system32, syswow64) will considered safe.  If the EXE is outside of these folders
+      you must use the /AllowInsecureShellEXE switch to have it configured.
+      
+      -params '"/SSHDefaultShellCommandOption:/c"'
+      Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable.
+
+      -params '"/AllowInsecureShellEXE"'
+      Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable.
+
+
+
     </description>
     <projectUrl>https://github.com/PowerShell/Win32-OpenSSH</projectUrl>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/openssh</packageSourceUrl>
@@ -85,6 +101,10 @@
       Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.21.0
 
       Release Notes for Chocolatey Packaging:
+      0.0.22.0
+        - Added switches for Default Shell configuration - for both chocolatey and barebonesinstall.ps1 
+          (PathSpecsToProbeForShellEXEString, SSHDefaultShellCommandOption and AllowInsecureShellEXE)
+        - Fix error when uninstall runs and openssh folder is already removed: https://github.com/DarwinJS/ChocoPackages/issues/49
       0.0.21.0
         - none
       0.0.20.20170913

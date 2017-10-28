@@ -109,48 +109,58 @@ https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
 
 Write-Output $OpeningMessage
 
+function Get-PackageParametersCustom {
+  [CmdletBinding()]
+  param(
+     [string] $Parameters = $Env:ChocolateyPackageParameters,
+     # Allows splatting with arguments that do not apply and future expansion. Do not use directly.
+     [parameter(ValueFromRemainingArguments = $true)]
+     [Object[]] $IgnoredArguments
+  )
+
+  $res = @{}
+
+  $re = "\/([a-zA-Z0-9]+)(:[`"'].+?[`"']|[^ ]+)?"
+  $results = $Parameters | Select-String $re -AllMatches | select -Expand Matches
+  foreach ($m in $results) {
+      if (!$m) { continue } # must because of posh 2.0 bug: https://github.com/chocolatey/chocolatey-coreteampackages/issues/465
+
+      $a = $m.Value -split ':'
+      $opt = $a[0].Substring(1); $val = $a[1..100] -join ':'
+      if ($val -match '^(".+")|(''.+'')$') {$val = $val -replace '^.|.$'}
+      $res[ $opt ] = if ($val) { $val } else { $true }
+  }
+  $res
+}
+
+
 # Now parse the packageParameters using good old regular expression
-if ($packageParameters) {
-    $match_pattern = "\/(?<option>([a-zA-Z]+)):(?<value>([`"'])?([a-zA-Z0-9- _\\:\.]+)([`"'])?)|\/(?<option>([a-zA-Z]+))"
-    #"
-    $option_name = 'option'
-    $value_name = 'value'
+if ($packageparameters) {
 
-    if ($packageParameters -match $match_pattern ){
-        $results = $packageParameters | Select-String $match_pattern -AllMatches
-        $results.matches | % {
-          $arguments.Add(
-              $_.Groups[$option_name].Value.Trim(),
-              $_.Groups[$value_name].Value.Trim())
-      }
-    }
-    else
-    {
-      throw "Package Parameters were found but were invalid (REGEX Failure)"
-    }
-
-    if ($arguments.ContainsKey("SSHAgentFeature")) {
+  $pp = Get-PackageParametersCustom
+  
+    if ($pp.SSHAgentFeature) {
         Write-Host "/SSHAgentFeature was used, including SSH Agent Service."
         $SSHAgentFeature = $true
     }
 
-    if ($arguments.ContainsKey("SSHServerFeature")) {
+    if ($pp.SSHServerFeature) {
         Write-Host "/SSHServerFeature was used, including SSH Server Feature."
         $SSHServerFeature = $true
     }
 
-    if ($arguments.ContainsKey("DisableKeyPermissionsReset")) {
+    if ($pp.DisableKeyPermissionsReset) {
         Write-Host "/DisableKeyPermissionsReset was used, will not reset key permissions."
         $DisableKeyPermissionsReset = $true
     }
 
-    if ($arguments.ContainsKey("OverWriteSSHDConf")) {
+    if ($pp.OverWriteSSHDConf) {
         Write-Host "/OverWriteSSHDConf was used, will overwrite any existing sshd_conf with one from install media."
         $OverWriteSSHDConf = $true
     }
 
-    if ($arguments.ContainsKey("SSHServerPort")) {
-        $SSHServerPort = $arguments.Get_Item("SSHServerPort")
+    if ($pp.SSHServerPort) {
+        $SSHServerPort = $pp.Get_Item("SSHServerPort")
         Write-Host "/SSHServerPort was used, attempting to use SSHD listening port $SSHServerPort."
         If (!$SSHServerFeature)
         {
@@ -159,10 +169,10 @@ if ($packageParameters) {
         }
     }
 
-    if ($arguments.ContainsKey("SSHLogLevel")) {
+    if ($pp.SSHLogLevel) {
 
       $ValidLogSettings = @('QUIET', 'FATAL', 'ERROR', 'INFO', 'VERBOSE', 'DEBUG', 'DEBUG1', 'DEBUG2','DEBUG3')
-      $SSHLogLevel = $arguments.Get_Item("SSHLogLevel").toupper()
+      $SSHLogLevel = $pp.Get_Item("SSHLogLevel").toupper()
       If ($ValidLogSettings -inotcontains $SSHLogLevel)
       {Throw "$SSHLogLevel is not one of the valid values: $(($ValidLogSettings -join ' ') | out-string)"}
       Write-Host "/SSHLogLevel was used, setting LogLevel in sshd_conf to $SSHLogLevel"
@@ -173,8 +183,8 @@ if ($packageParameters) {
       $SSHLogLevel = $null
     }
 
-    if ($arguments.ContainsKey("TERM")) {
-      $TERM = $arguments.Get_Item("TERM")
+    if ($pp.TERM) {
+      $TERM = $pp.Get_Item("TERM")
       Write-Host "/TERM was used, setting system TERM environment variable to $TERM"
       $TERMSwitchUsed = $True
     }
@@ -184,23 +194,37 @@ if ($packageParameters) {
       Write-Host "Defaulting system TERM environment variable to $TERM"
     }
 
-    if ($arguments.ContainsKey("UseNTRights")) {
+    if ($pp.UseNTRights) {
         Write-Host "Using ntrights.exe to set service permissions (will not work, but generate warning if WOW64 is not present on 64-bit machines)"
         $UseNTRights = $true
     }
 
-    if ($arguments.ContainsKey("DeleteServerKeysAfterInstalled")) {
+    if ($pp.DeleteServerKeysAfterInstalled) {
         Write-Host "Deleting server private keys after they have been secured."
         $DeleteServerKeysAfterInstalled = $true
     }
 
-    if ($arguments.ContainsKey("KeyBasedAuthenticationFeature")) {
-        Write-Host "Including LSA DLL Feature."
+    if ($pp.KeyBasedAuthenticationFeature) {
+        Write-Host "Including Key based authentication."
         $KeyBasedAuthenticationFeature = $true
         If (!$SSHServerFeature)
         {
           Write-Warning "KeyBasedAuthenticationFeature was specified, but is only value when SSHServerFeature is specified, ignoring..."
         }
+    }
+
+    if ($pp.PathSpecsToProbeForShellEXEString) {
+      $PathSpecsToProbeForShellEXEString = $pp.Get_Item("PathSpecsToProbeForShellEXEString")
+
+      Write-Host "PathSpecsToProbeForShellEXEString was used, probing for suitable shell using search specs: $PathSpecsToProbeForShellEXEString"
+    }
+
+    if ($pp.AllowInsecureShellEXE) {
+      $AllowInsecureShellEXE = $True
+    }
+
+    if ($pp.SSHDefaultShellCommandOption) {
+      $SSHDefaultShellCommandOption = $pp.Get_Item("SSHDefaultShellCommandOption")
     }
 
 } else {
@@ -384,8 +408,8 @@ If ((Test-Path "$TargetFolder\sshd_config") -AND !($OverWriteSSHDConf))
 Copy-Item "$ExtractFolder\*" "$PF" @ExcludeParams -Force -Recurse -Passthru -ErrorAction Stop
 #Fixed version of module
 #Write-Host "Updating OpenSSHUtils PowerShell Module to Latest"
-Copy-Item "$toolsdir\OpenSSHUtils.ps*" "$TargetFolder" -Force -PassThru -ErrorAction Stop
-#Copy-Item "$toolsdir\Fix*FilePermissions.ps1" "$TargetFolder" -Force -PassThru -ErrorAction Stop
+#Copy-Item "$toolsdir\OpenSSHUtils.ps*" "$TargetFolder" -Force -PassThru -ErrorAction Stop
+Copy-Item "$toolsdir\Set-SSHDefaultShell.ps1" "$TargetFolder" -Force -PassThru -ErrorAction Stop
 
 Remove-Item "$ExtractFolder" -Force -Recurse
 
@@ -497,6 +521,20 @@ If ($SSHServerFeature)
   Else
   {
     Write-Warning "Found existing server ssh keys in $TargetFolder, you must delete them manually to generate new ones."
+  }
+
+  
+
+  If ($PathSpecsToProbeForShellEXEString)
+  {
+    $ParamsSSHDefaultShell = @{}
+    $ParamsSSHDefaultShell.add('PathSpecsToProbeForShellEXEString',"$PathSpecsToProbeForShellEXEString")
+    If ($AllowInsecureShellEXE) {$ParamsSSHDefaultShell += @{'AllowInsecureShellEXE'=$AllowInsecureShellEXE}}
+    If ($SSHDefaultShellCommandOption) {$ParamsSSHDefaultShell += @{'SSHDefaultShellCommandOption'="$SSHDefaultShellCommandOption"}}
+    
+    Write-Host "$ParamsSSHDefaultShell"
+  
+    . $TargetFolder\Set-SSHDefaultShell.ps1 @ParamsSSHDefaultShell
   }
 
   netsh advfirewall firewall add rule name='SSHD Port OpenSSH (chocolatey package: openssh)' dir=in action=allow protocol=TCP localport=$SSHServerPort

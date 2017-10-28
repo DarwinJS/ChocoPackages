@@ -42,7 +42,10 @@ Param (
   [string]$SSHLogLevel,
   [switch]$ReleaseSSHLSAForUpgrade,
   [string]$TERM,
-  [switch]$DisableKeyPermissionsReset
+  [switch]$DisableKeyPermissionsReset,
+  [string]$PathSpecsToProbeForShellEXEString,
+  [string]$SSHDefaultShellCommandOption,
+  [switch]$AllowInsecureShellEXE
   )
 
 Write-Output "Configuring on Port $SSHServerPort"

@@ -77,14 +77,15 @@
       If not valid hits are located with the entire set of filespecs, the default behavior of not setting the registry key is taken (rather than an error).
       Only exe's in either Program Files folder or either System32 folder (system32, syswow64) will considered safe.  If the EXE is outside of these folders
       you must use the /AllowInsecureShellEXE switch to have it configured.
+      Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
       
       -params '"/SSHDefaultShellCommandOption:/c"'
       Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable.
+      Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
 
       -params '"/AllowInsecureShellEXE"'
       Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable.
-
-
+      Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
 
     </description>
     <projectUrl>https://github.com/PowerShell/Win32-OpenSSH</projectUrl>
@@ -104,6 +105,10 @@
       0.0.22.0
         - Added switches for Default Shell configuration - for both chocolatey and barebonesinstall.ps1 
           (PathSpecsToProbeForShellEXEString, SSHDefaultShellCommandOption and AllowInsecureShellEXE)
+          Make the latest powershell core or windows powershell the default shell:
+          /PathSpecsToProbeForShellEXEString:$env:programfiles\PowerShell\*\pwsh.exe;$env:programfiles\PowerShell\*\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
+          -PathSpecsToProbeForShellEXEString "$env:programfiles\PowerShell\*\pwsh.exe;$env:programfiles\PowerShell\*\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
+          Rules and More Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
         - Fix error when uninstall runs and openssh folder is already removed: https://github.com/DarwinJS/ChocoPackages/issues/49
       0.0.21.0
         - none

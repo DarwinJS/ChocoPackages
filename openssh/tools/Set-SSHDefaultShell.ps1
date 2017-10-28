@@ -35,7 +35,7 @@
 
 .EXAMPLE
 #All of these filespecs will be filtered out (dropped) because you can't wildcard the exe name, for securities sake you must know what the shell is called to use it:
--PathSpecsToProbeForShellEXEString "$env:userprofile\downloads\*.exe","c:\Program Files\PowerShell\*\P*.exe","c:\windows\system32\*"
+-PathSpecsToProbeForShellEXEString "$env:userprofile\downloads\*.exe;c:\Program Files\PowerShell\*\P*.exe;c:\windows\system32\*"
 
 .EXAMPLE
 #PowerShell for Windows instead of default cmd.exe, if not found, default behavior (no registry key created, cmd.exe is ssh default):
@@ -43,31 +43,31 @@
 
 .EXAMPLE
 #The latest version of powershell core (including favoring the new EXE name), if not found, use windows powershell
--PathSpecsToProbeForShellEXEString "$env:programfiles\PowerShell\*\pwsh.exe","$env:programfiles\PowerShell\*\Powershell.exe","c:\windows\system32\windowspowershell\v1.0\powershell.exe"
+-PathSpecsToProbeForShellEXEString "$env:programfiles\PowerShell\*\pwsh.exe;$env:programfiles\PowerShell\*\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
 
 .EXAMPLE
 #The latest version of Ruby, if not found, powershell core if not found, default behavior (no registry key created, cmd.exe is ssh default)
--PathSpecsToProbeForShellEXEString "c:\tools\ruby*\bin\ruby.exe","c:\Program Files\PowerShell\*\pwsh.exe","c:\Program Files\PowerShell\*\Powershell.exe"
+-PathSpecsToProbeForShellEXEString "c:\tools\ruby*\bin\ruby.exe;c:\Program Files\PowerShell\*\pwsh.exe;c:\Program Files\PowerShell\*\Powershell.exe"
 
 #I have no idea if ruby can actually be an SSH shell - just an example
 
 .EXAMPLE
 #Windows Subsystem for Linux Bash.exe, if not found, the latest version of git's bash.exe, if not found, default behavior (no registry key created, cmd.exe is ssh default)
--PathSpecsToProbeForShellEXEString "$env:windir\system32\bash.exe","$env:programfiles\Git\usr\bin\bash.exe"
+-PathSpecsToProbeForShellEXEString "$env:windir\system32\bash.exe;$env:programfiles\Git\usr\bin\bash.exe"
 
 #I have no idea if git's bash can actually be an SSH shell - just an example
 
 .EXAMPLE
 #Specific version of powershell core, if not found, windows powershell
--PathSpecsToProbeForShellEXEString "c:\Program Files\PowerShell\6.0.0-beta.6\Powershell.exe","c:\windows\system32\windowspowershell\v1.0\powershell.exe"
+-PathSpecsToProbeForShellEXEString "c:\Program Files\PowerShell\6.0.0-beta.6\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
 
 .EXAMPLE
 #malware.exe filtered out because it is not in a secure folder, Specific version of powershell core, if not found, windows powershell
--PathSpecsToProbeForShellEXEString "$env:userprofile\downloads\malware.exe","c:\Program Files\PowerShell\6.0.0-beta.6\Powershell.exe","c:\windows\system32\windowspowershell\v1.0\powershell.exe"
+-PathSpecsToProbeForShellEXEString "$env:userprofile\downloads\malware.exe;c:\Program Files\PowerShell\6.0.0-beta.6\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
 
 .EXAMPLE
 #malware.exe is used because of -AllowInsecureShellEXE
--AllowInsecureShellEXE -PathSpecsToProbeForShellEXEString "$env:userprofile\downloads\malware.exe","c:\Program Files\PowerShell\6.0.0-beta.6\Powershell.exe","c:\windows\system32\windowspowershell\v1.0\powershell.exe"
+-AllowInsecureShellEXE -PathSpecsToProbeForShellEXEString "$env:userprofile\downloads\malware.exe;c:\Program Files\PowerShell\6.0.0-beta.6\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
 
 .NOTES
 	Darwin Sanoy
@@ -140,7 +140,7 @@ If ($PathSpecsToProbeForShellEXE.count -ge 1)
 
   If ($ListOfEXEObjects.count -lt 1)
   {
-    Write-warning "On this system, searching $PathSpecsToProbeForShellEXEString does not result in any paths that end in .EXE, DefaultShell will not be explicitly set and ssh will use its default shell behavior."
+    Write-warning "On this system, searching $PathSpecsToProbeForShellEXEString does not result in any paths that end in .EXE, DefaultShell will not be explicitly set and ssh will use its default shell behavior or the existing registry key value."
   }
   else 
   {    
@@ -171,11 +171,11 @@ If ($PathSpecsToProbeForShellEXE.count -ge 1)
       {
         Write-Host "Writing default shell to registry ($ShellEXEToUse)"
         $SSHRegKey = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH"
-        New-ItemProperty -Path $SSHRegKey -Name 'DefaultShell' -Value "$ShellEXEToUse" -PropertyType 'String' -Force
+        New-ItemProperty -Path $SSHRegKey -Name 'DefaultShell' -Value "$ShellEXEToUse" -PropertyType 'String' -Force | Out-Null
         If ($SSHDefaultShellCommandOption)
         {
           Write-Host "Writing default shell command option to registry ($SSHDefaultShellCommandOption)"    
-          New-ItemProperty -Path $SSHRegKey -Name 'DefaultShellCommandOption' -Value "$SSHDefaultShellCommandOption" -PropertyType 'String' -Force
+          New-ItemProperty -Path $SSHRegKey -Name 'DefaultShellCommandOption' -Value "$SSHDefaultShellCommandOption" -PropertyType 'String' -Force  | Out-Null
         }
         else 
         {  #Revert to default behavior if not specified

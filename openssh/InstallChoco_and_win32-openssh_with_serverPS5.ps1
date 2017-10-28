@@ -50,6 +50,8 @@ Register-PackageSource -name chocolatey -provider nuget -location http://chocola
 
 Install-Package openssh -provider NuGet -Force
 
-cd ("$env:ProgramFiles\nuget\packages\openssh." + "$((dir "$env:ProgramFiles\nuget\packages\openssh*" | %{[version]$_.name.trimstart('openssh.')} | sort | select -last 1) -join '.')\tools")
+If (Test-Path "$env:programfiles\PackageManagement\NuGet\Packages") {$NuGetPkgRoot = "$env:programfiles\PackageManagement\NuGet\Packages"} elseIf (Test-Path "$env:programfiles\NuGet\Packages") {$NuGetPkgRoot = "$env:programfiles\NuGet\Packages"}
+
+cd ("$NuGetPkgRoot\openssh." + "$((dir "$NuGetPkgRoot\openssh*" | %{[version]$_.name.trimstart('openssh.')} | sort | select -last 1) -join '.')\tools")
 
 .".\barebonesinstaller.ps1" -SSHServerFeature

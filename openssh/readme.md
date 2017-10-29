@@ -24,6 +24,9 @@ Yes you read that right - although packaged as a chocolatey .nupkg, this install
     - [-params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'](#params-sshserverfeature-deleteserverkeysafterinstalled)
     - [-params '"/DeleteConfigAndServerKeys"' (during uninstall command)](#params-deleteconfigandserverkeys-during-uninstall-command)
     - [-params '"/UseNTRights"'](#params-usentrights)
+    - [-params '"/PathSpecsToProbeForShellEXEString:$env:programfiles\PowerShell\*\Powershell.exe;$env:windir\system32\windowspowershell\v1.0\powershell.exe"'](#params-pathspecstoprobeforshellexestringenvprogramfilespowershellpowershellexeenvwindirsystem32windowspowershellv10powershellexe)
+    - [-params '"/SSHDefaultShellCommandOption:/c"'](#params-sshdefaultshellcommandoptionc)
+    - [-params '"/AllowInsecureShellEXE"'](#params-allowinsecureshellexe)
 - [Ancient Version History](#ancient-version-history)
 
 
@@ -100,16 +103,16 @@ Oneliner premade script that does the below:
 2. Install-PackageProvider NuGet -forcebootstrap -force
 3. Register-PackageSource -name chocolatey -provider nuget -location http://chocolatey.org/api/v2/ 
 4. Install-Package openssh -provider NuGet -Force
-1. If (Test-Path "$env:programfiles\PackageManagement\NuGet\Packages") {$NuGetPkgRoot = "$env:programfiles\PackageManagement\NuGet\Packages"} elseIf (Test-Path "$env:programfiles\NuGet\Packages") {$NuGetPkgRoot = "$env:programfiles\NuGet\Packages"}
-5. cd ("$NuGetPkgRoot\openssh." + "$((dir "$NuGetPkgRoot\openssh*" | %{[version]$_.name.trimstart('openssh.')} | sort | select -last 1) -join '.')\tools")
-6. & ".\barebonesinstaller.ps1" #Client Tools only
-7. & ".\barebonesinstaller.ps1" -SSHServerFeature #SSH Server (& client tools)
-8. & ".\barebonesinstaller.ps1" -SSHServerFeature -SSHServerPort '5555' #SSH Server on port 5555 (& client tools)
-& ".\barebonesinstaller.ps1" -SSHServerFeature -PathSpecsToProbeForShellEXEString "$env:programfiles\PowerShell\*\pwsh.exe;$env:programfiles\PowerShell\*\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
+5. If (Test-Path "$env:programfiles\PackageManagement\NuGet\Packages") {$NuGetPkgRoot = "$env:programfiles\PackageManagement\NuGet\Packages"} elseIf (Test-Path "$env:programfiles\NuGet\Packages") {$NuGetPkgRoot = "$env:programfiles\NuGet\Packages"}
+6. cd ("$NuGetPkgRoot\openssh." + "$((dir "$NuGetPkgRoot\openssh*" | %{[version]$_.name.trimstart('openssh.')} | sort | select -last 1) -join '.')\tools")
+7. & ".\barebonesinstaller.ps1" #Client Tools only
+8. & ".\barebonesinstaller.ps1" -SSHServerFeature #SSH Server (& client tools)
+9. & ".\barebonesinstaller.ps1" -SSHServerFeature -SSHServerPort '5555' #SSH Server on port 5555 (& client tools)
+10. & ".\barebonesinstaller.ps1" -SSHServerFeature -PathSpecsToProbeForShellEXEString "$env:programfiles\PowerShell\*\pwsh.exe;$env:programfiles\PowerShell\*\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
 ## Uninstall and Clean Up
-9. & ".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall 
+1. & ".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall 
 #Uninstall
-1. & ".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall -DeleteConfigAndServerKeys 
+2. & ".\barebonesinstaller.ps1" -SSHServerFeature -Uninstall -DeleteConfigAndServerKeys 
  
 #Uninstall leftovers (after an above command)
 
@@ -196,8 +199,56 @@ affect Server Core where this feature is optional and not installed by default a
 **Note:** If you have tested and this switch is *absolutely required* for your deployment scenario, please file an issue so that I can enhance the code so that
 this switch is not needed for your scenario.
 
+## -params '"/PathSpecsToProbeForShellEXEString:$env:programfiles\PowerShell\*\Powershell.exe;$env:windir\system32\windowspowershell\v1.0\powershell.exe"'
+A set of filespecs to probe for the latest version of a given shell exe.  Wildcards can be used in the path, but not the filename.
+The first filespec to result in a one or more valid hits will be choosen for the default SSH shell (newest version when there are multiple hits).
+If not valid hits are located with the entire set of filespecs, the default behavior of not setting the registry key is taken (rather than an error).
+Only exe's in either Program Files folder or either System32 folder (system32, syswow64) will considered safe.  If the EXE is outside of these folders
+you must use the /AllowInsecureShellEXE switch to have it configured.
+This is implemented as a seperate script that is left in the openssh folder so admins can call it again when they wish to reset the default shell after upgrading a shell (e.g. just installed the lastest version of PowerShell core)
+Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
+
+## -params '"/SSHDefaultShellCommandOption:/c"'
+Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable.
+Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
+
+## -params '"/AllowInsecureShellEXE"'
+Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable that is outside of the Programs Folders or system32.
+Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
+
+
+
 # Ancient Version History
 
+0.0.11.0
+- /ReleaseSSHLSAForUpgrade - switch that de-configures ssh-lsa.dll in preparation for updating it after a reboot and forced reinstall (and another reboot).  See: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
+- Set-SSHKeyPermissions.ps1 - new utility for setting permissions on all existing user's authorized_keys files is placed in SSHD binaries folder (on path)
+- Calls Set-SSHKeyPermissions.ps1 during install to ensure existing keys are compliant with security updates in SSH 0.0.11.0
+- Fix - uninstall was not deconfiguring ssh-lsa.dll from load at startup.
+- updated barebonesinstaller.ps1 to take all switches chocolatey takes
+0.0.10.20170402
+- fix to looking versions of installed exes for PSH 2
+0.0.10.20170331
+- fix to looking versions of installed exes for Nano
+0.0.10.20170329
+- fixed issue looking up the path of conflicting sshd service (if one exists)
+- fixed problem for nano with listing of exe versions introdcued in 0.0.10.0
+0.0.10.0 
+- displays before and after versions of all EXES in SSH install folder and ssh-lsa.dll
+- readme updates for barebonesinstaller.ps1 (due to version 0.0.10.0 not sorting properly with previous versions)
+- Dockerfile updates (due to version 0.0.10.0 not sorting properly with previous versions)
+- Fix for Nano for barebonesinstaller.ps1 calling 7z.exe
+0.0.9.20170313 - fix for Win7/Server 2008 + PSH 2 When Installing SSHServerFeature
+0.0.9.20170311
+    - no longer overwrites sshd_conf if it already exists, unless /OverWriteSSHDConf is used
+    - supports setting SSHD LogLevel during install or upgrade using /SSHLogLevel
+    - automatically creates "logs" subfolder in install folder so that if logging is enabled 
+    in the config file it starts without requiring a manual folder creation
+0.0.9.20170308 - fix to fileinuseutiles.ps1 to not resolve path when target does not exist
+0.0.9.20170306 - fix to ensure sshlsa.dll always gets installed when it should (thanks @felfert !)
+0.0.9.20170226 - fix to allow barebones.ps1 to work on PSH 2 (e.g. Server 2008 R2)
+0.0.9.20170222 - removal of stray file
+0.0.9.0 - fix for problem detecting our install of sshd
 0.0.3.0
 - NEW: If ssh-lsa.dll is locked at install time, package schedules it to be updated at reboot
         displays a "CRITICAL" message noting that a reboot is needed.

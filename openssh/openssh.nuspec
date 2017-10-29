@@ -84,7 +84,7 @@
       Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
 
       -params '"/AllowInsecureShellEXE"'
-      Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable.
+      Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable that is outside of the Programs Folders or system32.
       Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
 
     </description>
@@ -103,13 +103,14 @@
 
       Release Notes for Chocolatey Packaging:
       0.0.22.0
+        - Fix error when uninstall runs and openssh folder is already removed: https://github.com/DarwinJS/ChocoPackages/issues/49
+        - Fix error using PSH 5 Package Management to install on Server 2016: https://github.com/DarwinJS/ChocoPackages/issues/47
         - Added switches for Default Shell configuration - for both chocolatey and barebonesinstall.ps1 
           (PathSpecsToProbeForShellEXEString, SSHDefaultShellCommandOption and AllowInsecureShellEXE)
           Make the latest powershell core or windows powershell the default shell:
           /PathSpecsToProbeForShellEXEString:$env:programfiles\PowerShell\*\pwsh.exe;$env:programfiles\PowerShell\*\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
           -PathSpecsToProbeForShellEXEString "$env:programfiles\PowerShell\*\pwsh.exe;$env:programfiles\PowerShell\*\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
           Rules and More Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
-        - Fix error when uninstall runs and openssh folder is already removed: https://github.com/DarwinJS/ChocoPackages/issues/49
       0.0.21.0
         - none
       0.0.20.20170913
@@ -149,35 +150,6 @@
         - ssh-lsa.dll is no longer needed and no longer configured (switch /ReleaseSSHLSAForUpgrade is ignored)
         - if ssh-lsa.dll is found during upgrade a delete attempt is made - if unsuccessful (file locked), ssh-lsa.dll 
           will be deconfigured as an authentication package and it will be delete on the next upgrade.
-      0.0.11.0
-        - /ReleaseSSHLSAForUpgrade - switch that de-configures ssh-lsa.dll in preparation for updating it after a reboot and forced reinstall (and another reboot).  See: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
-        - Set-SSHKeyPermissions.ps1 - new utility for setting permissions on all existing user's authorized_keys files is placed in SSHD binaries folder (on path)
-        - Calls Set-SSHKeyPermissions.ps1 during install to ensure existing keys are compliant with security updates in SSH 0.0.11.0
-        - Fix - uninstall was not deconfiguring ssh-lsa.dll from load at startup.
-        - updated barebonesinstaller.ps1 to take all switches chocolatey takes
-      0.0.10.20170402
-        - fix to looking versions of installed exes for PSH 2
-      0.0.10.20170331
-        - fix to looking versions of installed exes for Nano
-      0.0.10.20170329
-        - fixed issue looking up the path of conflicting sshd service (if one exists)
-        - fixed problem for nano with listing of exe versions introdcued in 0.0.10.0
-      0.0.10.0 
-        - displays before and after versions of all EXES in SSH install folder and ssh-lsa.dll
-        - readme updates for barebonesinstaller.ps1 (due to version 0.0.10.0 not sorting properly with previous versions)
-        - Dockerfile updates (due to version 0.0.10.0 not sorting properly with previous versions)
-        - Fix for Nano for barebonesinstaller.ps1 calling 7z.exe
-      0.0.9.20170313 - fix for Win7/Server 2008 + PSH 2 When Installing SSHServerFeature
-      0.0.9.20170311
-         - no longer overwrites sshd_conf if it already exists, unless /OverWriteSSHDConf is used
-         - supports setting SSHD LogLevel during install or upgrade using /SSHLogLevel
-         - automatically creates "logs" subfolder in install folder so that if logging is enabled 
-           in the config file it starts without requiring a manual folder creation
-      0.0.9.20170308 - fix to fileinuseutiles.ps1 to not resolve path when target does not exist
-      0.0.9.20170306 - fix to ensure sshlsa.dll always gets installed when it should (thanks @felfert !)
-      0.0.9.20170226 - fix to allow barebones.ps1 to work on PSH 2 (e.g. Server 2008 R2)
-      0.0.9.20170222 - removal of stray file
-      0.0.9.0 - fix for problem detecting our install of sshd
 
     </releaseNotes>
   </metadata>

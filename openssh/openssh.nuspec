@@ -16,77 +16,10 @@
       Read here for more information: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md
       *****************************************************************************
       
-      CloudyWindows.com Utility Scripts:
-      * Set-SSHKeyPermissions.ps1
+      CloudyWindows.io Utility Scripts:
+      * Set-SSHDefaultShell.ps1
 
-      This package supports the following parameters:
-
-      -params '"/SSHServerFeature"' (Install and Uninstall)
-      Also install sshd Windows Service - including opening port 22.
-      If this parameter is not included on an upgrade or uninstall and
-      the sshd server is installed - an error is generated.  You must
-      use this switch to indicate you have made preparations for the
-      sshd service to be interrupted or removed.
-
-      -params '"/SSHAgentFeature"'
-      Installs SSH Agent Service even if SSHD Server is not being installed.
-      Requires admin rights to configure service.
-      This option is automatically set when /SSHServerFeature is used.
-
-      -params '"/SSHServerFeature /SSHServerPort:3834"'
-      Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.
-
-      -params '"/OverWriteSSHDConf"'
-      Introduced in Version: 0.0.9.20170311
-      By default an existing sshd_conf file will not be overwritten (previous packaging versions always overwrote)
-      Use this switch to overwrite an existing sshd_conf with the one from the current install media
-
-      -params '"/SSHLogLevel:VERBOSE"'
-      Introduced in Version: 0.0.9.20170311
-      Allows the setup of the SSH logging level.
-      Valid Options: QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, DEBUG3
-      On a fresh install LogLevel is set to QUIET
-
-      -params '"/TERM:xterm-new"'
-      Introduced in Version: 0.0.14.0
-      Allows the initial setup and subsequent update of the TERM system environment variable.
-      On a fresh install TERM is set to xterm whether or not this switch is used.
-
-      -params '"/DisableKeyPermissionsReset"'
-      Introduced in Version: 0.0.15.0
-      As of 0.0.13.0 new key permissions are required for ssh keys.  By default this installer
-      reasserts these permissions whenever run.  Used this switch if you do not want the installation
-      to attempt to manage key permissions.  The utility script will still be installed and available
-      if you need to use it later to fix up permissions.
-
-      -params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'
-      Also install sshd Windows Service - including opening port 22 and
-      it with Key Based Authentication (reboot required before active)
-      Server keys are deleted after added to the ssh-agent (you will not have an opportunity to copy them)
-
-      -params '"/SSHServerFeature /DeleteConfigAndServerKeys"' (Uninstall)
-      By default an uninstall does not remove config files nor server keys.
-
-      -params '"/UseNTRights"'
-      By default the install uses PowerShell code that works on operating systems that cannot run the 32-bit ntrights.exe (Nano, Server Core w/out WOW64).
-      If this code does not work for you, you can use this switch to invoke the 32-bit ntrights.exe
-
-      -params '"/PathSpecsToProbeForShellEXEString:$env:programfiles\PowerShell\*\Powershell.exe;$env:windir\system32\windowspowershell\v1.0\powershell.exe"'
-      A set of filespecs to probe for the latest version of a given shell exe.  Wildcards can be used in the path, but not the filename.
-      The first filespec to result in a one or more valid hits will be choosen for the default SSH shell (newest version when there are multiple hits).
-      If not valid hits are located with the entire set of filespecs, the default behavior of not setting the registry key is taken (rather than an error).
-      Only exe's in either Program Files folder or either System32 folder (system32, syswow64) will considered safe.  If the EXE is outside of these folders
-      you must use the /AllowInsecureShellEXE switch to have it configured.
-      Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
-      
-      -params '"/SSHDefaultShellCommandOption:/c"'
-      Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable.
-      Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
-
-      -params '"/AllowInsecureShellEXE"'
-      Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable that is outside of the Programs Folders or system32.
-      Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
-
+      See release notes for package parameters
     </description>
     <projectUrl>https://github.com/PowerShell/Win32-OpenSSH</projectUrl>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/openssh</packageSourceUrl>
@@ -111,6 +44,79 @@
           /PathSpecsToProbeForShellEXEString:$env:programfiles\PowerShell\*\pwsh.exe;$env:programfiles\PowerShell\*\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
           -PathSpecsToProbeForShellEXEString "$env:programfiles\PowerShell\*\pwsh.exe;$env:programfiles\PowerShell\*\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
           Rules and More Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
+
+          This package supports the following parameters:
+
+          -params '"/SSHServerFeature"' (Install and Uninstall)
+          Also install sshd Windows Service - including opening port 22.
+          If this parameter is not included on an upgrade or uninstall and
+          the sshd server is installed - an error is generated.  You must
+          use this switch to indicate you have made preparations for the
+          sshd service to be interrupted or removed.
+
+          -params '"/SSHAgentFeature"'
+          Installs SSH Agent Service even if SSHD Server is not being installed.
+          Requires admin rights to configure service.
+          This option is automatically set when /SSHServerFeature is used.
+
+          -params '"/SSHServerFeature /SSHServerPort:3834"'
+          Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.
+
+          -params '"/OverWriteSSHDConf"'
+          Introduced in Version: 0.0.9.20170311
+          By default an existing sshd_conf file will not be overwritten (previous packaging versions always overwrote)
+          Use this switch to overwrite an existing sshd_conf with the one from the current install media
+
+          -params '"/SSHLogLevel:VERBOSE"'
+          Introduced in Version: 0.0.9.20170311
+          Allows the setup of the SSH logging level.
+          Valid Options: QUIET, FATAL, ERROR, INFO, VERBOSE, DEBUG, DEBUG1, DEBUG2, DEBUG3
+          On a fresh install LogLevel is set to QUIET
+
+          -params '"/TERM:xterm-new"'
+          Introduced in Version: 0.0.14.0
+          Allows the initial setup and subsequent update of the TERM system environment variable.
+          On a fresh install TERM is set to xterm whether or not this switch is used.
+
+          -params '"/DisableKeyPermissionsReset"'
+          Introduced in Version: 0.0.15.0
+          As of 0.0.13.0 new key permissions are required for ssh keys.  By default this installer
+          reasserts these permissions whenever run.  Used this switch if you do not want the installation
+          to attempt to manage key permissions.  The utility script will still be installed and available
+          if you need to use it later to fix up permissions.
+
+          -params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'
+          Also install sshd Windows Service - including opening port 22 and
+          it with Key Based Authentication (reboot required before active)
+          Server keys are deleted after added to the ssh-agent (you will not have an opportunity to copy them)
+
+          -params '"/SSHServerFeature /DeleteConfigAndServerKeys"' (Uninstall)
+          By default an uninstall does not remove config files nor server keys.
+
+          -params '"/UseNTRights"'
+          By default the install uses PowerShell code that works on operating systems that cannot run the 32-bit ntrights.exe (Nano, Server Core w/out WOW64).
+          If this code does not work for you, you can use this switch to invoke the 32-bit ntrights.exe
+
+          -params '"/PathSpecsToProbeForShellEXEString:$env:programfiles\PowerShell\*\Powershell.exe;$env:windir\system32\windowspowershell\v1.0\powershell.exe"'
+          Introduced in Version: 0.0.22.0
+          A set of filespecs to probe for the latest version of a given shell exe.  Wildcards can be used in the path, but not the filename.
+          The first filespec to result in a one or more valid hits will be choosen for the default SSH shell (newest version when there are multiple hits).
+          If not valid hits are located with the entire set of filespecs, the default behavior of not setting the registry key is taken (rather than an error).
+          Only exe's in either Program Files folder or either System32 folder (system32, syswow64) will considered safe.  If the EXE is outside of these folders
+          you must use the /AllowInsecureShellEXE switch to have it configured.
+          Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
+          
+          -params '"/SSHDefaultShellCommandOption:/c"'
+          Introduced in Version: 0.0.22.0
+          Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable.
+          Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
+
+          -params '"/AllowInsecureShellEXE"'
+          Introduced in Version: 0.0.22.0
+          Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable that is outside of the Programs Folders or system32.
+          Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
+
+
       0.0.21.0
         - none
       0.0.20.20170913

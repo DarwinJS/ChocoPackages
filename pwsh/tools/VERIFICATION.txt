@@ -1,0 +1,12 @@
+﻿
+VERIFICATION
+Verification is intended to assist the Chocolatey moderators and community
+in verifying that this package's contents are trustworthy.
+
+Retrieve the SHA256 value for the specific release MSI you will install from
+this page: https://github.com/PowerShell/PowerShell/releases
+
+Calculate the SHA256 on the file and compare.
+
+The package also contains and performs the checksum even when it has the source
+internally.

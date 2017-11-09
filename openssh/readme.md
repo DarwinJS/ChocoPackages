@@ -137,8 +137,10 @@ https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/Dockerfi
 https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/DockerServer2016Core/Dockerfile
 
 # Install Scenario 4: Complete Offline Install / Network Based Install / SCCM Or Other ESD Install (w/out Chocolatey, w/out WOW64, w/out PowerShell 5, w/out Internet):
+
 This works for any version of Windows that OpenSSH can run on.
 Use this method for:
+
 - Installing from a network share (after step 1)
 - Installing through SCCM or another automated software deployment solution (after step 1)
 

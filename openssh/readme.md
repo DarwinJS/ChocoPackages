@@ -13,7 +13,7 @@ Yes you read that right - although packaged as a chocolatey .nupkg, this install
     - [Uninstall and Clean Up](#uninstall-and-clean-up)
 - [Install Scenario 3: Docker](#install-scenario-3-docker)
     - [Pre-made Docker Files:](#pre-made-docker-files)
-- [Install Scenario 4: Complete Offline Install (w/out Chocolatey, w/out WOW64, w/out PowerShell 5, w/out Internet):](#install-scenario-4-complete-offline-install-wout-chocolatey-wout-wow64-wout-powershell-5-wout-internet)
+- [Install Scenario 4: Complete Offline Install / Network Based Install / SCCM Or Other ESD Install (w/out Chocolatey, w/out WOW64, w/out PowerShell 5, w/out Internet):](#install-scenario-4-complete-offline-install-network-based-install-sccm-or-other-esd-install-wout-chocolatey-wout-wow64-wout-powershell-5-wout-internet)
 - [Package Parameters](#package-parameters)
     - [-params '"/SSHServerFeature"' (Install and Uninstall)](#params-sshserverfeature-install-and-uninstall)
     - [-params '"/SSHAgentFeature"'](#params-sshagentfeature)
@@ -136,20 +136,37 @@ https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/Dockerfi
 **Server 2016 Core Container:**
 https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/DockerServer2016Core/Dockerfile
 
-# Install Scenario 4: Complete Offline Install (w/out Chocolatey, w/out WOW64, w/out PowerShell 5, w/out Internet):
-This works for any version of Windows that OpenSSH can run on.  It also works in non-internet scenarios as well
+# Install Scenario 4: Complete Offline Install / Network Based Install / SCCM Or Other ESD Install (w/out Chocolatey, w/out WOW64, w/out PowerShell 5, w/out Internet):
+This works for any version of Windows that OpenSSH can run on.
+Use this method for:
+- Installing from a network share (after step 1)
+- Installing through SCCM or another automated software deployment solution (after step 1)
 
 **Requirements:** Windows 7 SP1 / Server 2008 w/ PowerShell 2
 **Works On:** Anything from Windows 7 and later, PSH 2 and later
 
 **Steps**: [1] Fetch from Internet (manual by human), [2] Unpack (unzip util - manual or automated), [3] Install (run installbarebones.ps1)
 
-1. Expand the openssh .nupkg (rename it to .zip and use your favorite unzipper)
-2. Push the ..\tools folder to the target system (use Copy-Item -ToSession for Nano)
+1. Download the desired version openssh .nupkg from Chocolatey.    
+    ```
+    invoke-webrequest 'https://chocolatey.org/api/v2/package/openssh/0.0.22.0' -outfile "$env:public\openssh.0.0.22.0"
+    ```
+2. Rename the .nupkg to .zip
+    
+    ```
+    rename-item "$env:public\openssh.0.0.22.0.nupkg" "$env:public\openssh.0.0.22.0.zip"
+    ```
+3. Unzip the file (or use it directly if your software distribution method supports unzipping)
+    
+    **Note:** The "tools" folder in the zip contains all the installation files and can be utilized from a network location or pushed through your regular software distribution system (e.g. SCCM) or configuration management tool (e.g. Chef, Puppet, Ansible)
+
+3. If necessary, push the ..\tools folder to the target system (use Copy-Item -ToSession for Nano)
 3. CD to "..\tools"
 4. To install only client tools, run '.\barebonesinstaller.ps1'
 5. To install client tools and Server, run '.\barebonesinstaller.ps1 -SSHServerFeature'
 6. To uninstall, run '.\barebonesinstaller.ps1 -SSHServerFeature -Uninstall'
+
+**Note:** In general the switches used for barebonesinstaller.ps1 exactly match the below chocolatey switches, but use the standard powershell arguments formats.  You can look directly at barebonesinstaller.ps1 for a complete list: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/barebonesinstaller.ps1
 
 # Package Parameters
 

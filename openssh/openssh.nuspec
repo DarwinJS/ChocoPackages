@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Universal Installer)</title>
-    <version>0.0.22.0</version>
+    <version>0.0.23.0</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -35,6 +35,8 @@
       Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v0.0.21.0
 
       Release Notes for Chocolatey Packaging:
+      0.0.23.0
+        - None
       0.0.22.0
         - Fix error when uninstall runs and openssh folder is already removed: https://github.com/DarwinJS/ChocoPackages/issues/49
         - Fix error using PSH 5 Package Management to install on Server 2016: https://github.com/DarwinJS/ChocoPackages/issues/47
@@ -45,7 +47,7 @@
           -PathSpecsToProbeForShellEXEString "$env:programfiles\PowerShell\*\pwsh.exe;$env:programfiles\PowerShell\*\Powershell.exe;c:\windows\system32\windowspowershell\v1.0\powershell.exe"
           Rules and More Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
 
-          This package supports the following parameters:
+      This package supports the following parameters:
 
           -params '"/SSHServerFeature"' (Install and Uninstall)
           Also install sshd Windows Service - including opening port 22.

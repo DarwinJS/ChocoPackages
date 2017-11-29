@@ -180,11 +180,10 @@ If (($SSHServiceInstanceExistsAndIsOurs -AND $DeleteConfigAndServerKeys) -OR (!$
     
     #Ensure we have permissions to all keys and config files:
     #$ErrorActionPreference = 'SilentlyContinue'
-    If (Test-Path "$toolsdir\OpenSSHUtils.psm1") {Import-Module "$toolsdir\OpenSSHUtils" -Force}
+    If (Test-Path "$TargetFolder\OpenSSHUtils.psm1") {Import-Module "$TargetFolder\OpenSSHUtils" -Force}
     $RunningUser = New-Object System.Security.Principal.NTAccount($($env:USERDOMAIN), $($env:USERNAME))
     #dir "$TargetFolder\*" | % {repair-filepermission -FilePath $_.fullname -ReadAccessOK $RunningUser -AnyAccessOK $RunningUser -ReadAccessNeeded $RunningUser -confirm:$false}
     dir "$TargetFolder\*" | % {repair-filepermission -FilePath $_.fullname -confirm:$false}
-
     If (Test-Path $TargetFolder) {Remove-Item "$TargetFolder" -Recurse -Force}
     #$ErrorActionPreference = 'Stop'
 }

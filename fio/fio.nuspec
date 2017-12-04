@@ -5,7 +5,7 @@
     <version>3.1.0</version>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/fio</packageSourceUrl>
     <owners>DarwinJS</owners>
-    <title>fio (Install)</title>
+    <title>Flexible IO Tester (fio) (Install)</title>
     <authors>Jens Axboe</authors>
     <projectUrl>http://bluestop.org/fio/</projectUrl>
     <copyright>Jens Axboe</copyright>

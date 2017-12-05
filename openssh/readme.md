@@ -27,6 +27,8 @@ Yes you read that right - although packaged as a chocolatey .nupkg, this install
     - [-params '"/PathSpecsToProbeForShellEXEString:$env:programfiles\PowerShell\*\Powershell.exe;$env:windir\system32\windowspowershell\v1.0\powershell.exe"'](#params-pathspecstoprobeforshellexestringenvprogramfilespowershellpowershellexeenvwindirsystem32windowspowershellv10powershellexe)
     - [-params '"/SSHDefaultShellCommandOption:/c"'](#params-sshdefaultshellcommandoptionc)
     - [-params '"/AllowInsecureShellEXE"'](#params-allowinsecureshellexe)
+- [TroubleShooting](#troubleshooting)
+    - [Chocolatey Uninstall Problems](#chocolatey-uninstall-problems)
 - [Ancient Version History](#ancient-version-history)
 
 
@@ -235,7 +237,18 @@ Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openss
 Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable that is outside of the Programs Folders or system32.
 Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
 
+# TroubleShooting
 
+## Chocolatey Uninstall Problems
+If Chocolatey Uninstall is giving errors, you can update with the latest Chocolatey Uninstall code in case there have been fixes made to uninstall.
+
+This command will update the uninstall script with the latest:
+
+```
+Invoke-WebRequest -Uri 'https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/tools/chocolateyuninstall.ps1' -OutFile $env:ChocolateyInstall\lib\openssh\tools\ChocolateyUninstall.ps1
+cuninst -y openssh -params '"/SSHServerFeature /DeleteConfigAndServerKeys"'
+```
+Thanks to [king6cong](https://github.com/king6cong) for the above suggested code.
 
 # Ancient Version History
 

@@ -73,9 +73,9 @@ $packageArgs = @{
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = '2DB935E7B9A5443124ADA8F3E651489977074EA4'
+  checksum      = '40C0198122F4B0F8BDDF5345D3C5340132647D23'
   checksumType  = 'SHA1'
-  checksum64    = 'F10EB198054FCE59010FBCC1402E85379C3AE09F'
+  checksum64    = 'A181D320159DDA8188BEE172F6AADECDFB9FCC1D'
   checksumType64= 'SHA1'
 }
 
@@ -260,6 +260,11 @@ Else
   {
     Throw "You need a copy of 7z.exe next to this script for this operating system.  You can get a copy at 7-zip.org"
   }
+}
+
+If ($SSHServerFeature -OR $SSHAgentFeature)
+{
+  . "$toolsdir\SetSpecialPrivileges.ps1"
 }
 
 If ($SSHServerFeature)
@@ -456,7 +461,8 @@ If ($SSHAgentFeature)
   If (!$UseNTRights)
   {
     #The code in this .PS1 has been tested on Nano - the hardest case to date for setting special privileges in script
-    . "$toolsdir\AddAccountToLogonAsAService.ps1" -AccountToAdd "NT SERVICE\SSH-Agent"
+    $sshagentSid = (Get-OpenSSHUserSID -User "NT SERVICE\SSH-Agent").Value
+    Add-OpenSSHPrivilege -Account $sshagentSid -Privilege SeServiceLogonRight
   }
   Else
   {
@@ -588,8 +594,9 @@ If ($SSHServerFeature)
   If (!$UseNTRights)
   {
     #The code in this .PS1 has been tested on Nano - the hardest case to date for setting special privileges in script
-    . "$toolsdir\AddAccountToAssignPrimaryToken.ps1" -AccountToAdd "NT SERVICE\SSHD"
-    . "$toolsdir\AddAccountToLogonAsAService.ps1" -AccountToAdd "NT SERVICE\SSHD"
+    $sshdSid = (Get-OpenSSHUserSID -User "NT SERVICE\SSHD").value
+    Add-OpenSSHPrivilege -Account $sshdSid -Privilege SeAssignPrimaryTokenPrivilege
+    Add-OpenSSHPrivilege -Account $sshdSid -Privilege SeServiceLogonRight
   }
   Else
   {

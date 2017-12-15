@@ -4,7 +4,7 @@ $ErrorActionPreference = 'Stop';
 $packageName= 'powershell-core'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $VersionMaj = '6.0.0'
-$versionMinor = '1'
+$versionMinor = '2'
 $Version = "$VersionMaj.$versionMinor"
 $PFSubfolder = "$VersionMaj-rc$versionMinor"
 $InstallFolder = "$env:ProgramFiles\PowerShell\$PFSubfolder"
@@ -19,14 +19,14 @@ $packageArgs = @{
   packageName   = $packageName
   unzipLocation = $toolsDir
   fileType      = 'MSI'
-  url           = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-rc/PowerShell-6.0.0-rc-win-x86.msi'
-  url64bit      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-rc/PowerShell-6.0.0-rc-win-x64.msi'
+  url           = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-rc.2/PowerShell-6.0.0-rc.2-win-x86.msi'
+  url64bit      = 'https://github.com/PowerShell/PowerShell/releases/download/v6.0.0-rc.2/PowerShell-6.0.0-rc.2-win-x64.msi'
 
   softwareName  = "PowerShell-6.0.0*"
 
-  checksum      = 'DAF927B5F51583E044FF70092DFB3B07310CCC8051BC7E48D105C4479B879F68'
+  checksum      = 'E8A834D0785E0032E16E56351EF72CD1CDC4C3D9B2CA4DCAF86B070B72560A12'
   checksumType  = 'sha256'
-  checksum64    = '92B6FBB0784F7C0AD778BABB6A678A27CDDD6D49E585B6CC9770AC603C6A04F4'
+  checksum64    = 'DACE51D011EC5C0F9AC2B0E773799B2E8E5FDEA85375A569E98CA7C9C4A44D96'
   checksumType64= 'sha256'
 
   silentArgs    = "/qn /norestart /l*v `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`"" # ALLUSERS=1 DISABLEDESKTOPSHORTCUT=1 ADDDESKTOPICON=0 ADDSTARTMENU=0

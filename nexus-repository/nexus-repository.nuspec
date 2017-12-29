@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>nexus-repository</id>
     <title>Nexus Repository OSS</title>
-    <version>3.6.0.02</version>
+    <version>3.7.1.02</version>
     <authors>Sonatype</authors>
     <owners>DarwinJS</owners>
     <summary>Free open source version of popular Nexus Repository for binary artifacts including first class Nuget support.</summary>
@@ -24,6 +24,8 @@
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/nexus-repository/appicon.png</iconUrl>
     <releaseNotes>https://help.sonatype.com/display/NXRM3/2017+Release+Notes
     Packaging
+    3.7.1.02
+     - none
     3.6.0.02
      - improved service startup checking
      - cleaner uninstall

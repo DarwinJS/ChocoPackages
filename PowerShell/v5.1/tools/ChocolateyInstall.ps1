@@ -62,7 +62,7 @@ function Install-PowerShell5([string]$urlx86, [string]$urlx64 = $null, [string]$
         Write-Warning "$packageName requires a reboot to complete the installation."
     }
     else {
-        throw ".NET Framework 4.5.2 or later required.  Use package named `"dotnet4.5` to upgrade.  Your .NET Release is `"$MinimumNet4Version`" but needs to be at least `"$MinimumNet4Version`"."
+        throw ".NET Framework 4.5.2 or later required.  Use package named `"dotnet4.5` to upgrade.  Your .NET Release is `"$Net4Version`" but needs to be at least `"$MinimumNet4Version`"."
     }
 }
 

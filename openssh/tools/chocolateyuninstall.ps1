@@ -80,10 +80,15 @@ if ((test-path variable:packageparameters) -AND $packageParameters) {
 
 Function CheckServicePath ($ServiceEXE,$FolderToCheck)
 {
-  #The modern way:
-  #Return ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike "*$ServiceEXE*"} | select -expand PathName) -ilike "*$FolderToCheck*"))
-  #The NANO TP5 Compatible Way:
-  Return ([bool]((wmic service | ?{$_ -ilike "*$ServiceEXE*"}) -ilike "*$FolderToCheck*"))
+  if ($RunningOnNano) {
+    #The NANO TP5 Compatible Way:
+    Return ([bool](@(wmic service | ?{$_ -ilike "*$ServiceEXE*"}) -ilike "*$FolderToCheck*"))
+  }
+  Else
+  {
+    #The modern way:
+    Return ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike "*$ServiceEXE*"} | select -expand PathName) -ilike "*$FolderToCheck*"))
+  }
 }
 
 #$SSHServiceInstanceExistsAndIsOurs = ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike 'sshd'} | select -expand PathName) -ilike "*$TargetFolder*"))

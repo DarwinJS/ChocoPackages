@@ -34,6 +34,11 @@ Else
 $TargetFolder = "$PF\OpenSSH-Win$($OSBits)"
 $TargetFolderOld = "$PF\OpenSSH-Win$($OSBits)"
 
+$sshdpath = Join-Path $TargetFolder "sshd.exe"
+$sshagentpath = Join-Path $TargetFolder "ssh-agent.exe"
+$sshdir = Join-Path $env:ProgramData "\ssh"
+$logsdir = Join-Path $sshdir "logs"
+
 If ($RunningUnderChocolatey)
 {
   # Default the values before reading params
@@ -87,7 +92,7 @@ Function CheckServicePath ($ServiceEXE,$FolderToCheck)
   Else
   {
     #The modern way:
-    Return ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike "*$ServiceEXE*"} | select -expand PathName) -ilike "*$FolderToCheck*"))
+    Return ([bool]((Get-WmiObject win32_service | ?{$_.PathName -ilike "*$ServiceEXE*"} | select -expand PathName) -ilike "*$FolderToCheck*"))
   }
 }
 
@@ -131,13 +136,6 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorActio
     }
 }
 
-$KeyBasedAuthenticationFeatureINSTALLED = $False
-If ((get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa').getvalue("authentication packages") -contains 'ssh-lsa')
-{
-  $KeyBasedAuthenticationFeatureINSTALLED = $True
-  Write-Warning "ssh-lsa.dll will be deconfigured - but not deleted.  It must be manually deleted after a reboot."
-}
-
 #uninstall agent service if it was installed without SSHD
 If ($SSHAGENTServiceInstanceExistsAndIsOurs -AND (!$SSHServiceInstanceExistsAndIsOurs))
 {
@@ -149,56 +147,23 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ($SSHServerFeature))
 {
   Stop-Service sshd -Force
   sc.exe delete sshd  | out-null
+}
+
+If ([bool](get-service ssh-agent -ea SilentlyContinue))
+{
   Stop-Service ssh-agent -Force
   sc.exe delete ssh-agent | out-null
 }
 
-If ($KeyBasedAuthenticationFeatureINSTALLED)
-{
-  If (Test-Path "$env:windir\sysnative")
-  { #We are running in a 32-bit process under 64-bit Windows
-    $sys32dir = "$env:windir\sysnative"
-  }
-  Else
-  { #We are on a 32-bit OS, or 64-bit proc on 64-bit OS
-    $sys32dir = "$env:windir\system32"
-  }
-
-  $AuthpkgToRemove = 'ssh-lsa'
-  foreach ($authpackage in (get-item 'Registry::HKLM\System\CurrentControlSet\Control\Lsa').getvalue("authentication packages"))
-  {
-    If ($authpackage)
-    {
-      If ($authpackage -ine "$AuthpkgToRemove")
-      {
-        [string[]]$Newauthpackages += "$authpackage"
-      }
-    }
-  }
-  Set-ItemProperty "HKLM:\SYSTEM\CurrentControlSet\Control\Lsa\" "Authentication Packages" $Newauthpackages
-}
+If (Test-Path $TargetFolder) {Remove-Item "$TargetFolder" -Recurse -Force}
 
 #Don't remove config in case they reinstall.
 If (($SSHServiceInstanceExistsAndIsOurs -AND $DeleteConfigAndServerKeys) -OR (!$SSHServiceInstanceExistsAndIsOurs))
 {
     Write-Warning "Removing all config and server keys as requested by /DeleteConfigAndServerKeys"
-    
-    #Ensure we have permissions to all keys and config files:
-    #$ErrorActionPreference = 'SilentlyContinue'
-    If (Test-Path "$TargetFolder\OpenSSHUtils.psm1") {Import-Module "$TargetFolder\OpenSSHUtils" -Force}
-    $RunningUser = New-Object System.Security.Principal.NTAccount($($env:USERDOMAIN), $($env:USERNAME))
-    #dir "$TargetFolder\*" | % {repair-filepermission -FilePath $_.fullname -ReadAccessOK $RunningUser -AnyAccessOK $RunningUser -ReadAccessNeeded $RunningUser -confirm:$false}
-    dir "$TargetFolder\*" | % {repair-filepermission -FilePath $_.fullname -confirm:$false}
-    If (Test-Path $TargetFolder) {Remove-Item "$TargetFolder" -Recurse -Force}
-    #$ErrorActionPreference = 'Stop'
+    If (Test-Path $sshdir) {Remove-Item "$sshdir" -Recurse -Force}
 }
-Else
-{
 
-  If (Test-Path $TargetFolder) {Get-ChildItem "$TargetFolder\*.*" -include *.exe,*.dll,*.cmd,*.ps1,*.psm1,*.psd1 | Remove-Item -Recurse -Force}
-  If (Test-Path "$TargetFolder\logs") {Remove-Item "$TargetFolder\logs" -Recurse -Force}
-  Write-Warning "NOT REMOVED: Config files and any keys in `"$TargetFolder`" were NOT REMOVED - you must remove them manually or use the package uninstall parameter /DeleteConfigAndServerKeys."
-}
 netsh advfirewall firewall delete rule name='SSHD Port OpenSSH (chocolatey package: openssh)'
 
 $PathToRemove = "$TargetFolder"

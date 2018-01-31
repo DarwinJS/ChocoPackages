@@ -62,20 +62,20 @@ $filename = "$toolsdir\OpenSSH-Win$($OSBits).zip"
 #$TargetFolderOld = "$PF\OpenSSH-Win$($OSBits)"
 $TargetFolder = "$PF\OpenSSH-Win$($OSBits)"
 $ExtractFolder = "$env:temp\OpenSSHTemp"
-$TERMDefault = 'xterm' #Overall Default
-If ([version]$OSVersionString -ge [version]'10.0.0')
-{
-  $TERMDefault = 'xterm-256color' #Windows 10 / 2016 default
-}
+
+$sshdpath = Join-Path $TargetFolder "sshd.exe"
+$sshagentpath = Join-Path $TargetFolder "ssh-agent.exe"
+$sshdir = Join-Path $env:ProgramData "\ssh"
+$logsdir = Join-Path $sshdir "logs"
 
 $packageArgs = @{
   packageName   = 'openssh'
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = '40C0198122F4B0F8BDDF5345D3C5340132647D23'
+  checksum      = '0947CFC1AB7C3A5D6BAA5243C57F1C638A058085'
   checksumType  = 'SHA1'
-  checksum64    = 'A181D320159DDA8188BEE172F6AADECDFB9FCC1D'
+  checksum64    = 'A6DE1E923813B7AF8E62B753C3237AB6AC2A168C'
   checksumType64= 'SHA1'
 }
 
@@ -240,7 +240,7 @@ Function CheckServicePath ($ServiceEXE,$FolderToCheck)
   Else
   {
     #The modern way:
-    Return ([bool]((Get-WmiObject win32_service | ?{$_.Name -ilike "*$ServiceEXE*"} | select -expand PathName) -ilike "*$FolderToCheck*"))
+    Return ([bool]((Get-WmiObject win32_service | ?{$_.PathName -ilike "*$ServiceEXE*"} | select -expand PathName) -ilike "*$FolderToCheck*"))
   }
 }
 
@@ -274,8 +274,6 @@ If ($SSHServerFeature -OR $SSHAgentFeature)
 
 If ($SSHServerFeature)
 {  #Check if anything is already listening on port $SSHServerPort, which is not a previous version of this software.
-  Write-Host "/SSHAgentFeature is also automatically enabled when using /SSHServerFeature."
-  $SSHAgentFeature = $true
   $AtLeastOneSSHDPortListenerIsNotUs = $False
   Write-Output "Probing for possible conflicts with SSHD server to be configured on port $SSHServerPort ..."
   . "$toolsdir\Get-NetStat.ps1"
@@ -408,14 +406,7 @@ Else
   Write-Output "Source files are internal to the package, checksums are not required nor checked."
 }
 
-$ExcludeParams = @{}
-If ((Test-Path "$TargetFolder\sshd_config") -AND !($OverWriteSSHDConf))
-{
-  Write-Output "sshd_config already exists, not overwriting"
-  $ExcludeParams.Add("Exclude","sshd_config")
-}
-
-Copy-Item "$ExtractFolder\*" "$PF" @ExcludeParams -Force -Recurse -Passthru -ErrorAction Stop
+Copy-Item "$ExtractFolder\*" "$PF" -Force -Recurse -Passthru -ErrorAction Stop
 #Fixed version of module
 #Write-Host "Updating OpenSSHUtils PowerShell Module to Latest"
 #Copy-Item "$toolsdir\OpenSSHUtils.ps*" "$TargetFolder" -Force -PassThru -ErrorAction Stop
@@ -446,8 +437,6 @@ If ($env:Path -inotlike "*$TargetFolder*")
 $ExistingTermValue = $null
 $ExistingTermValue = (get-ItemProperty -Path 'Registry::HKEY_LOCAL_MACHINE\SYSTEM\CurrentControlSet\Control\Session Manager\Environment' -EA SilentlyContinue | Select -Expand TERM -EA SilentlyContinue)
 
-If (!$TERM) {$TERM = $TERMDefault}
-
 If ((!$ExistingTermValue) -OR ($ExistingTermValue -ine $TERM))
 { 
   Write-Host "Updating machine environment variable TERM from `"$ExistingTermValue`" to `"$TERM`""
@@ -463,78 +452,95 @@ If ($SSHAgentFeature)
 
   Start-Sleep -seconds 3
 
-  If (!$UseNTRights)
-  {
-    #The code in this .PS1 has been tested on Nano - the hardest case to date for setting special privileges in script
-    $sshagentSid = (Get-OpenSSHUserSID -User "NT SERVICE\SSH-Agent").Value
-    Add-OpenSSHPrivilege -Account $sshagentSid -Privilege SeServiceLogonRight
-  }
-  Else
-  {
-    If (($OSBits -eq 64) -and (!(Test-Path "$env:windir\syswow64")))
-    {
-      Write-Warning "This 64-bit system does not have the WOW64 subsystem installed, please manually grant the right SeLogonAsAService to `"NT SERVICE\SSHD`"."
-      Write-Warning "OR try again WITHOUT the /UseNTRights switch."
-    }
-    Else
-    {
-      write-output "Using ntrights.exe to grant logon as service."
-      Start-Process "$TargetFolder\ntrights.exe" -ArgumentList "-u `"NT SERVICE\SSH-Agent`" +r SeServiceLogonRight"
-    }
-  }
+  #The code in this .PS1 has been tested on Nano - the hardest case to date for setting special privileges in script
+  #$sshagentSid = (Get-OpenSSHUserSID -User "NT SERVICE\SSH-Agent").Value
+  #Add-OpenSSHPrivilege -Account $sshagentSid -Privilege SeServiceLogonRight
 }
 
 If ($SSHServerFeature)
 {
   Write-Warning "You have specified SSHServerFeature - this machine is being configured as an SSH Server including opening port $SSHServerPort."
 
+  #create the ssh config folder and set its permissions
+  if(-not (test-path $sshdir -PathType Container))
+  {
+    $null = New-Item $sshdir -ItemType Directory -Force -ErrorAction Stop
+  }
+  $acl = Get-Acl -Path $sshdir
+  # following SDDL implies 
+  # - owner - built in Administrators
+  # - disabled inheritance
+  # - Full access to System
+  # - Full access to built in Administrators
+  $acl.SetSecurityDescriptorSddlForm("O:BAD:PAI(A;OICI;FA;;;SY)(A;OICI;FA;;;BA)(A;OICI;0x1200a9;;;AU)")
+  Set-Acl -Path $sshdir -AclObject $acl
+
+  # create logs folder and set its permissions
+  if(-not (test-path $logsdir -PathType Container))
+  {
+    $null = New-Item $logsdir -ItemType Directory -Force -ErrorAction Stop
+  }
+  $acl = Get-Acl -Path $logsdir
+  # following SDDL implies 
+  # - owner - built in Administrators
+  # - disabled inheritance
+  # - Full access to System
+  # - Full access to built in Administrators
+  $acl.SetSecurityDescriptorSddlForm("O:BAD:PAI(A;OICI;FA;;;SY)(A;OICI;FA;;;BA)")
+  Set-Acl -Path $logsdir -AclObject $acl
+
   If((Test-Path "$TargetFolder\sshd_config"))
   {
-    #(Get-Content "$TargetFolder\sshd_config") -replace '#LogLevel INFO', 'LogLevel QUIET' | Set-Content "$TargetFolder\sshd_config"
+    Write-Host "Migrating existing sshd_config to new location `"$sshdir`""
+    Move-Item "$TargetFolder\sshd_config" $sshdir -force
+  }
 
-    $CurrentLogLevelConfig = ((gc "$TargetFolder\sshd_config") -imatch "^#*LogLevel\s\w*\b.*$")
+  #for clean config copy sshd_config_default to $sshdir\sshd_config
+  $sshdconfigpath = Join-Path $sshdir "sshd_config"
+  $sshddefaultconfigpath = Join-Path $TargetFolder "sshd_config_default"
+  if(-not (test-path $sshdconfigpath -PathType Leaf))
+  {
+    $null = Copy-Item $sshddefaultconfigpath -Destination $sshdconfigpath  -ErrorAction Stop
+  }
+
+  If((Test-Path "$TargetFolder\ssh_host_*"))
+  {
+    Write-Host "Migrating existing ssh host keys to new location `"$sshdir`""
+    Move-Item "$TargetFolder\ssh_host_*" $sshdir -force
+  }
+
+  If((Test-Path "$sshdconfigpath"))
+  {
+    $CurrentLogLevelConfig = ((gc "$sshdconfigpath") -imatch "^#*LogLevel\s\w*\b.*$")
     Write-Output 'Setting up SSH Logging'
     If ($SSHLogLevel)
     { #command line specified a log level - override whatever is there
       If ([bool]($CurrentLogLevelConfig -inotmatch "^LogLevel\s$SSHLogLevel\s*$"))
       {
-        Write-Output "Current LogLevel setting in `"$TargetFolder\sshd_config`" is `"$CurrentLogLevelConfig`", setting it to `"LogLevel $SSHLogLevel`""
-        (Get-Content "$TargetFolder\sshd_config") -replace "^#*LogLevel\s\w*\b.*$", "LogLevel $SSHLogLevel" | Set-Content "$TargetFolder\sshd_config"
+        Write-Output "Current LogLevel setting in `"$sshdconfigpath`" is `"$CurrentLogLevelConfig`", setting it to `"LogLevel $SSHLogLevel`""
+        (Get-Content "$sshdconfigpath") -replace "^#*LogLevel\s\w*\b.*$", "LogLevel $SSHLogLevel" | Set-Content "$sshdconfigpath"
       }
     }
     Else
     { #command line did not specify a log level, set it to QUIET - only if it has never been set (currently commented INFO setting)
-      If((Test-Path "$TargetFolder\sshd_config") -AND ([bool]((gc "$TargetFolder\sshd_config") -ilike "#LogLevel INFO*")))
+      If((Test-Path "$sshdconfigpath") -AND ([bool]((gc "$sshdconfigpath") -ilike "#LogLevel INFO*")))
       {
         Write-Warning "Explicitly disabling sshd logging as it currently logs about .5 GB / hour"
-        (Get-Content "$TargetFolder\sshd_config") -replace '#LogLevel INFO', 'LogLevel QUIET' | Set-Content "$TargetFolder\sshd_config"
+        (Get-Content "$sshdconfigpath") -replace '#LogLevel INFO', 'LogLevel QUIET' | Set-Content "$sshdconfigpath"
       }
     }
 
-     $CurrentPortConfig = ((gc "$TargetFolder\sshd_config") -match "^#*Port\s\d*\s*$")
+     $CurrentPortConfig = ((gc "$sshdconfigpath") -match "^#*Port\s\d*\s*$")
      If ([bool]($CurrentPortConfig -notmatch "^Port $SSHServerPort"))
      {
-       Write-Output "Current port setting in `"$TargetFolder\sshd_config`" is `"$CurrentPortConfig`", setting it to `"Port $SSHServerPort`""
-       (Get-Content "$TargetFolder\sshd_config") -replace "^#*Port\s\d*\s*$", "Port $SSHServerPort" | Set-Content "$TargetFolder\sshd_config"
+       Write-Output "Current port setting in `"$sshdconfigpath`" is `"$CurrentPortConfig`", setting it to `"Port $SSHServerPort`""
+       (Get-Content "$sshdconfigpath") -replace "^#*Port\s\d*\s*$", "Port $SSHServerPort" | Set-Content "$sshdconfigpath"
      }
      Else
      {
-       Write-Output "Current port setting in `"$TargetFolder\sshd_config`" already matches `"Port $SSHServerPort`", no action necessary."
+       Write-Output "Current port setting in `"$sshdconfigpath`" already matches `"Port $SSHServerPort`", no action necessary."
      }
   }
-
-  If (!(Test-Path "$TargetFolder\KeysGenerated.flg"))
-  { #Only ever generate a key the first time SSHD server is installed
-      Write-Output "Generating sshd keys in `"$TargetFolder`""
-      start-process "$TargetFolder\ssh-keygen.exe" -ArgumentList '-A' -WorkingDirectory "$TargetFolder" -nonewwindow -wait
-      New-Item "$TargetFolder\KeysGenerated.flg" -type File | out-null
-  }
-  Else
-  {
-    Write-Warning "Found existing server ssh keys in $TargetFolder, you must delete them manually to generate new ones."
-  }
-
-  
 
   If ($PathSpecsToProbeForShellEXEString)
   {
@@ -550,6 +556,7 @@ If ($SSHServerFeature)
 
   netsh advfirewall firewall add rule name='SSHD Port OpenSSH (chocolatey package: openssh)' dir=in action=allow protocol=TCP localport=$SSHServerPort
 
+  $keylist = "ssh_host_dsa_key", "ssh_host_rsa_key", "ssh_host_ecdsa_key", "ssh_host_ed25519_key"
   If ($DeleteServerKeysAfterInstalled)
   {
     pushd $TargetFolder
@@ -566,57 +573,18 @@ If ($SSHServerFeature)
   {
     Write-Warning "The following private keys should be removed from the machine: $keylist"
   }
-  New-Service -Name sshd -BinaryPathName "$TargetFolder\sshd.exe" -Description "SSH Daemon" -StartupType Automatic -DependsOn ssh-agent | Out-Null
-  sc.exe config sshd obj= "NT SERVICE\SSHD"
-  sc.exe privs sshd SeAssignPrimaryTokenPrivilege
+  New-Service -Name sshd -BinaryPathName "$TargetFolder\sshd.exe" -Description "SSH Daemon" -StartupType Automatic | Out-Null
+  #sc.exe config sshd obj= "NT SERVICE\SSHD"
+  #sc.exe privs sshd SeAssignPrimaryTokenPrivilege
   
-  If (!$DisableKeyPermissionsReset)
-  {
-    Write-Host "Ensuring all ssh key and configuration files have correct permissions for all users"
-    . "$TargetFolder\FixHostFilePermissions.ps1" -Confirm:$false
-  }
+  #The code in this .PS1 has been tested on Nano - the hardest case to date for setting special privileges in script
+  #$sshdSid = (Get-OpenSSHUserSID -User "NT SERVICE\SSHD").value
+  #Add-OpenSSHPrivilege -Account $sshdSid -Privilege SeAssignPrimaryTokenPrivilege
+  #Add-OpenSSHPrivilege -Account $sshdSid -Privilege SeServiceLogonRight
 
-  $logsdir = "$TargetFolder\Logs"
-  If (!(Test-Path $logsdir))
-  {
-    New-Item $logsdir -ItemType Directory | out-null
-    $rights = [System.Security.AccessControl.FileSystemRights]"Read, Write"
-    $accessRule = New-Object System.Security.AccessControl.FileSystemAccessRule("NT SERVICE\sshd", $rights, "ContainerInherit,ObjectInherit", "None", "Allow")
-    If (!$RunningOnNano)
-    {
-      $aclAccess = (Get-Item -Path $logsdir).GetAccessControl('Access')
-      $aclAccess.SetAccessRule($accessRule)
-      Set-Acl -AclObject $aclAccess -Path $logsdir -Confirm:$false
-    }
-    Else
-    {
-      $aclAccess = Get-Acl -Path $logsdir
-      $aclAccess.SetAccessRule($accessRule)
-      Set-Acl -Path $logsdir -AclObject $aclAccess
-    }
-  }
+  Write-Host "Ensuring all ssh key and configuration files have correct permissions for all users"
+  . "$TargetFolder\FixHostFilePermissions.ps1" -Confirm:$false
 
-  If (!$UseNTRights)
-  {
-    #The code in this .PS1 has been tested on Nano - the hardest case to date for setting special privileges in script
-    $sshdSid = (Get-OpenSSHUserSID -User "NT SERVICE\SSHD").value
-    Add-OpenSSHPrivilege -Account $sshdSid -Privilege SeAssignPrimaryTokenPrivilege
-    Add-OpenSSHPrivilege -Account $sshdSid -Privilege SeServiceLogonRight
-  }
-  Else
-  {
-    If (($OSBits -eq 64) -and (!(Test-Path "$env:windir\syswow64")))
-    {
-      Write-Warning "This 64-bit system does not have the WOW64 subsystem installed, please manually grant the right SeLogonAsAService to `"NT SERVICE\SSHD`"."
-      Write-Warning "OR try again WITHOUT the /UseNTRights switch."
-    }
-    Else
-    {
-      write-output "Using ntrights.exe to grant logon as service."
-      Start-Process "$TargetFolder\ntrights.exe" -ArgumentList "-u `"NT SERVICE\SSHD`" +r SeAssignPrimaryTokenPrivilege"
-      Start-Process "$TargetFolder\ntrights.exe" -ArgumentList "-u `"NT SERVICE\SSH-Agent`" +r SeServiceLogonRight"
-    }
-  }
 }
 
 If (CheckServicePath 'sshd.exe' "$TargetFolder")
@@ -630,13 +598,11 @@ If (CheckServicePath 'ssh-agent.exe' "$TargetFolder")
   Start-Service SSH-Agent
 }
 
-$keylist = "ssh_host_dsa_key", "ssh_host_rsa_key", "ssh_host_ecdsa_key", "ssh_host_ed25519_key"
-$fullpathkeylist = "'$TargetFolder\ssh_host_dsa_key'", "'$TargetFolder\ssh_host_rsa_key'", "'$TargetFolder\ssh_host_ecdsa_key'", "'$TargetFolder\ssh_host_ed25519_key'"
-
+$fullpathkeylist = "'$sshdir\ssh_host_dsa_key'", "'$sshdir\ssh_host_rsa_key'", "'$sshdir\ssh_host_ecdsa_key'", "'$sshdir\ssh_host_ed25519_key'"
 
 If ($SSHServerFeature)
 {
-  If (!(Test-Path "$TargetFolder\KeysAddedToAgent.flg"))
+  If (!(Test-Path "$sshdir\KeysAddedToAgent.flg"))
   {
     Write-Output "Installing Server Keys into SSH-Agent"
 
@@ -646,7 +612,7 @@ If ($SSHServerFeature)
 
     schtasks.exe /Delete /TN "ssh-add" /F
 
-    New-Item "$TargetFolder\KeysAddedToAgent.flg" -type File | out-null
+    New-Item "$sshdir\KeysAddedToAgent.flg" -type File | out-null
   }
   
 }

@@ -179,6 +179,11 @@ else
     {
       Write-Host "Writing default shell to registry ($ShellEXEToUse)"
       $SSHRegKey = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH"
+      If (!(Test-Path $SSHRegKey))
+      {
+        New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE" -Name 'OpenSSH' –Force | out-null
+      }
+
       New-ItemProperty -Path $SSHRegKey -Name 'DefaultShell' -Value "$ShellEXEToUse" -PropertyType 'String' -Force | Out-Null
       If ($SSHDefaultShellCommandOption)
       {

@@ -122,82 +122,83 @@ $ListOfSecurePathsRegExString = ($ListOfSecurePathsRegExPrep -join '').trimend("
 #write-host "`$ListOfSecurePathsRegExString: $ListOfSecurePathsRegExString"
 If ($PathSpecsToProbeForShellEXE.count -ge 1)
 {
-#Special Handling of "C:\Program Files\PowerShell" for versioned subfolders and EXEs with no PE header version
-$ListOfEXEObjects = @()
-[array]$SubListofEXEObjects 
-ForEach ($PathSpec in $PathSpecsToProbeForShellEXE)
-{ write-host "processing $pathspec"
-  $SubListOfEXEPaths = @(Resolve-Path $PathSpec -ErrorAction SilentlyContinue)
-  write-host "`$SubListOfEXEPaths: $SubListOfEXEPaths"
-  $SubListOfEXEPaths = @($SubListOfEXEPaths | where {[IO.Path]::GetExtension($_) -ieq '.exe'})
-  If ($SubListOfEXEPaths.count -gt 0)
-  {
-    $SubListofEXEObjects = @(get-command $SubListOfEXEPaths)
-  
-    If ($PathSpec -ilike "$env:ProgramFiles\PowerShell\*")
-    { #apply a sort to full file names
-      $SubListOfEXEObjects = $SubListOfEXEObjects | sort-object -Property 'Definition' -Descending
-    }
-    else 
+  #Special Handling of "C:\Program Files\PowerShell" for versioned subfolders and EXEs with no PE header version
+  $ListOfEXEObjects = @()
+  [array]$SubListofEXEObjects 
+  ForEach ($PathSpec in $PathSpecsToProbeForShellEXE)
+  { write-host "processing $pathspec"
+    $SubListOfEXEPaths = @(Resolve-Path $PathSpec -ErrorAction SilentlyContinue)
+    write-host "`$SubListOfEXEPaths: $SubListOfEXEPaths"
+    $SubListOfEXEPaths = @($SubListOfEXEPaths | where {[IO.Path]::GetExtension($_) -ieq '.exe'})
+    If ($SubListOfEXEPaths.count -gt 0)
     {
-      $SubListOfEXEObjects = $SubListOfEXEObjects | sort-object -Property FileVersionInfo.ProductVersion -Descending
-    }
-    $ListOfEXEObjects += $SubListOfEXEObjects
-  }
-}
-
-If ($ListOfEXEObjects.count -lt 1)
-{
-  Write-warning "On this system, searching $PathSpecsToProbeForShellEXEString does not result in any paths that end in .EXE, DefaultShell will not be explicitly set and ssh will use its default shell behavior or the existing registry key value."
-}
-else 
-{    
-  $ListOfValidEXEObjects = @()
-  If (!$AllowInsecureShellEXE)
-  {
-    Write-Host "Filtering out EXEs that are not on the secure path list: $ListOfSecurePaths.  To unwisely override this filtering use the AllowInsecureShellEXE switch."
-    ForEach ($EXEObject in $ListOfEXEObjects)
-    { #Validate EXEs are on Secure Paths
-      If ($EXEObject.Definition -imatch "$ListOfSecurePathsRegExString")
-      {
-        Write-Host "     Valid: $($EXEObject.Definition)"
-        $ListOfValidEXEObjects += $EXEObject
+      $SubListofEXEObjects = @(get-command $SubListOfEXEPaths)
+    
+      If ($PathSpec -ilike "$env:ProgramFiles\PowerShell\*")
+      { #apply a sort to full file names
+        $SubListOfEXEObjects = $SubListOfEXEObjects | sort-object -Property 'Definition' -Descending
       }
       else 
       {
-        Write-Warning "  Dropping: $($EXEObject.Definition)"
+        $SubListOfEXEObjects = $SubListOfEXEObjects | sort-object -Property FileVersionInfo.ProductVersion -Descending
       }
+      $ListOfEXEObjects += $SubListOfEXEObjects
     }
-    $ListOfEXEObjects = $ListOfValidEXEObjects
   }
 
-  If ($ListOfEXEObjects.count -ge 1)
+  If ($ListOfEXEObjects.count -lt 1)
   {
-    $ShellEXEToUse = $ListOfEXEObjects | Select-Object -First 1 -Expand Definition
-    Write-host "Shell to use: $ShellEXEToUse"
-    If ($ShellEXEToUse)
+    Write-warning "On this system, searching $PathSpecsToProbeForShellEXEString does not result in any paths that end in .EXE, DefaultShell will not be explicitly set and ssh will use its default shell behavior or the existing registry key value."
+  }
+  else 
+  {    
+    $ListOfValidEXEObjects = @()
+    If (!$AllowInsecureShellEXE)
     {
-      Write-Host "Writing default shell to registry ($ShellEXEToUse)"
-      $SSHRegKey = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH"
-      If (!(Test-Path $SSHRegKey))
-      {
-        New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE" -Name 'OpenSSH' –Force | out-null
+      Write-Host "Filtering out EXEs that are not on the secure path list: $ListOfSecurePaths.  To unwisely override this filtering use the AllowInsecureShellEXE switch."
+      ForEach ($EXEObject in $ListOfEXEObjects)
+      { #Validate EXEs are on Secure Paths
+        If ($EXEObject.Definition -imatch "$ListOfSecurePathsRegExString")
+        {
+          Write-Host "     Valid: $($EXEObject.Definition)"
+          $ListOfValidEXEObjects += $EXEObject
+        }
+        else 
+        {
+          Write-Warning "  Dropping: $($EXEObject.Definition)"
+        }
       }
+      $ListOfEXEObjects = $ListOfValidEXEObjects
+    }
 
-      New-ItemProperty -Path $SSHRegKey -Name 'DefaultShell' -Value "$ShellEXEToUse" -PropertyType 'String' -Force | Out-Null
-      If ($SSHDefaultShellCommandOption)
+    If ($ListOfEXEObjects.count -ge 1)
+    {
+      $ShellEXEToUse = $ListOfEXEObjects | Select-Object -First 1 -Expand Definition
+      Write-host "Shell to use: $ShellEXEToUse"
+      If ($ShellEXEToUse)
       {
-        Write-Host "Writing default shell command option to registry ($SSHDefaultShellCommandOption)"    
-        New-ItemProperty -Path $SSHRegKey -Name 'DefaultShellCommandOption' -Value "$SSHDefaultShellCommandOption" -PropertyType 'String' -Force  | Out-Null
-      }
-      else 
-      {  #Revert to default behavior if not specified
-        Remove-ItemProperty -Path $SSHRegKey -Name 'DefaultShellCommandOption' -ErrorAction 'SilentlyContinue'
-      }
-    }      
+        Write-Host "Writing default shell to registry ($ShellEXEToUse)"
+        $SSHRegKey = "Registry::HKEY_LOCAL_MACHINE\SOFTWARE\OpenSSH"
+        
+        If (!(Test-Path "$SSHRegKey"))
+        {
+          New-Item -Path "Registry::HKEY_LOCAL_MACHINE\SOFTWARE" -Name OpenSSH -Force | out-null
+        }
+
+        New-ItemProperty -Path $SSHRegKey -Name 'DefaultShell' -Value "$ShellEXEToUse" -PropertyType 'String' -Force | Out-Null
+        If ($SSHDefaultShellCommandOption)
+        {
+          Write-Host "Writing default shell command option to registry ($SSHDefaultShellCommandOption)"    
+          New-ItemProperty -Path $SSHRegKey -Name 'DefaultShellCommandOption' -Value "$SSHDefaultShellCommandOption" -PropertyType 'String' -Force  | Out-Null
+        }
+        else 
+        {  #Revert to default behavior if not specified
+          Remove-ItemProperty -Path $SSHRegKey -Name 'DefaultShellCommandOption' -ErrorAction 'SilentlyContinue'
+        }
+      }      
+    }
+    else {
+      Write-Warning "After all filtering criteria was applied, there is no matching EXE for your search string: $PathSpecsToProbeForShellEXEString"
+    }
   }
-  else {
-    Write-Warning "After all filtering criteria was applied, there is no matching EXE for your search string: $PathSpecsToProbeForShellEXEString"
-  }
-}
 }

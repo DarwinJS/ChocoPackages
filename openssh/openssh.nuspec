@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Universal Installer)</title>
-    <version>1.0.0.20180202</version>
+    <version>7.6.0.1</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -32,9 +32,11 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/openssh/appicon.png</iconUrl>
     <releaseNotes>
-      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/releases/tag/v1.0.0.0
+      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/tree/v7.6.0.0p1-Beta
 
       Release Notes for Chocolatey Packaging:
+      7.6.0.1
+        - Fixed problems with install parameter /SSHAgentFeature
       1.0.0.20180202
         - Set-SSHDefaultShell.ps1 - fix corrupt characters
       1.0.0.20180201

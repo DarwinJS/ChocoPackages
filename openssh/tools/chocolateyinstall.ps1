@@ -73,9 +73,9 @@ $packageArgs = @{
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = '0947CFC1AB7C3A5D6BAA5243C57F1C638A058085'
+  checksum      = 'B12769AE28FCF045DCE6330575DC4D7F3D5A0BEB'
   checksumType  = 'SHA1'
-  checksum64    = 'A6DE1E923813B7AF8E62B753C3237AB6AC2A168C'
+  checksum64    = '6DC776D62DF097F8751A81AB0DC36DF0FF4EF341'
   checksumType64= 'SHA1'
 }
 
@@ -187,11 +187,6 @@ if ($packageparameters) {
       $TERM = $pp.Get_Item("TERM")
       Write-Host "/TERM was used, setting system TERM environment variable to $TERM"
       $TERMSwitchUsed = $True
-    }
-    Else
-    {
-      $TERM = 'xterm'
-      Write-Host "Defaulting system TERM environment variable to $TERM"
     }
 
     if ($pp.UseNTRights) {
@@ -349,7 +344,6 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorActio
 {
     #Shutdown and unregister service for upgrade
     stop-service sshd -Force
-    Stop-Service SSH-Agent -Force
     Start-Sleep -seconds 3
     If (([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
     {
@@ -357,7 +351,7 @@ If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorActio
     }
     If ($SSHAGENTServiceInstanceExistsAndIsOurs)
     {
-      stop-service ssh-agent -Force
+      Stop-Service SSH-Agent -Force
       Start-Sleep -seconds 3
       If (([bool](Get-Service ssh-agent | where {$_.Status -ieq 'Running'})))
       {

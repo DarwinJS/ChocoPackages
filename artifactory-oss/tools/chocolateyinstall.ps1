@@ -2,10 +2,10 @@
 #Reread Environment In Case JDK dependency just ran
 Update-SessionEnvironment
 
-$version = '5.5.2'
+$version = '5.9.1'
 
 $url = "https://api.bintray.com/content/jfrog/artifactory/jfrog-artifactory-oss-$version.zip;bt_package=jfrog-artifactory-oss-zip"
-$checksum = 'F90802CC06571AD35F10DDAD870E3A87A76E4D12'
+$checksum = 'B43083674E4B8666CC9A7D4B505303555266C331'
 $checksumtype = 'sha1'
 $validExitCodes = @(0)
 

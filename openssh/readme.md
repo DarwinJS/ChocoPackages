@@ -184,7 +184,7 @@ sshd service to be interrupted or removed.
 ## -params '"/SSHAgentFeature"'
 Installs SSH Agent Service even if SSHD Server is not being installed.
 Requires admin rights to configure service.
-This option is automatically set when /SSHServerFeature is used.
+IMPORTANT: ssh-agent is no longer required for sshd after version openssh 1.0.0.0
 
 ## -params '"/SSHServerFeature /SSHServerPort:3834"'
 Allows the setup of the SSH server on an alternate port - sometimes done for security or to avoid conflicts with an existing service on port 22.
@@ -251,6 +251,46 @@ cuninst -y openssh -params '"/SSHServerFeature /DeleteConfigAndServerKeys"'
 Thanks to [king6cong](https://github.com/king6cong) for the above suggested code.
 
 # Ancient Version History
+
+0.0.21.0
+- none
+0.0.20.20170913
+- added possible missing command from install-sshd.ps1 (sc.exe privs sshd SeAssignPrimaryTokenPrivilege)
+0.0.20.0
+- handle edge case error for Azure Custom Script Extensions and DSC cChocoInstalledPackage resource 
+    where GetTempFileName does not find TEMP folder when running under SYSTEM account.
+0.0.19.0
+- sshlsa features are removed from install package as this dll is no longer required for Openssh
+0.0.18.20170730
+- TERM defaults to 'xterm-256color' on windows kernel 10.x and above
+0.0.18.0
+- updated instructions for non-chocolatey install so that they do not add the source location as "trusted"
+0.0.17.0
+- fixes latest opensshutils.psm1 to work on Nano
+0.0.16.0
+- Fixed incomplete permissions grant when using /NTRights switch.
+- Fixed uninstall implementation
+- Fixed uninstall and clean uninstall for Nano
+- Uses version of opensshutils shipped with openssh
+0.0.15.20170613
+- Fixed problem for issue #35 (error with "$RunningOnNano not found").
+- /DeleteConfigAndServerKeys now works.
+0.0.15.20170611
+- Sets permissions for user "NT SERVICE\sshd" to write to [sshfolder]\Logs
+0.0.15.0
+- Calls utility script FixUserFilePermissions.ps1 (included with OpenSSH) to align setup / migrate 
+    permissions to v.0.0.15.0 standard. Permissions are reasserted at every install / upgrade.
+- A chocolatey uninstall that specifies "/DeleteConfigAndServerKeys" will fail.  This is only ever used
+    for a completely clean uninstall - not using it means that the ssh_conf and the server key files will
+    remain in the openssh install folder and will need to be removed manually after taking ownership of the files.
+- New switch /DisableKeyPermissionsReset disables this capability if you are managing permissions separately.
+0.0.14.0
+- by default sets a machine environment variable TERM=xterm, customize with /TERM switch
+- updated path setting code to not make unnecessary path alterations
+0.0.12.0
+- ssh-lsa.dll is no longer needed and no longer configured (switch /ReleaseSSHLSAForUpgrade is ignored)
+- if ssh-lsa.dll is found during upgrade a delete attempt is made - if unsuccessful (file locked), ssh-lsa.dll 
+    will be deconfigured as an authentication package and it will be delete on the next upgrade.
 
 0.0.11.0
 - /ReleaseSSHLSAForUpgrade - switch that de-configures ssh-lsa.dll in preparation for updating it after a reboot and forced reinstall (and another reboot).  See: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md

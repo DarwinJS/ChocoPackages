@@ -87,7 +87,6 @@ If ($RunningUnderChocolatey)
   $DeleteServerKeysAfterInstalled = $false
   $UseNTRights = $false
   $SSHServerPort = '22'
-  $DisableKeyPermissionsReset = $False
 
   $arguments = @{};
   $packageParameters = $env:chocolateyPackageParameters
@@ -147,11 +146,6 @@ if ($packageparameters) {
     if ($pp.SSHServerFeature) {
         Write-Host "/SSHServerFeature was used, including SSH Server Feature."
         $SSHServerFeature = $true
-    }
-
-    if ($pp.DisableKeyPermissionsReset) {
-        Write-Host "/DisableKeyPermissionsReset was used, will not reset key permissions."
-        $DisableKeyPermissionsReset = $true
     }
 
     if ($pp.OverWriteSSHDConf) {

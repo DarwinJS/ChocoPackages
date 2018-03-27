@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>powershell-core</id>
-    <version>6.0.2</version>
+    <version>6.1.0-preview-1</version>
     <packageSourceUrl>https://github.com/darwinjs/chocopackages/powershell-core</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>powershell-core (Install)</title>
@@ -18,7 +18,7 @@
     <tags>powershell-core pwsh admin</tags>
     <summary>PowerShell Core is the open source multiplatform version of PowerShell</summary>
     <description>PowerShell Core is the open source multiplatform version of PowerShell</description>
-    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.0.1
+    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.1.0-preview.1
     Package release Notes:
     </releaseNotes>
     <dependencies>

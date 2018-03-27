@@ -19,10 +19,18 @@ If (!(Get-ProcessorBits -eq 64))
 
 $nexusversionedfolder = "nexus-$version"
 $TargetFolder = "$env:programdata\nexus"
-$TargetDataFolder = "$env:programdata\sonatype-work"
 $ExtractFolder = "$env:temp\NexusExtract"
-$NexusWorkFolder = "$env:programdata\nexus\sonatype-work"
+$TargetDataFolder = "$env:programdata\sonatype-work"
+$NexusConfigFile = "$TargetDataFolder\nexus3\etc\nexus.properties"
 $servicename = 'nexus'
+$NexusPort = '8081'
+
+$pp = Get-PackageParameters
+  
+if ($pp.Port) {
+  $NexusPort = $pp.Port
+  Write-Host "/Port was used, Nexus will listen on port $NexusPort."
+}
 
 If (Test-Path "$env:ProgramFiles\nexus\bin")
 {
@@ -35,24 +43,42 @@ If ([bool](Get-Service $servicename -ErrorAction SilentlyContinue))
   Stop-Service $servicename -force
 }
 
+If (Test-Path "$ExtractFolder") {Remove-Item "$ExtractFolder" -Recurse -Force}
+
 Install-ChocolateyZipPackage -PackageName $packageName -unziplocation "$ExtractFolder" -url $url -checksum $checksum -checksumtype $checksumtype -url64 $url -checksum64 $checksum -checksumtype64 $checksumtype
 
 Copy-Item "$ExtractFolder\$nexusversionedfolder" "$TargetFolder" -Force -Recurse
 
-If (!(Test-Path "$env:programdata\sonatype-work"))
+If (!(Test-Path "$TargetDataFolder"))
 {
-  Move-Item "$extractfolder\sonatype-work" "$env:programdata\sonatype-work"
+  Move-Item "$extractfolder\sonatype-work" "$TargetDataFolder"
 }
 else 
 {
-  Write-Warning "`"$env:programdata\sonatype-work`" already exists, not overwriting, residual data from previous installs will not be reset."
+  Write-Warning "`"$TargetDataFolder`" already exists, not overwriting, residual data from previous installs will not be reset."
 }
 
 Remove-Item "$ExtractFolder" -Force -Recurse
 
 Start-ChocolateyProcessAsAdmin -ExeToRun "$TargetFolder\bin\nexus.exe" -Statements "/install $servicename" -validExitCodes $validExitCodes
 
-#Install-ChocolateyEnvironmentVariable 'PLEXUS_NEXUS_WORK' "$NexusWorkFolder"
+#Update Port
+If ($NexusPort -ne '8081')
+{
+  $service = Start-Service $servicename -PassThru
+  $Service.WaitForStatus('Running', '00:02:00')
+  Start-Sleep 120
+  If (Test-Path "$NexusConfigFile")
+  {
+    Write-Host "Configuring Nexus to listen on port $NexusPort."
+    (Get-Content "$NexusConfigFile") -replace "^#\s*application-port=.*$", "application-port=$NexusPort" | Set-Content "$NexusConfigFile"
+    Stop-Service $servicename
+  }
+  else 
+  {
+    Write-Warning "Cannot find `"$NexusConfigFile`", skipping configuring Nexus to listen on port $NexusPort."
+  }
+}
 
 $service = Start-Service $servicename -PassThru
 Write-Host "Waiting for Nexus service to be completely ready"
@@ -73,10 +99,10 @@ Write-Warning "*****************************************************************
 Write-Warning "*"
 Write-Warning "*  You MAY receive the error 'localhost refused to connect.' until Nexus is fully started."
 Write-Warning "*"
-Write-Warning "*  You can manage the repository by visiting http://localhost:8081"
+Write-Warning "*  You can manage the repository by visiting http://localhost:$NexusPort"
 Write-Warning "*  The default user is 'admin' with password 'admin123'"
 Write-Warning "*  Nexus availability is controlled via the service `"$servicename`""
-Write-Warning "*  Use the following command to open port 8081 for access from off this machine (one line):"
+Write-Warning "*  Use the following command to open port $NexusPort for access from off this machine (one line):"
 Write-Warning "*   netsh advfirewall firewall add rule name=`"Nexus Repository`" dir=in action=allow "
-Write-Warning "*   protocol=TCP localport=8081"
+Write-Warning "*   protocol=TCP localport=$NexusPort"
 Write-Warning "*******************************************************************************************"

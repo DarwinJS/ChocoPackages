@@ -33,6 +33,7 @@ By default the install runs a custom utility script called "Reset-SSHKeyPermissi
 
 Param (
   [switch]$SSHServerFeature,
+  [switch]$SSHAgentFeature,
   [string]$SSHServerPort='22',
   [switch]$DeleteServerKeysAfterInstalled,
   [switch]$DeleteConfigAndServerKeys,
@@ -42,7 +43,6 @@ Param (
   [string]$SSHLogLevel,
   [switch]$ReleaseSSHLSAForUpgrade,
   [string]$TERM,
-  [switch]$DisableKeyPermissionsReset,
   [string]$PathSpecsToProbeForShellEXEString,
   [string]$SSHDefaultShellCommandOption,
   [switch]$AllowInsecureShellEXE

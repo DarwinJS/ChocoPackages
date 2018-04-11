@@ -119,7 +119,7 @@ Oneliner premade script that does the below:
 #Uninstall leftovers (after an above command)
 
 11. cd \
-11. rd -recurse "$env:ProgramFiles\nuget\packages\openssh"
+11. rd -recurse "$env:ProgramFiles\PackageManagement\NuGet\Packages\openssh.7.6.0.1"
 
 # Install Scenario 3: Docker
 

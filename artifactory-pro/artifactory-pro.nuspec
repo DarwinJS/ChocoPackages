@@ -5,9 +5,9 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>artifactory-pro</id>
     <title>jFrog Artifactory Pro</title>
-    <version>4.10</version>
+    <version>4.14.2</version>
     <authors>JFrog</authors>
-    <owners>DarwinJS dragon788</owners>
+    <owners>DarwinJS espoelstra</owners>
     <summary>Professional version of JFrog binary artifact repository including Nuget. (Requires paid/evaluation license key)</summary>
     <description>Professional version of JFrog binary artifact repository including Nuget. (Requires paid/evaluation license key)</description>
     <projectUrl>https://www.jfrog.com/artifactory/features/</projectUrl>
@@ -20,7 +20,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/artifactory/appicon.png</iconUrl>
     <dependencies>
-      <dependency id="JDK" />
+      <dependency id="server-jre" />
     </dependencies>
   </metadata>
   <files>

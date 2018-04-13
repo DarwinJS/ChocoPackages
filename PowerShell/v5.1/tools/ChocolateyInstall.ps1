@@ -109,7 +109,7 @@ try
                 $Net4Version = (get-itemproperty "hklm:software\microsoft\net framework setup\ndp\v4\full" -ea silentlycontinue | Select -Expand Release -ea silentlycontinue)
                 if ($Net4Version -lt $MinimumNet4Version)
                 {
-                  throw ".NET Framework 4.5.2 or later required.  Use package named `"dotnet4.5` to upgrade.  Your .NET Release is `"$MinimumNet4Version`" but needs to be at least `"$MinimumNet4Version`"."
+                  throw ".NET Framework 4.5.2 or later required.  Use package named `"dotnet4.5` to upgrade.  Your .NET Release is `"$Net4Version`" but needs to be at least `"$MinimumNet4Version`"."
                 }
                 Else
                 {

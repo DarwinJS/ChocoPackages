@@ -21,12 +21,11 @@ Yes you read that right - although packaged as a chocolatey .nupkg, this install
     - [-params '"/OverWriteSSHDConf"'](#params-overwritesshdconf)
     - [-params '"/SSHLogLevel:VERBOSE"'](#params-sshloglevelverbose)
     - [-params '"/TERM:xterm-new"'](#params-termxterm-new)
-    - [-params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'](#params-sshserverfeature-deleteserverkeysafterinstalled)
     - [-params '"/DeleteConfigAndServerKeys"' (during uninstall command)](#params-deleteconfigandserverkeys-during-uninstall-command)
-    - [-params '"/UseNTRights"'](#params-usentrights)
     - [-params '"/PathSpecsToProbeForShellEXEString:$env:programfiles\PowerShell\*\Powershell.exe;$env:windir\system32\windowspowershell\v1.0\powershell.exe"'](#params-pathspecstoprobeforshellexestringenvprogramfilespowershellpowershellexeenvwindirsystem32windowspowershellv10powershellexe)
     - [-params '"/SSHDefaultShellCommandOption:/c"'](#params-sshdefaultshellcommandoptionc)
     - [-params '"/AllowInsecureShellEXE"'](#params-allowinsecureshellexe)
+    - [-params '"/AlsoLogToFile"'](#params-alsologtofile)
 - [TroubleShooting](#troubleshooting)
     - [Chocolatey Uninstall Problems](#chocolatey-uninstall-problems)
 - [Ancient Version History](#ancient-version-history)
@@ -119,7 +118,7 @@ Oneliner premade script that does the below:
 #Uninstall leftovers (after an above command)
 
 11. cd \
-11. rd -recurse "$env:ProgramFiles\nuget\packages\openssh"
+11. rd -recurse "$NuGetPkgRoot\openssh"
 
 # Install Scenario 3: Docker
 
@@ -205,20 +204,8 @@ Introduced in Version: 0.0.13.0
 Allows the initial setup and subsequent update of the TERM system environment variable.
 If it does not exist, TERM is defaulted to "xterm" when this switch has NOT been used.
 
-## -params '"/SSHServerFeature /DeleteServerKeysAfterInstalled"'
-When installing the server, server keys are deleted after added to the ssh-agent (you will not have an opportunity to copy them).
-
 ## -params '"/DeleteConfigAndServerKeys"' (during uninstall command)
 By default an uninstall does not remove config files nor server keys.
-
-## -params '"/UseNTRights"'
-By default this install uses PowerShell code that works on operating systems that cannot run the 32-bit ntrights.exe (Nano, Server Core w/out WOW64).
-If this code does not work for you, you can use this switch to invoke the 32-bit ntrights.exe
-Please be aware that 32-bit ntrights.exe will NOT work on Windows Systems that do not have WOW64 installed - this would mainly
-affect Server Core where this feature is optional and not installed by default and Server Nano where 32-bit is not supported.
-
-**Note:** If you have tested and this switch is *absolutely required* for your deployment scenario, please file an issue so that I can enhance the code so that
-this switch is not needed for your scenario.
 
 ## -params '"/PathSpecsToProbeForShellEXEString:$env:programfiles\PowerShell\*\Powershell.exe;$env:windir\system32\windowspowershell\v1.0\powershell.exe"'
 A set of filespecs to probe for the latest version of a given shell exe.  Wildcards can be used in the path, but not the filename.
@@ -236,6 +223,9 @@ Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openss
 ## -params '"/AllowInsecureShellEXE"'
 Only used when /PathSpecsToProbeForShellEXEString is used and results in finding a valid shell executable that is outside of the Programs Folders or system32.
 Rules and Examples: https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/tools/Set-SSHDefaultShell.ps1
+
+## -params '"/AlsoLogToFile"'
+As of version 7.6.1.0p1-Beta default logging has shifted to ETW Windows Event Logging.  Throwing this switch causes logging to also occur to the log file - now located in $env:ProgramData\ssh\logs.
 
 # TroubleShooting
 

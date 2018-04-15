@@ -17,8 +17,6 @@ To push tools folder to Nano use 'Copy-Item -tosession $sessionvariable tools c:
 Include SSH Server Feature.
 .PARAMETER SSHServerPort
 The port that SSHD Server should listen on.
-.PARAMETER DeleteServerKeysAfterInstalled
-Delete server private keys after they have been secured
 .PARAMETER DeleteConfigAndServerKeys
 Delete server private keys and configuration upon uninstall.
 .PARAMETER Uninstall
@@ -35,9 +33,7 @@ Param (
   [switch]$SSHServerFeature,
   [switch]$SSHAgentFeature,
   [string]$SSHServerPort='22',
-  [switch]$DeleteServerKeysAfterInstalled,
   [switch]$DeleteConfigAndServerKeys,
-  [switch]$UseNTRights,
   [switch]$Uninstall,
   [switch]$OverWriteSSHDConf,
   [string]$SSHLogLevel,
@@ -45,7 +41,8 @@ Param (
   [string]$TERM,
   [string]$PathSpecsToProbeForShellEXEString,
   [string]$SSHDefaultShellCommandOption,
-  [switch]$AllowInsecureShellEXE
+  [switch]$AllowInsecureShellEXE,
+  [switch]$AlsoLogToFile
   )
 
 Write-Output "Configuring on Port $SSHServerPort"

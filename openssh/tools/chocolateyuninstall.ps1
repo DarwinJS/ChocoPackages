@@ -36,8 +36,8 @@ $TargetFolderOld = "$PF\OpenSSH-Win$($OSBits)"
 
 $sshdpath = Join-Path $TargetFolder "sshd.exe"
 $sshagentpath = Join-Path $TargetFolder "ssh-agent.exe"
-$sshdir = Join-Path $env:ProgramData "\ssh"
-$logsdir = Join-Path $sshdir "logs"
+$sshdatadir = Join-Path $env:ProgramData "\ssh"
+$logsdir = Join-Path $sshdatadir "logs"
 
 If ($RunningUnderChocolatey)
 {
@@ -62,7 +62,7 @@ if ((test-path variable:packageparameters) -AND $packageParameters) {
           $arguments.Add(
               $_.Groups[$option_name].Value.Trim(),
               $_.Groups[$value_name].Value.Trim())
-      }
+       }
     }
     else
     {
@@ -121,37 +121,28 @@ If ([bool](get-process ssh -erroraction silentlycontinue | where {$_.Path -ilike
 
 If ($SSHServiceInstanceExistsAndIsOurs -AND ([bool](Get-Service SSHD -ErrorAction SilentlyContinue | where {$_.Status -ieq 'Running'})))
 {
-    Stop-Service SSHD -Force
-    Stop-Service SSH-Agent -Force
-    Start-Sleep -seconds 3
-    If (([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
-    {
-      Throw "Could not stop the SSHD service, please stop manually and retry this package."
-    }
-    Stop-Service ssh-agent -Force
-    Start-Sleep -seconds 3
-    If (([bool](Get-Service ssh-agent | where {$_.Status -ieq 'Running'})))
-    {
-      Throw "Could not stop the ssh-agent service, please stop manually and retry this package."
-    }
-}
+  Stop-Service SSHD -Force
+  Start-Sleep -seconds 3
+  If (([bool](Get-Service SSHD | where {$_.Status -ieq 'Running'})))
+  {
+    Throw "Could not stop the SSHD service, please stop it manually and retry this package."
+  }
+  $etwman = Join-Path $TargetFolder "openssh-events.man"
+  # unregister etw provider
+  wevtutil um `"$etwman`"  
 
-#uninstall agent service if it was installed without SSHD
-If ($SSHAGENTServiceInstanceExistsAndIsOurs -AND (!$SSHServiceInstanceExistsAndIsOurs))
-{
-  Stop-Service ssh-agent -Force
-  sc.exe delete ssh-agent | out-null
-}
-
-If ($SSHServiceInstanceExistsAndIsOurs -AND ($SSHServerFeature))
-{
   Stop-Service sshd -Force
   sc.exe delete sshd  | out-null
 }
 
-If ([bool](get-service ssh-agent -ea SilentlyContinue))
+If ($SSHAGENTServiceInstanceExistsAndIsOurs)
 {
-  Stop-Service ssh-agent -Force
+  Stop-Service SSH-Agent -Force
+  Start-Sleep -seconds 3
+  If (([bool](Get-Service ssh-agent | where {$_.Status -ieq 'Running'})))
+  {
+    Throw "Could not stop the ssh-agent service, please stop manually and retry this package."
+  }
   sc.exe delete ssh-agent | out-null
 }
 
@@ -161,7 +152,7 @@ If (Test-Path $TargetFolder) {Remove-Item "$TargetFolder" -Recurse -Force}
 If (($SSHServiceInstanceExistsAndIsOurs -AND $DeleteConfigAndServerKeys) -OR (!$SSHServiceInstanceExistsAndIsOurs))
 {
     Write-Warning "Removing all config and server keys as requested by /DeleteConfigAndServerKeys"
-    If (Test-Path $sshdir) {Remove-Item "$sshdir" -Recurse -Force}
+    If (Test-Path $sshdatadir) {Remove-Item "$sshdatadir" -Recurse -Force}
 }
 
 netsh advfirewall firewall delete rule name='SSHD Port OpenSSH (chocolatey package: openssh)'

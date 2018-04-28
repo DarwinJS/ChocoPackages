@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>pwsh</id>
-    <version>6.1.0-preview-1</version>
+    <version>6.1.0-preview-2</version>
     <packageSourceUrl>https://github.com/darwinjs/chocopackages/pwsh</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>pwsh (Install)</title>
@@ -18,8 +18,11 @@
     <tags>powershell-core pwsh admin</tags>
     <summary>PowerShell Core is the open source multiplatform version of PowerShell</summary>
     <description>PowerShell Core is the open source multiplatform version of PowerShell</description>
+    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.1.0-preview.2
+    Package release Notes:
+    </releaseNotes>    
     <dependencies>
-      <dependency id="powershell-core" version="[6.1.0-preview-1]"/>
+      <dependency id="powershell-core" version="[6.1.0-preview-2]"/>
     </dependencies>
   </metadata>
   <files>

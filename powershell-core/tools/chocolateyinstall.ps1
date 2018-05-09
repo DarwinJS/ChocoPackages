@@ -30,6 +30,13 @@ $packageArgs = @{
   validExitCodes= @(0, 3010, 1641)
   }
 
+$pp = Get-PackageParameters
+
+if ($pp.CleanUpPath) {
+  Write-Host "/CleanUpSystemPath was used, removing all PowerShell Core path entries before installing"
+  & "$toolsDir\Reset-PWSHSystemPath.ps1" -PathScope Machine, User -RemoveAllOccurances
+}
+
 Install-ChocolateyPackage @packageArgs
 
 Write-Output "************************************************************************************"

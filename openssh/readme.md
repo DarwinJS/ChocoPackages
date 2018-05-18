@@ -152,7 +152,7 @@ Use this method for:
 
 1. Download the desired version openssh .nupkg from Chocolatey.    
     ```
-    invoke-webrequest 'https://chocolatey.org/api/v2/package/openssh/0.0.22.0' -outfile "$env:public\openssh.0.0.22.0"
+    invoke-webrequest 'https://chocolatey.org/api/v2/package/openssh/0.0.22.0' -outfile "$env:public\openssh.0.0.22.0.nupkg"
     ```
 2. Rename the .nupkg to .zip
     

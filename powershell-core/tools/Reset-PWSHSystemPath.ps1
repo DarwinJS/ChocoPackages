@@ -1,15 +1,23 @@
 <#
 .SYNOPSIS
   Idempotently removes extra PowerShell Core paths from the machine, user and/or process environment scope with no reordering.
+
 .DESCRIPTION
   Defaults to machine scope and leaving the last sorted path alone.
   Does not touch path if there is nothing to clean.
   Emits one simple log line about it's actions for each scope.
+
+  Also accessible in the powershell-core Chocolatey package by using -params '"/CleanUpSystemPath"'
+
 .PARAMETER PathScope
   Set of machine scopes to clean up.  Valid options are one or more of: Machine, User, Process.
+  Default: machine
+
 .PARAMETER RemoveAllOccurences
   By default the cleanup leaves the highest sorted PowerShell Core path alone.  
   This switch causes it to be cleaned up as well.
+  Default: false
+
 .EXAMPLE
   .\Reset-PWSHSystemPath.ps1
   
@@ -20,7 +28,7 @@
   .\Reset-PWSHSystemPath.ps1 -RemoveAllOccurences
   
   Removes ALL PowerShell core paths from the Machine level path.
-  Good for running right before upgrading PowerShell install.
+  Good for running right before upgrading PowerShell core.
 .EXAMPLE
   .\Reset-PWSHSystemPath.ps1 -PathScope Machine, User, Process
 
@@ -29,8 +37,7 @@
 .EXAMPLE
   .\Reset-PWSHSystemPath.ps1 -PathScope Machine, User, Process -RemoveAllOccurencs
 
-  Removes all paths but the very last one when sorted in ascending order.
-  Processes all path scopes including current process.
+  Removes all paths from all path scopes including current process.
 #>
 param (
   [ValidateSet("machine","user","process")]

@@ -15,7 +15,7 @@
     <projectSourceUrl>https://github.com/PowerShell/PowerShell</projectSourceUrl>
     <docsUrl>https://github.com/PowerShell/PowerShell-Docs</docsUrl>
     <bugTrackerUrl>https://github.com/PowerShell/PowerShell/issues</bugTrackerUrl>
-    <tags>powershell-core pwsh admin</tags>
+    <tags>powershell-core powershell pwsh admin</tags>
     <summary>PowerShell Core is the open source multiplatform version of PowerShell</summary>
     <description>PowerShell Core is the open source multiplatform version of PowerShell
     

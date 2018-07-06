@@ -1,5 +1,6 @@
 
 New Version:
+Previews are under seperate package ids - so a given update needs to apply to either the releases packages or preview packages.
 1. ChocolateyInstall.ps1 - Update all install links and checksums from MS release page.
 2. ChocolateyInstall.ps1 - Update version number.
 3. ChocolateyUninstall.ps1 - Update version number.

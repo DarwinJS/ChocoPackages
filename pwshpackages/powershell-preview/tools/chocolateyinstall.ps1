@@ -1,16 +1,10 @@
 
 $ErrorActionPreference = 'Stop';
 
-$packageName= 'powershell-core'
+$packageName= 'powershell-preview'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $Version = "6.1.0-preview.3"
-$InstallFolder = "$env:ProgramFiles\PowerShell\$Version"
-
-If (Test-Path "$InstallFolder\powershell.exe")
-{
-  Write-output "$packagename version $PFSubfolder is already installed by another means."
-  Exit 0
-}
+$InstallFolder = "$env:ProgramFiles\PowerShell\6-preview"
 
 $packageArgs = @{
   packageName   = $packageName

@@ -1,0 +1,1 @@
+﻿#Install-VirtualPackage 'powershell-core' 'powershell-core'

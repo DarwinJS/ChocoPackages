@@ -2,8 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>pwsh</id>
-    <version>6.1.0-preview-3</version>
-    <packageSourceUrl>https://github.com/darwinjs/chocopackages/pwsh</packageSourceUrl>
+    <version>6.0.2.20180704</version>
+    <packageSourceUrl>https://github.com/darwinjs/chocopackages/pwshpackages/pwsh</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>pwsh (Install)</title>
     <authors>Microsoft</authors>
@@ -15,21 +15,24 @@
     <projectSourceUrl>https://github.com/PowerShell/PowerShell</projectSourceUrl>
     <docsUrl>https://github.com/PowerShell/PowerShell-Docs</docsUrl>
     <bugTrackerUrl>https://github.com/PowerShell/PowerShell/issues</bugTrackerUrl>
-    <tags>powershell-core pwsh admin</tags>
-    <summary>PowerShell Core is the open source multiplatform version of PowerShell</summary>
+    <tags>powershell powershell-core pwsh admin</tags>
+    <summary>PowerShell Core is the open source multiplatform version of PowerShell.</summary>
     <description>PowerShell Core is the open source multiplatform version of PowerShell
     
+    Preview releases are under the package id powershell-preview so that they can be safely installed and maintained side-by-side with the release versions on production systems.
+    Preview versions do not become the default powershell core edition on a system (unless they are the ONLY edition), if you have a preview version installed, access it via pwsh's '-pre' switch.
+
     This package automatically does verbose MSI logging to %temp%\(packagenameandversion).MsiInstall.log
 
     There are some helpful arguments you can pass to the MSI installer, but you should use the powershell-core package 
     directly to do so.
 
     </description>
-    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.1.0-preview.3
+    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.0.3
     Package release Notes:
     </releaseNotes>    
     <dependencies>
-      <dependency id="powershell-core" version="[6.1.0-preview-3]"/>
+      <dependency id="powershell-core" version="[6.0.2.20180704]"/>
     </dependencies>
   </metadata>
   <files>

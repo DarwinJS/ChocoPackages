@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>virtualmachineconverter</id>
     <title>Microsoft Virtual Machine Converter</title>
-    <version>3.1</version>
+    <version>3.1.0.20180613</version>
     <authors>Microsoft</authors>
     <owners>Darwin Sanoy (CSI-Windows.com)</owners>
     <summary>Microsoft Virtual Machine Converter can be used to convert non-MS virtual machines to Hyper-V using a wizard or CMDLets and non-VHD hard disks to VHD or VHDX using CMDLets.(</summary>

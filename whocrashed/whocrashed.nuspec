@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>whocrashed</id>
     <title>Who Crashed</title>
-    <version>5.53</version>
+    <version>6.01</version>
     <authors>Resplendence Software Projects Sp.</authors>
     <owners>DarwinJS</owners>
     <summary>Analyzes existing crash dumps and tries to determine and state the root cause in easy to understand language.</summary>

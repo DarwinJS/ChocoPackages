@@ -8,7 +8,7 @@ $packageArgs = @{
   unzipLocation = $toolsDir
   installerType = 'EXE'
   url           = 'http://www.resplendence.com/download/whocrashedSetup.exe'
-  checksum      = '3A8ED4F8D3EC0E64050BB6C4375B4523377BD39B'
+  checksum      = '2E880B90012EF4487B1248A4D0922EB18AFDFAF5'
   checksumtype  = 'sha1'
   silentArgs    = "/VERYSILENT /NORESTART /LOG=`"$env:temp\CHOCO-INSTALL-whocrashed.log`""
   validExitCodes= @(0, 3010, 1641)

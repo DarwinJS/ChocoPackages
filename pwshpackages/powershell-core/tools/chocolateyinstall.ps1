@@ -37,6 +37,11 @@ if ($pp.CleanUpPath) {
   & "$toolsDir\Reset-PWSHSystemPath.ps1" -PathScope Machine, User -RemoveAllOccurances
 }
 
+If ($PSVersionTable.PSVersion -ilike '6*')
+{
+  Write-Warning "You are running this package under PowerShell core, replacing an in-use version may be unpredictable or require multiple attempts."
+}
+
 Install-ChocolateyPackage @packageArgs
 
 Write-Output "************************************************************************************"

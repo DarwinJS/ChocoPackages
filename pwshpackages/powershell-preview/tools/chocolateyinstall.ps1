@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop';
 
 $packageName= 'powershell-preview'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$Version = "6.1.0-preview.3"
+$Version = "6.1.0-preview.4"
 $InstallFolder = "$env:ProgramFiles\PowerShell\6-preview"
 
 $packageArgs = @{
@@ -15,9 +15,9 @@ $packageArgs = @{
 
   softwareName  = "PowerShell-6.0.*"
 
-  checksum      = '5A6D894329C5B2E8FF358FEC746AA1B56A7144DE98B2DEC5A9589C9EB2189427'
+  checksum      = '0CB997B3AC912899265FECE6305B3BC9FDA7527EFC5FE62AA1E3B0A33CB27CDF'
   checksumType  = 'sha256'
-  checksum64    = 'A68C4AF35E36701CE02B0E0D79B0D8EF5E6D978A496A8B025CFA9F6BF08BC177'
+  checksum64    = '59B26D1EA488D1F42F0952D2064AEF8EBB52C66B9325CD6AA0034A9FA1543931'
   checksumType64= 'sha256'
 
   silentArgs    = "/qn /norestart /l*v `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`"" # ALLUSERS=1 DISABLEDESKTOPSHORTCUT=1 ADDDESKTOPICON=0 ADDSTARTMENU=0
@@ -29,6 +29,11 @@ $pp = Get-PackageParameters
 if ($pp.CleanUpPath) {
   Write-Host "/CleanUpSystemPath was used, removing all PowerShell Core path entries before installing"
   & "$toolsDir\Reset-PWSHSystemPath.ps1" -PathScope Machine, User -RemoveAllOccurances
+}
+
+If ($PSVersionTable.PSVersion -ilike '6*-preview*')
+{
+  Write-Warning "You are running this package under PowerShell core preview, replacing an in-use version may be unpredictable or require multiple attempts."
 }
 
 Install-ChocolateyPackage @packageArgs

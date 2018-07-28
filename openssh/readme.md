@@ -76,9 +76,10 @@ If you have chocolatey installed, then just issue either of these commands to in
 **Steps**: [0] Installs Chocolatey (kicker script), [1] Fetch from Internet (Chocolatey), [2] Unpack (Chocolatey), [3] Install (Chocolatey)
 
 A oneliner pulled from the web which installs chocolatey in order to install the OpenSSH package:
-`iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_openssh_with_server.ps1'))`
+`iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_win32-openssh.ps1'))`
+
 Include the Server Feature:
-`iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_openssh_with_server.ps1'))`
+`iex ((new-object net.webclient).DownloadString('https://raw.githubusercontent.com/DarwinJS/ChocoPackages/master/openssh/InstallChoco_and_win32-openssh_with_server.ps1'))`
 
 1. Open an ELEVATED PowerShell Prompt
 2. Paste this command into the console (get the whole line - it's long and is a single line):

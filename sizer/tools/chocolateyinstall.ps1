@@ -2,7 +2,7 @@
 
 $packageName= 'sizer'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = 'http://www.brianapps.net/sizer4/sizer4_dev562.msi'
+$url        = 'http://www.brianapps.net/sizer4/sizer4_dev570.msi'
 $LogFile    = "`"$env:TEMP\chocolatey\$($packageName)\$($packageName).MsiInstall.log`""
 $packageArgs = @{
   packageName   = $packageName
@@ -15,7 +15,7 @@ $packageArgs = @{
   validExitCodes= @(0, 3010, 1641)
 
   softwareName  = 'sizer*'
-  checksum      = 'E8091D5165B74EB674455D1896DFB3BF96BAC1A0'
+  checksum      = 'CE5529FAA4F4392A60FDB558545D88DD9DD8AB11'
   checksumtype  = 'sha1'
 }
 

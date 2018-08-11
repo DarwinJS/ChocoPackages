@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>pwsh</id>
-    <version>6.0.2.20180704</version>
+    <version>6.0.4</version>
     <packageSourceUrl>https://github.com/darwinjs/chocopackages/pwshpackages/pwsh</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>pwsh (Install)</title>
@@ -32,7 +32,7 @@
     Package release Notes:
     </releaseNotes>    
     <dependencies>
-      <dependency id="powershell-core" version="[6.0.2.20180704]"/>
+      <dependency id="powershell-core" version="[6.0.4]"/>
     </dependencies>
   </metadata>
   <files>

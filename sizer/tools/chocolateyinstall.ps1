@@ -21,4 +21,6 @@ $packageArgs = @{
 
 Write-Output "The installation log is: $LogFile"
 
+Write-Output "The PowerShell Version is: $($Psversiontable | out-string)"
+
 Install-ChocolateyPackage @packageArgs

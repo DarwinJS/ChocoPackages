@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop';
 
 $packageName= 'powershell-preview'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$Version = "6.1.0-preview.4"
+$Version = "6.2.0-preview.1"
 $InstallFolder = "$env:ProgramFiles\PowerShell\6-preview"
 
 $packageArgs = @{
@@ -15,9 +15,9 @@ $packageArgs = @{
 
   softwareName  = "PowerShell-6.0.*"
 
-  checksum      = '0CB997B3AC912899265FECE6305B3BC9FDA7527EFC5FE62AA1E3B0A33CB27CDF'
+  checksum      = 'F7B2EA7210B9FF0FE0EB64F75947C441EEC0FC881D93E5570EBC1F4F49EA9CE2'
   checksumType  = 'sha256'
-  checksum64    = '59B26D1EA488D1F42F0952D2064AEF8EBB52C66B9325CD6AA0034A9FA1543931'
+  checksum64    = 'C36B327173610BA565BA6E636F6F6B9EE54609B60F2014AE7530CDD24ABB8778'
   checksumType64= 'sha256'
 
   silentArgs    = "/qn /norestart /l*v `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`"" # ALLUSERS=1 DISABLEDESKTOPSHORTCUT=1 ADDDESKTOPICON=0 ADDSTARTMENU=0

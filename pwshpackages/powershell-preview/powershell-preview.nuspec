@@ -48,6 +48,8 @@
     </description>
     <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.1.0-preview.4
     Package release Notes:
+    6.1.0.20181026
+     - added chocolatey-core to dependencies
     v6.1.0-preview.2
      - new utility script Reset-PWSHSystemPath.ps1 included to clean up old path entries
        left by previous MSI installs.  This problem should not occur going forward.  To learn how to use this utility
@@ -55,6 +57,7 @@
      - new chocolatey package switch to invoke path cleanup /CleanUpPath
     </releaseNotes>
     <dependencies>
+      <dependency id="chocolatey-core.extension"/>
       <dependency id="KB2999226"/>
     </dependencies>
   </metadata>

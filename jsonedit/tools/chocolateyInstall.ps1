@@ -1,8 +1,8 @@
 ﻿$packageName = 'jsonedit'
-$url = 'http://tomeko.net/software/JSONedit/bin/JSONedit_0_9_30.zip'
+$url = 'http://tomeko.net/software/JSONedit/bin/JSONedit_0_9_31.zip'
 $validExitCodes = @(0)
 $exeName = "jsonedit.exe"
-$checksum      = '3E07C6FD76E1FEAE9C118022AA0E342C0FDE387A'
+$checksum      = '880F431ACA0447C945B30BAC102A71B1B2EADF43'
 $checksumType  = 'sha1'
 
 Install-ChocolateyZipPackage "$packageName" "$url" "$(Split-Path -parent $MyInvocation.MyCommand.Definition)" -checksum $checksum -checksumType $checksumType

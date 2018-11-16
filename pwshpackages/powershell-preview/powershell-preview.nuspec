@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>powershell-preview</id>
-    <version>6.2.0.1</version>
+    <version>6.2.0.2</version>
     <packageSourceUrl>https://github.com/darwinjs/chocopackages/pwshpackages/powershell-preview</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>powershell-preview (Install)</title>

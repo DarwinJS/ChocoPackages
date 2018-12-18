@@ -2,11 +2,11 @@
 #Reread Environment In Case JDK dependency just ran
 Update-SessionEnvironment
 
-$version = '5.9.3'
+$version = '6.5.13'
 
 $url = "https://api.bintray.com/content/jfrog/artifactory/jfrog-artifactory-oss-$version.zip;bt_package=jfrog-artifactory-oss-zip"
-$checksum = 'D66F3FC04F0608CE10E954EB28E3E3A02439CF75'
-$checksumtype = 'sha1'
+$checksum = '781627500B75F9B541DDC93D750548112520F9CAB2233001AFCACDDE111D0DA6'
+$checksumtype = 'sha256'
 $validExitCodes = @(0)
 
 $packageName= 'artifactory'
@@ -40,14 +40,14 @@ If (!(Test-Path Env:JDK_HOME))
       Install-ChocolateyEnvironmentVariable -VariableName 'JDK_HOME' -VariableValue "$JavaPath" -VariableType 'Machine'
       Install-ChocolateyEnvironmentVariable -VariableName 'JDK_HOME' -VariableValue "$JavaPath" -VariableType 'Process'
     }
-    Else 
+    Else
     {
       Throw "Java is not installed at `"$env:ProgramFiles\Java`", cannot find java, cannot continue"
     }
   }
-  else 
+  else
   {
-    Throw "Cannot find variable JDK_HOME nor Java itself, cannot continue..."  
+    Throw "Cannot find variable JDK_HOME nor Java itself, cannot continue..."
   }
 }
 
@@ -85,7 +85,7 @@ If (Test-Path $ArtifactoryServiceRegKey)
   $CleanedValue = (Get-ItemProperty $ArtifactoryServiceRegKey | Select -Expand ImagePath) -replace '[^\p{L}\p{Nd}///_/ /:/./\\/-]', ''
   Set-ItemProperty $ArtifactoryServiceRegKey -Name ImagePath -Value $CleanedValue
 }
-else 
+else
 {
   Throw "Artifactory installer failed."
 }
@@ -94,11 +94,11 @@ $service = Start-Service $servicename -PassThru
 Write-Host "Waiting for Artifactory service to be completely ready"
 $Service.WaitForStatus('Running', '00:02:00')
 
-If ($Service.Status -ine 'Running') 
+If ($Service.Status -ine 'Running')
 {
   Write-Warning "The Artifactory service ($servicename) did not start."
 }
-else 
+else
 {
   #Even though windows reports service is ready - web url will not respond until Artifactory is actually ready to serve content
   Start-Sleep 120

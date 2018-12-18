@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>artifactory</id>
     <title>jFrog Artifactory OSS</title>
-    <version>5.9.3</version>
+    <version>6.5.13</version>
     <authors>jFrog</authors>
     <owners>DarwinJS</owners>
     <summary>Open source vesion of jFrog binary artifact repository including Nuget.</summary>
@@ -23,7 +23,7 @@
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/artifactory/appicon.png</iconUrl>
     <releaseNotes>[https://bintray.com/jfrog/artifactory/jfrog-artifactory-oss-zip/5.9.3#release]
     Packaging:
-    5.9.3 
+    5.9.3
       - uses JRE rather than JDK package for java
       - captures and error checks installartifactory.bat output
       - fixes invalid characters that artifactory's installservice.bat put in artifactory registry key

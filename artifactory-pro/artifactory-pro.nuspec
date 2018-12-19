@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>artifactory-pro</id>
     <title>jFrog Artifactory Pro</title>
-    <version>4.10</version>
+    <version>6.5.13</version>
     <authors>JFrog</authors>
     <owners>DarwinJS dragon788</owners>
     <summary>Professional version of JFrog binary artifact repository including Nuget. (Requires paid/evaluation license key)</summary>

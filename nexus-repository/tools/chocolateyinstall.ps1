@@ -1,8 +1,8 @@
 
 $packageid = "nexus-repository"
-$version = '3.13.0-01'
+$version = '3.14.0-04'
 $url = "http://download.sonatype.com/nexus/3/nexus-$version-win64.zip"
-$checksum = '1f5606d38d0563ea28a5d37f6be66416e709646d'
+$checksum = '1adcd03cc48e48a4587e78a4d891f13e657d13c0'
 $checksumtype = 'SHA1'
 $silentargs = "-q -console -dir `"$installfolder`""
 $validExitCodes = @(0)
@@ -48,9 +48,9 @@ If (Test-Path "$ExtractFolder") {Remove-Item "$ExtractFolder" -Recurse -Force}
 Install-ChocolateyZipPackage -PackageName $packageName -unziplocation "$ExtractFolder" -url $url -checksum $checksum -checksumtype $checksumtype -url64 $url -checksum64 $checksum -checksumtype64 $checksumtype
 
 Write-Host "Copying files to '$TargetFolder' with overwrite"
-$VerbosePreference = Continue
+#$VerbosePreference = Continue
 Copy-Item "$ExtractFolder\$nexusversionedfolder" "$TargetFolder" -Force -Recurse
-$VerbosePreference = SilentlyContinue
+#$VerbosePreference = SilentlyContinue
 
 If (!(Test-Path "$TargetDataFolder"))
 {

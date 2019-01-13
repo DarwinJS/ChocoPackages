@@ -73,9 +73,9 @@ $packageArgs = @{
   unziplocation = "$ExtractFolder"
   fileType      = 'EXE_MSI_OR_MSU' #only one of these: exe, msi, msu
 
-  checksum      = '8DBF029B48EDD711A1A7106145259C4AAB51BC09'
+  checksum      = 'F60242D89DAB3AFE9BA4DB6657E767EF78A33D5B'
   checksumType  = 'SHA1'
-  checksum64    = '911829D490B5FF5270DAB98388B4677357FDB588'
+  checksum64    = '8AA6455C37C6F4E6DA5F6D33A3C6DBBC2096E860'
   checksumType64= 'SHA1'
 }
 

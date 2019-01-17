@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop';
 
 $packageName= 'powershell-core'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$Version = "6.1.1"
+$Version = "6.1.2"
 $InstallFolder = "$env:ProgramFiles\PowerShell\$Version"
 
 If (Test-Path "$InstallFolder\pwsh.exe")
@@ -21,9 +21,9 @@ $packageArgs = @{
 
   softwareName  = "PowerShell-6.0.*"
 
-  checksum      = 'DC35FF9488734E2A0D6B0F51BCC5C673ADC787F4CE9ABBB52803C46973D92B8D'
+  checksum      = 'D6EE3E941989556D5A5EF3AB940A297387AF7A427B3F4779C0ACDC2BB44C0232'
   checksumType  = 'sha256'
-  checksum64    = '19B255C767BD9517B7BDB85D957F793968F7D86BDD33F9E71813B2ED2912BE56'
+  checksum64    = '271195A099D9D3E906B523B6A40BA6F1E61D962559F408321651C551D5A45EC6'
   checksumType64= 'sha256'
 
   silentArgs    = "/qn /norestart /l*v `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`"" # ALLUSERS=1 DISABLEDESKTOPSHORTCUT=1 ADDDESKTOPICON=0 ADDSTARTMENU=0
@@ -37,10 +37,7 @@ if ($pp.CleanUpPath) {
   & "$toolsDir\Reset-PWSHSystemPath.ps1" -PathScope Machine, User -RemoveAllOccurances
 }
 
-If ($PSVersionTable.PSVersion -ilike '6*')
-{
-  Write-Warning "You are running this package under PowerShell core, replacing an in-use version may be unpredictable or require multiple attempts."
-}
+Write-Warning "If you started this package under PowerShell core, replacing an in-use version may be unpredictable, require multiple attempts or produce errors."
 
 Install-ChocolateyPackage @packageArgs
 

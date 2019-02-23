@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop';
 
 $packageName= 'powershell-core'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$Version = "6.1.2"
+$Version = "6.1.3"
 $InstallFolder = "$env:ProgramFiles\PowerShell\$Version"
 
 If (Test-Path "$InstallFolder\pwsh.exe")
@@ -21,9 +21,9 @@ $packageArgs = @{
 
   softwareName  = "PowerShell-6.0.*"
 
-  checksum      = 'D6EE3E941989556D5A5EF3AB940A297387AF7A427B3F4779C0ACDC2BB44C0232'
+  checksum      = 'BFDB11D5863CAC56C31AB05D07CDB66882E9EC5A93B73FB6F1860BD9FE34CC89'
   checksumType  = 'sha256'
-  checksum64    = '271195A099D9D3E906B523B6A40BA6F1E61D962559F408321651C551D5A45EC6'
+  checksum64    = '8C02B3E5375095C11135C74779F8F4A57A4E041A76C031D023673C6363814387'
   checksumType64= 'sha256'
 
   silentArgs    = "/qn /norestart /l*v `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`"" # ALLUSERS=1 DISABLEDESKTOPSHORTCUT=1 ADDDESKTOPICON=0 ADDSTARTMENU=0

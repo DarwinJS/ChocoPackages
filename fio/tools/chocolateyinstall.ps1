@@ -1,7 +1,10 @@
-﻿$ErrorActionPreference = 'Stop';
+﻿
+$Version = '3.13'
+
+$ErrorActionPreference = 'Stop';
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = "$toolsDir\fio-3.1-x86.zip"
-$url64      = "$toolsDir\fio-3.1-x64.zip"
+$url        = "$toolsDir\fio-$Version-x86.zip"
+$url64      = "$toolsDir\fio-$Version-x64.zip"
 
 $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
@@ -10,9 +13,9 @@ $packageArgs = @{
   url           = $url
   url64bit      = $url64
   softwareName  = 'fio*'
-  checksum      = '82F8E88051F5CAAC777900FD57BB08984BDBBB5D9F61D91E827593D2F1B47601'
+  checksum      = '4AAA39C4E11C531B56A28C78E41DA587E6D9083F475C4482D632F4727D269DC8'
   checksumType  = 'sha256'
-  checksum64    = 'FDCC4D9433F635B1325C9849425EC097CFDC12030961570F45E5BFA75A3067D3'
+  checksum64    = 'A187F9F456FE86A93A69BB8C470F248CF7AD23BED15D431ACCBBD4D68FA7AE6B'
   checksumType64= 'sha256'
 }
 

@@ -2,19 +2,19 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>fio</id>
-    <version>3.1.0</version>
+    <version>3.13.0</version>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/fio</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>Flexible IO Tester (fio) (Install)</title>
     <authors>Jens Axboe</authors>
-    <projectUrl>http://bluestop.org/fio/</projectUrl>
+    <projectUrl>https://bluestop.org/fio/</projectUrl>
     <copyright>Jens Axboe</copyright>
     <licenseUrl>http://fio.readthedocs.io/en/latest/fio_doc.html#license</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
-    <projectSourceUrl>http://git.kernel.dk/cgit/fio/</projectSourceUrl>
+    <projectSourceUrl>https://github.com/axboe/fio</projectSourceUrl>
     <docsUrl>http://fio.readthedocs.io/en/latest/</docsUrl>
     <mailingListUrl>http://www.spinics.net/lists/fio/</mailingListUrl>
-    <bugTrackerUrl>http://bluestop.org/files/fio/REPORTING-BUGS.txt</bugTrackerUrl>
+    <bugTrackerUrl>https://github.com/axboe/fio/issues</bugTrackerUrl>
     <tags>fio dd</tags>
     <summary>Port of linux fio - used for disk reads / writes and volume initialization - improved functionality over 'dd'</summary>
     <description>Windows port of Linux 'fio'
@@ -33,10 +33,6 @@
     Initializes physical devices 0 and 3 on the system
         
     </description>
-    <releaseNotes>
-    Software: http://bluestop.org/fio/
-    Packaging:
-    </releaseNotes>
     <dependencies>
       <dependency id="chocolatey-core.extension" version="1.1.0" />
     </dependencies>    

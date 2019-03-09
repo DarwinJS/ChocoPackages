@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>fio</id>
-    <version>3.13.0</version>
+    <version>3.13.0.20190308</version>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/fio</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>Flexible IO Tester (fio) (Install)</title>

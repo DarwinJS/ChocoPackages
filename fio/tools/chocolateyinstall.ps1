@@ -59,11 +59,20 @@ If (Test-Path variable:PhysicalDriveEnumList)
   }
 }
 
-Write-Output ""
-Write-Output "**********************************************************************"
-Write-Output "*  INSTRUCTIONS: At a shell prompt, type 'fio' to start fio          *"
-Write-Output "**********************************************************************"
-Write-Output ""
+Write-Output @"
+**********************************************************************
+*  INSTRUCTIONS: 
+*    At a shell prompt, type 'fio' to start fio
+*
+*    For additional licensing details and README look at :
+*      $toolsDir\fio-$Version-x64\
+*
+*    For example commands look at :
+*      $toolsDir\fio-$Version-x64\examples\
+*
+**********************************************************************
+
+"@
 
 If (!(Test-Path variable:PhysicalDeviceIDsToInitialize))
 {

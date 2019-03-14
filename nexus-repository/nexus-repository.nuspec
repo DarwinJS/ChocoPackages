@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>nexus-repository</id>
     <title>Nexus Repository OSS</title>
-    <version>3.14.0.4</version>
+    <version>3.15.2.01</version>
     <authors>Sonatype</authors>
     <owners>DarwinJS</owners>
     <summary>Free open source version of popular Nexus Repository for binary artifacts including first class Nuget support.</summary>
@@ -22,7 +22,7 @@
     <licenseUrl>http://www.eclipse.org/legal/epl-v10.html</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/nexus-repository/appicon.png</iconUrl>
-    <releaseNotes>https://help.sonatype.com/display/NXRM3/2018+Release+Notes
+    <releaseNotes>https://help.sonatype.com/repomanager3/release-notes/2019-release-notes
     Packaging
     3.9.0.20180301
      - Supports "Port" parameter for changing nexus repository listening port

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>powershell-core</id>
-    <version>6.2.0-rc1</version>
+    <version>6.2.0</version>
     <packageSourceUrl>https://github.com/darwinjs/chocopackages/pwshpackages/powershell-core</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>powershell-core (Install)</title>
@@ -21,7 +21,7 @@
 
     Preview releases are under the package id powershell-preview so that they can be safely installed and maintained side-by-side with the release versions on production systems.
     Preview versions do not become the default powershell core edition on a system (unless they are the ONLY edition), if you have a preview version installed, access it via pwsh's '-pre' switch.
-    
+
     This package automatically does verbose MSI logging to %temp%\(packagenameandversion).MsiInstall.log
 
     Some helpful install options (any of them can be combined - delimited by space):
@@ -44,7 +44,7 @@
     Removes all powershell core paths before starting install.  Cleans up old paths from old powershell core MSIs.
 
     </description>
-    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.2.0-rc.1
+    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.2.0
     Package release Notes:
     6.2.0-rc.1
      - package detects prerelease and displays correct install path in final message, other messaging corrections

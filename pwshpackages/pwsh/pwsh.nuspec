@@ -2,8 +2,8 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>pwsh</id>
-    <version>6.2.0-rc1</version>
-    <packageSourceUrl>https://github.com/darwinjs/chocopackages/pwshpackages/pwsh</packageSourceUrl>
+    <version>6.2.0</version>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/blob/master/pwshpackages/pwsh</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>pwsh (Install)</title>
     <authors>Microsoft</authors>
@@ -28,11 +28,11 @@
     directly to do so.
 
     </description>
-    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.2.0-rc.1
+    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.2.0
     Package release Notes:
     </releaseNotes>    
     <dependencies>
-      <dependency id="powershell-core" version="[6.2.0-rc1]"/>
+      <dependency id="powershell-core" version="[6.2.0]"/>
     </dependencies>
   </metadata>
   <files>

@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop';
 
 $packageName= 'powershell-core'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$Version = "6.2.0-rc.1"
+$Version = "6.2.0"
 Try {
   [Version]$Version
   $InstallFolder = "$env:ProgramFiles\PowerShell\$($version.split('.')[0])"
@@ -16,8 +16,11 @@ Catch {
 
 If (Test-Path "$InstallFolder\pwsh.exe")
 {
-  Write-output "$packagename version $PFSubfolder is already installed by another means."
-  Exit 0
+  If ((get-command "$InstallFolder\pwsh.exe").version -ge [version]$Version)
+  {
+    Write-output "The version of PowerShell in this package ($Version) is already installed by another means, marking package as installed"
+    Exit 0
+  }
 }
 
 $packageArgs = @{
@@ -29,9 +32,9 @@ $packageArgs = @{
 
   softwareName  = "PowerShell-6.0.*"
 
-  checksum      = 'DEA825F48A666966B12B08BA224E8EF0BA6BE651DBD1B961193D4B1ECCA3F7F2'
+  checksum      = '99C5F517B5A3B88238C0DFDEF259EA8AB9666C72DA47D093769126C97FF3EE78'
   checksumType  = 'sha256'
-  checksum64    = '0C0F5D68D3C69D36BE4151C3C98BF44F3C6EA33769E19295BE136A785EC10054'
+  checksum64    = 'BF4CBCE14ED448BBAE2DC38293AA637B8C82932893E3804E7711649DFB28E53F'
   checksumType64= 'sha256'
 
   silentArgs    = "/qn /norestart /l*v `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`"" # ALLUSERS=1 DISABLEDESKTOPSHORTCUT=1 ADDDESKTOPICON=0 ADDSTARTMENU=0

@@ -2,7 +2,7 @@
 
 $packageName= 'teamviewer.portable'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$url        = 'http://download.teamviewer.com/download/version_11x/TeamViewer_Setup.exe'
+$url        = 'http://download.teamviewer.com/download/version_14x/TeamViewer_Setup.exe'
 $filefullpath  = "$toolsDir\TeamViewerPortable.exe"
 $exename = split-path -leaf $filefullpath
 

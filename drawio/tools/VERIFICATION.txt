@@ -1,0 +1,5 @@
+﻿
+VERIFICATION
+Download from here: https://github.com/jgraph/drawio-desktop/releases/
+
+(get-filehash draw.io-setup-signed-9.3.1.exe)

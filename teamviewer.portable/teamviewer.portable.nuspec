@@ -3,7 +3,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
     <metadata>
     <id>teamviewer.portable</id>
-    <version>11.0.56083</version>
+    <version>14.2.8352</version>
     <title>teamviewer.portable</title>
     <authors>TeamViewer Inc.</authors>
     <owners>DarwinJS</owners>

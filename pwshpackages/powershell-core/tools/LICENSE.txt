@@ -1,4 +1,5 @@
 ﻿From: https://raw.githubusercontent.com/PowerShell/PowerShell/master/LICENSE.txt
+Also see: ThirdPartyNotices.txt In This Same Folder which is from: https://raw.githubusercontent.com/PowerShell/PowerShell/master/ThirdPartyNotices.txt
 
 LICENSE
 

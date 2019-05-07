@@ -2,10 +2,10 @@
 #Reread Environment In Case JDK dependency just ran
 Update-SessionEnvironment
 
-$version = '6.5.13'
+$version = '6.9.1'
 
 $url = "https://api.bintray.com/content/jfrog/artifactory/jfrog-artifactory-oss-$version.zip;bt_package=jfrog-artifactory-oss-zip"
-$checksum = '781627500B75F9B541DDC93D750548112520F9CAB2233001AFCACDDE111D0DA6'
+$checksum = '83E99303990A444AADBDA36CE5279640F17F99672917200CB1A62B13E5ECAE82'
 $checksumtype = 'sha256'
 $validExitCodes = @(0)
 
@@ -82,8 +82,8 @@ $ArtifactoryServiceRegKey = 'HKLM:System\CurrentControlSet\Services\Artifactory'
 If (Test-Path $ArtifactoryServiceRegKey)
 {
   Write-Host "Cleaning up the invalid characters that installservice.bat puts in the Artifactory service definition registry key..."
-  $CleanedValue = (Get-ItemProperty $ArtifactoryServiceRegKey | Select -Expand ImagePath) -replace '[^\p{L}\p{Nd}///_/ /:/./\\/-]', ''
-  Set-ItemProperty $ArtifactoryServiceRegKey -Name ImagePath -Value $CleanedValue
+  #$CleanedValue = (Get-ItemProperty $ArtifactoryServiceRegKey | Select -Expand ImagePath) -replace '[^\p{L}\p{Nd}///_/ /:/./\\/-]', ''
+  Set-ItemProperty $ArtifactoryServiceRegKey -Name ImagePath -Value "$TargetFolder\bin\artifactory-service.exe //RS//Artifactory"
 }
 else
 {

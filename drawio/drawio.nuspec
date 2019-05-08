@@ -3,15 +3,15 @@
   <metadata>
     <id>drawio</id>
     <version>9.3.1</version>
-    <packageSourceUrl>github.com/darwinjs/chocopackages/drawio</packageSourceUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/drawio</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>drawio (Install)</title>
     <authors>JGraph</authors>
     <projectUrl>https://www.draw.io</projectUrl>
-    <!--<iconUrl>http://cdn.rawgit.com/__REPLACE_YOUR_REPO__/master/icons/drawio.png</iconUrl>-->
+    <iconUrl>https://cdn.jsdelivr.net/gh/darwinjs/chocopackages/drawio/appicon.png</iconUrl>
     <copyright>2005</copyright>
     <licenseUrl>https://desk.draw.io/support/solutions/articles/16000039577-how-is-draw-io-licensed-</licenseUrl>
-    <requireLicenseAcceptance>true</requireLicenseAcceptance>-->
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <projectSourceUrl>https://github.com/jgraph/drawio-desktop</projectSourceUrl>
     <docsUrl>https://about.draw.io/draw-io-diagramming-in-confluence-cheat-sheets-for-beginners/</docsUrl>
     <bugTrackerUrl>https://github.com/jgraph/drawio-desktop/issues</bugTrackerUrl>

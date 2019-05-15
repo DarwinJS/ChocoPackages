@@ -9,13 +9,13 @@
     <authors>JGraph</authors>
     <projectUrl>https://www.draw.io</projectUrl>
     <iconUrl>https://cdn.jsdelivr.net/gh/darwinjs/chocopackages/drawio/appicon.png</iconUrl>
-    <copyright>2005</copyright>
+    <copyright>2005-2019</copyright>
     <licenseUrl>https://desk.draw.io/support/solutions/articles/16000039577-how-is-draw-io-licensed-</licenseUrl>
     <requireLicenseAcceptance>true</requireLicenseAcceptance>
     <projectSourceUrl>https://github.com/jgraph/drawio-desktop</projectSourceUrl>
     <docsUrl>https://about.draw.io/draw-io-diagramming-in-confluence-cheat-sheets-for-beginners/</docsUrl>
     <bugTrackerUrl>https://github.com/jgraph/drawio-desktop/issues</bugTrackerUrl>
-    <tags>drawio SPACE_SEPARATED</tags>
+    <tags>drawio</tags>
     <summary>Desktop Version of popular draw.io diagramming software.</summary>
     <description>Desktop Version of popular draw.io diagramming software.</description>
     <dependencies>

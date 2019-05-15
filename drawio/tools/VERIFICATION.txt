@@ -2,4 +2,4 @@
 VERIFICATION
 Download from here: https://github.com/jgraph/drawio-desktop/releases/
 
-(get-filehash draw.io-setup-signed-9.3.1.exe)
+if (get-filehash -algorithm sha256 draw.io-setup-signed-9.3.1.exe).hash = '4006D22608E2E8DADC7ED196B3F22EF14D301722B73C1D69FB26EF17858379FD'

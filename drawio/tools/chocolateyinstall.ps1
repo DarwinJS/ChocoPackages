@@ -13,7 +13,12 @@ $packageArgs = @{
   silentArgs   = '/S'
 }
 
-Install-ChocolateyPackage @packageArgs
+If ([bool](get-command Get-ChecksumValid -ea silentlycontinue))
+{
+  Get-ChecksumValid -File $($packageArgs.file) -checksumType $($packageArgs.checksumType) -checksum $($packageArgs.checksum)
+}
+
+Install-ChocolateyInstallPackage @packageArgs
 
 #Create .ignore files so chocolatey does not shim the Exe
 $files = get-childitem $toolsDir -include *.exe -recurse

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>powershell-core</id>
-    <version>6.2.0.20190408</version>
+    <version>6.2.1</version>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/blob/master/pwshpackages/powershell-core</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>powershell-core (Install)</title>
@@ -44,7 +44,7 @@
     Removes all powershell core paths before starting install.  Cleans up old paths from old powershell core MSIs.
 
     </description>
-    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.2.0
+    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v6.2.1
     Package release Notes:
     6.2.0
      - fixed #78 - 

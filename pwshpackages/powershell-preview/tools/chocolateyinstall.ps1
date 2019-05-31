@@ -3,7 +3,7 @@ $ErrorActionPreference = 'Stop';
 
 $packageName= 'powershell-preview'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
-$Version = "6.2.0-preview.4"
+$Version = "7.0.0-preview.1"
 $InstallFolder = "$env:ProgramFiles\PowerShell\6-preview"
 
 $packageArgs = @{
@@ -13,11 +13,11 @@ $packageArgs = @{
   url           = "https://github.com/PowerShell/PowerShell/releases/download/v$version/PowerShell-$version-win-x86.msi"
   url64bit      = "https://github.com/PowerShell/PowerShell/releases/download/v$version/PowerShell-$version-win-x64.msi"
 
-  softwareName  = "PowerShell-6.0.*"
+  softwareName  = "PowerShell-7.0.*"
 
-  checksum      = '875FC975AE4D98FF852D6B56108C681BBB97F3A80E7031E706430A86391C99B6'
+  checksum      = '5543E6DF6126AC6DDA24F6B3B3F7343ACE7492329548F5CE2D6277A57D2301D1'
   checksumType  = 'sha256'
-  checksum64    = 'B64D7D803D10D6FB14FF7B87283912FD6FEA69A67DFEEFF6C481201D3086695C'
+  checksum64    = 'D4B6D58B0BFA791E3D613BEC89062579E58951EA07EEDAA54038F317EBBBAD0A'
   checksumType64= 'sha256'
 
   silentArgs    = "/qn /norestart /l*v `"$($env:TEMP)\$($packageName).$($env:chocolateyPackageVersion).MsiInstall.log`"" # ALLUSERS=1 DISABLEDESKTOPSHORTCUT=1 ADDDESKTOPICON=0 ADDSTARTMENU=0

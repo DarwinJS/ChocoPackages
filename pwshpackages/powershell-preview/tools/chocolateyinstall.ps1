@@ -4,7 +4,7 @@ $ErrorActionPreference = 'Stop';
 $packageName= 'powershell-preview'
 $toolsDir   = "$(Split-Path -parent $MyInvocation.MyCommand.Definition)"
 $Version = "7.0.0-preview.1"
-$InstallFolder = "$env:ProgramFiles\PowerShell\6-preview"
+$InstallFolder = "$env:ProgramFiles\PowerShell\7-preview"
 
 $packageArgs = @{
   packageName   = $packageName
@@ -31,7 +31,7 @@ if ($pp.CleanUpPath) {
   & "$toolsDir\Reset-PWSHSystemPath.ps1" -PathScope Machine, User -RemoveAllOccurances
 }
 
-If ($PSVersionTable.PSVersion -ilike '6*-preview*')
+If ($PSVersionTable.PSVersion -ilike '7*-preview*')
 {
   Write-Warning "You are running this package under PowerShell core preview, replacing an in-use version may be unpredictable or require multiple attempts."
 }

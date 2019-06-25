@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>openssh</id>
     <title>Win32 OpenSSH (Universal Installer)</title>
-    <version>7.9.0.1</version>
+    <version>8.0.0.1</version>
     <authors>Microsoft</authors>
     <owners>DarwinJS</owners>
     <summary>Open SSH tools for Windows - works in all CLIs.</summary>
@@ -32,7 +32,7 @@
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/openssh/appicon.png</iconUrl>
     <releaseNotes>
-      Product release notes: https://github.com/PowerShell/Win32-OpenSSH/tree/v7.7.1.0p1-Beta
+      Product release notes: https://github.com/PowerShell/openssh-portable/releases/tag/v8.0.0.0
 
       Release Notes for Chocolatey Packaging:
       7.7.1.1

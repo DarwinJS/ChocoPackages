@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>powershell-preview</id>
-    <version>7.0.0.20190704</version>
+    <version>7.0.0.20190717</version>
     <packageSourceUrl>https://github.com/darwinjs/chocopackages/pwshpackages/powershell-preview</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>powershell-preview (Install)</title>
@@ -46,8 +46,10 @@
     Removes all powershell core paths before starting install.  Cleans up old paths from old powershell core MSIs.
 
     </description>
-    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v7.0.0-preview.1
+    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v7.0.0-preview.2
     Package release Notes:
+    7.0.0.20190717 and 7.0.0.2
+      - contains powershell release 7.0.0-preview.2
     7.0.0.1
      - the 6.x preview install will be removed, but unfortunately that will still leave it's programs folder and
        addition to the PATH in place.

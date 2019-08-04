@@ -6,9 +6,9 @@ $packageArgs = @{
   packageName   = $env:ChocolateyPackageName
   unzipLocation = $toolsDir
   fileType      = 'EXE'
-  file          = "$toolsDir/draw.io-setup-signed-9.3.1.exe"
+  file          = "$toolsDir/draw.io-11.1.1-windows-installer.exe"
   softwareName  = 'drawio*'
-  checksum      = '4006D22608E2E8DADC7ED196B3F22EF14D301722B73C1D69FB26EF17858379FD'
+  checksum      = 'F6B701DA4FE1E6D9C64FC9DD48D7D114188FCC700D5B7DAE8C031E1D896156AC'
   checksumType  = 'sha256'
   silentArgs   = '/S'
 }

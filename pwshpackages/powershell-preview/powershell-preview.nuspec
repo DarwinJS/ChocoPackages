@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>powershell-preview</id>
-    <version>7.0.0.20190717</version>
+    <version>7.0.0.320190821</version>
     <packageSourceUrl>https://github.com/darwinjs/chocopackages/pwshpackages/powershell-preview</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>powershell-preview (Install)</title>
@@ -48,6 +48,9 @@
     </description>
     <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v7.0.0-preview.2
     Package release Notes:
+    7.0.0.320190821 and 7.0.0.3
+      - due to the final segment of the version being used by both powershell previews and chocolatey fix packages
+        all future packages will need to contain both in this last segment.
     7.0.0.20190717 and 7.0.0.2
       - contains powershell release 7.0.0-preview.2
     7.0.0.1

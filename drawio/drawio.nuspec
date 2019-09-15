@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>drawio</id>
-    <version>11.1.1</version>
+    <version>11.1.4</version>
     <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/drawio</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>drawio (Install)</title>

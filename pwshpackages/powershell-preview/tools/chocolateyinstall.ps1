@@ -40,11 +40,13 @@ If ($PSVersionTable.PSVersion -ilike '7*-preview*')
 
 Install-ChocolateyPackage @packageArgs
 
+Copy-Item -Path "${InstallFolder}\preview\pwsh-preview.cmd" -Destination "${InstallFolder}\preview\pw7p.cmd"
+
 Write-Output "************************************************************************************"
 Write-Output "*  INSTRUCTIONS: Your system default PowerShell version has not been changed."
 Write-Output "*   PowerShell Core $version, was installed to: `"$installfolder`""
 Write-Output "*   To start PowerShell Core $version, at a prompt or the start menu execute:"
-Write-Output "*      `"pwsh.exe`""
+Write-Output "*      `"pwsh-preview`"  OR  `"pw7p`""
 Write-Output "*   Or start it from the desktop or start menu shortcut installed by this package."
 Write-Output "************************************************************************************"
 

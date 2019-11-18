@@ -5,7 +5,7 @@
     <!-- Read this before publishing packages to chocolatey.org: https://github.com/chocolatey/chocolatey/wiki/CreatePackages -->
     <id>nexus-repository</id>
     <title>Nexus Repository OSS</title>
-    <version>3.19.1.01</version>
+    <version>3.19.1.20191118</version>
     <authors>Sonatype</authors>
     <owners>DarwinJS</owners>
     <summary>Free open source version of popular Nexus Repository for binary artifacts including first class Nuget support.</summary>
@@ -24,6 +24,8 @@
     <iconUrl>https://cdn.rawgit.com/DarwinJS/ChocoPackages/master/nexus-repository/appicon.png</iconUrl>
     <releaseNotes>https://help.sonatype.com/repomanager3/release-notes/2019-release-notes
     Packaging
+    3.19.1.20191118
+     - messaging at end of install has been adjusted to accurately reflect new admin password behavior
     3.18.1.01
      - uses open JRE via dependency on adoptopenjdkjre
     3.9.0.20180301

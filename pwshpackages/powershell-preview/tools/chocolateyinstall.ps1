@@ -44,7 +44,7 @@ Write-Output "******************************************************************
 Write-Output "*  INSTRUCTIONS: Your system default PowerShell version has not been changed."
 Write-Output "*   PowerShell Core $version, was installed to: `"$installfolder`""
 Write-Output "*   To start PowerShell Core $version, at a prompt or the start menu execute:"
-Write-Output "*      `"pwsh.exe`""
+Write-Output "*      `"pwsh-preview`""
 Write-Output "*   Or start it from the desktop or start menu shortcut installed by this package."
 Write-Output "************************************************************************************"
 

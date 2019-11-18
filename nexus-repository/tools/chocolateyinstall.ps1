@@ -97,13 +97,31 @@ else
   Start-Sleep 120
 }
 
+
+$generatedadminpasswordfile = "$TargetDataFolder\nexus3\admin.password"
+If (Test-Path $generatedadminpasswordfile) {
+  $passwddata = Get-Content $generatedadminpasswordfile
+}
+
+
 Write-Warning "`r`n"
 Write-Warning "*******************************************************************************************"
 Write-Warning "*"
 Write-Warning "*  You MAY receive the error 'localhost refused to connect.' until Nexus is fully started."
 Write-Warning "*"
-Write-Warning "*  You can manage the repository by visiting http://localhost:$NexusPort"
-Write-Warning "*  The default user is 'admin' with password 'admin123'"
+Write-Warning "*  For new installs, you must login as admin to complete some setup steps"
+Write-Warning "*  You can manage the repository by typing 'start http://localhost:$NexusPort'"
+Write-Warning "*"
+Write-Warning "*  The default user is 'admin'"
+Write-Warning "*  ADMIN PASSWORD:"
+Write-Warning "*    NEW INSTALLS: The password generated for your instance is recorded"
+Write-Warning "*       in '$generatedadminpasswordfile'"
+Write-Warning "*    UPGRADES/REINSTALLS: If you upgraded (or uninstalled and reinstalled) without cleaning"
+Write-Warning "*      up $TargetDataFolder - the password will be the same as it was before and the password file"
+Write-Warning "*      will not exist."
+Write-Warning "*    RESET PASSWORD WITH INSTALL: Uninstall Nexus and remove the directory '$TargetDataFolder'"
+Write-Warning "*      and then reinstall.  This time a password file will be generated."
+Write-Warning "*"
 Write-Warning "*  Nexus availability is controlled via the service `"$servicename`""
 Write-Warning "*  Use the following command to open port $NexusPort for access from off this machine (one line):"
 Write-Warning "*   netsh advfirewall firewall add rule name=`"Nexus Repository`" dir=in action=allow "

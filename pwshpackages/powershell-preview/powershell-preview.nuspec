@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>powershell-preview</id>
-    <version>7.0.0.520191024</version>
+    <version>7.0.0.620191122</version>
     <packageSourceUrl>https://github.com/darwinjs/chocopackages/pwshpackages/powershell-preview</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>powershell-preview (Install)</title>
@@ -46,7 +46,7 @@
     Removes all powershell core paths before starting install.  Cleans up old paths from old powershell core MSIs.
 
     </description>
-    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v7.0.0-preview.4
+    <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v7.0.0-preview.6
     Package release Notes:
     7.0.0.320190821 and 7.0.0.3
       - due to the final segment of the version being used by both powershell previews and chocolatey fix packages

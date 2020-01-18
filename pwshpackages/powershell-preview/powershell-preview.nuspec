@@ -3,12 +3,12 @@
   <metadata>
     <id>powershell-preview</id>
     <version>7.0.2.0</version>
-    <packageSourceUrl>https://github.com/darwinjs/chocopackages/pwshpackages/powershell-preview</packageSourceUrl>
+    <packageSourceUrl>https://github.com/DarwinJS/ChocoPackages/tree/master/pwshpackages/powershell-preview</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>powershell-preview (Install)</title>
     <authors>Microsoft</authors>
     <projectUrl>https://github.com/PowerShell/PowerShell</projectUrl>
-    <iconUrl>https://github.com/DarwinJS/ChocoPackages/blob/master/powershell-preview/appicon.png</iconUrl>
+    <iconUrl>https://rawcdn.githack.com/DarwinJS/ChocoPackages/0f500f022f5badf483e99310bd431cef60f2521a/pwshpackages/powershell-preview/appicon.png</iconUrl>
     <copyright>Microsoft</copyright>
     <licenseUrl>https://github.com/PowerShell/PowerShell/blob/master/LICENSE.txt</licenseUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>

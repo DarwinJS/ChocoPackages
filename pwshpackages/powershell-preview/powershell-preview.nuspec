@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
   <metadata>
     <id>powershell-preview</id>
-    <version>7.0.0.620191123</version>
+    <version>7.0.2.0</version>
     <packageSourceUrl>https://github.com/darwinjs/chocopackages/pwshpackages/powershell-preview</packageSourceUrl>
     <owners>DarwinJS</owners>
     <title>powershell-preview (Install)</title>
@@ -16,7 +16,7 @@
     <docsUrl>https://github.com/PowerShell/PowerShell-Docs</docsUrl>
     <bugTrackerUrl>https://github.com/PowerShell/PowerShell/issues</bugTrackerUrl>
     <tags>powershell-preview powershell pwsh admin</tags>
-    <summary>PowerShell Core is the open source multiplatform version of PowerShell</summary>
+    <summary>Real version is 7.0.0-rc.2 PowerShell 7 is the open source multiplatform version of PowerShell</summary>
     <description>PowerShell Core is the open source multiplatform version of PowerShell
     
     ATTENTION: This is a preview release, use the release version package if you want a stable, supported version.
@@ -48,6 +48,8 @@
     </description>
     <releaseNotes>Product Release Notes https://github.com/PowerShell/PowerShell/releases/tag/v7.0.0-preview.6
     Package release Notes:
+    7.0.1.0 contains PowerShell 7.0.0-rc.1 - version number variance is so that this package will show publicly and be greater than all preview releases.
+      - package is also available on powershell-core package as a prerelease with vesion 7.0.0-rc.1
     7.0.0.320190821 and 7.0.0.3
       - due to the final segment of the version being used by both powershell previews and chocolatey fix packages
         all future packages will need to contain both in this last segment.

@@ -1,8 +1,2 @@
 
-# [DEPRECIATED]
-
-This package had changed chocolatey IDs.
-
-The new version of this document is at:
-
-[https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md](https://github.com/DarwinJS/ChocoPackages/blob/master/openssh/readme.md)
+Moved to GitLab at [https://gitlab.com/DarwinJS/ChocoPackages/tree/master/win32-openssh](https://gitlab.com/DarwinJS/ChocoPackages/tree/master/win32-openssh)

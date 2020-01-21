@@ -1,7 +1,0 @@
-﻿
-VERIFICATION
-Verification is intended to assist the Chocolatey moderators and community
-in verifying that this package's contents are trustworthy.
- 
-1. Download file(s) from: http://bluestop.org/fio/
-2. Compare hash of downloaded file(s) with internally packaged files.

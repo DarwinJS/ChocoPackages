@@ -1,9 +1,0 @@
-VERIFICATION.txt is intended to assist the Chocolatey moderators and community
-in verifying that this package's contents are trustworthy.
-
-To verify:
-
-1. Download https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win64.zip
-2. Compare OpenSSH-Win64.zip hash with bundled OpenSSH-Win64.zip hash.
-3. Download https://github.com/PowerShell/Win32-OpenSSH/releases/download/5_30_2016/OpenSSH-Win32.zip
-4. Compare OpenSSH-Win64.zip hash with bundled OpenSSH-Win32.zip hash.

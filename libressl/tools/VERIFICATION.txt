@@ -1,6 +1,0 @@
-﻿
-VERIFICATION
-The package internally verifies it's checksum.
-
-The SHA256 checksum for the enclosed zip is found here: https://ftp.openbsd.org/pub/OpenBSD/LibreSSL/SHA256
-
